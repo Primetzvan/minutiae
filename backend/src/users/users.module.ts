@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { JwtStrategy } from '../auth/jwt.strategy';
 import { ConfigService } from '@nestjs/config';
-import { UserRepository } from "./repositories/user.repository";
+import { UserRepository } from './repositories/user.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, UserRepository])],

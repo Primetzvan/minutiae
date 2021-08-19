@@ -11,12 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateFingerDto = void 0;
 const class_validator_1 = require("class-validator");
-const user_entity_1 = require("../../users/entities/user.entity");
 class CreateFingerDto {
 }
 __decorate([
     class_validator_1.IsString(),
-    __metadata("design:type", user_entity_1.User)
-], CreateFingerDto.prototype, "user", void 0);
+    __metadata("design:type", String)
+], CreateFingerDto.prototype, "userId", void 0);
 exports.CreateFingerDto = CreateFingerDto;
-//# sourceMappingURL=create-finger.dto.js.map
+//# sourceMappingURL=create-finger.entity.js.map
