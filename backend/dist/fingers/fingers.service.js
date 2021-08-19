@@ -24,11 +24,10 @@ let FingersService = class FingersService {
         this.userRepository = userRepository;
     }
     async create(createFingerDto) {
-        const f = this.fingerRepository.create();
-        await this.fingerRepository.save(f);
-        const user = await this.userRepository.preload({
+        let user = await this.userRepository.findOne({
             uuid: createFingerDto.userId,
-            finger: f,
+        }, {
+            relations: ['finger'],
         });
         if (!user) {
             throw new common_1.NotFoundException(`User '${createFingerDto.userId}' not found`);
@@ -36,6 +35,12 @@ let FingersService = class FingersService {
         else if (user.finger !== null) {
             throw new common_1.BadRequestException(`User '${createFingerDto.userId}' already has a finger, please remove finger before creating a new one`);
         }
+        const f = this.fingerRepository.create();
+        await this.fingerRepository.save(f);
+        user = await this.userRepository.preload({
+            uuid: createFingerDto.userId,
+            finger: f,
+        });
         return this.userRepository.save(user);
     }
     async remove(userId) {

@@ -15,9 +15,8 @@ const users_module_1 = require("./users/users.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const doors_module_1 = require("./doors/doors.module");
 const fingers_module_1 = require("./fingers/fingers.module");
-const accesses_controller_1 = require("./accesses/accesses.controller");
-const accesses_module_1 = require("./accesses/accesses.module");
 const config_1 = require("@nestjs/config");
+const accesses_controller_1 = require("./accesses/accesses.controller");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -27,7 +26,6 @@ AppModule = __decorate([
             users_module_1.UsersModule,
             doors_module_1.DoorsModule,
             fingers_module_1.FingersModule,
-            accesses_module_1.AccessesModule,
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'mariadb',
                 host: '127.0.0.1',
@@ -40,10 +38,7 @@ AppModule = __decorate([
             }),
             config_1.ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }),
         ],
-        controllers: [
-            app_controller_1.AppController,
-            accesses_controller_1.AccessesController,
-        ],
+        controllers: [app_controller_1.AppController, accesses_controller_1.AccessesController],
         providers: [app_service_1.AppService],
     })
 ], AppModule);

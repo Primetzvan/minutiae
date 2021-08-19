@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { Finger } from './entities/finger.entity';
-import { User } from "../users/entities/user.entity";
-import { CreateFingerDto } from "./dto/create-finger.entity";
+import { User } from '../users/entities/user.entity';
+import { CreateFingerDto } from './dto/create-finger.entity';
 export declare class FingersService {
     private readonly fingerRepository;
     private readonly userRepository;

@@ -4,14 +4,15 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  InternalServerErrorException, NotAcceptableException,
-  NotFoundException
-} from "@nestjs/common";
+  InternalServerErrorException,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Finger } from './entities/finger.entity';
-import { User } from "../users/entities/user.entity";
-import { CreateFingerDto } from "./dto/create-finger.entity";
+import { User } from '../users/entities/user.entity';
+import { CreateFingerDto } from './dto/create-finger.entity';
 
 @Injectable()
 export class FingersService {
@@ -24,13 +25,14 @@ export class FingersService {
   ) {}
 
   async create(createFingerDto: CreateFingerDto) {
-    const f = this.fingerRepository.create();
-    await this.fingerRepository.save(f);
-
-    const user = await this.userRepository.preload({
-      uuid: createFingerDto.userId,
-      finger: f,
-    });
+    let user = await this.userRepository.findOne(
+      {
+        uuid: createFingerDto.userId,
+      },
+      {
+        relations: ['finger'],
+      },
+    );
 
     if (!user) {
       throw new NotFoundException(`User '${createFingerDto.userId}' not found`);
@@ -39,6 +41,14 @@ export class FingersService {
         `User '${createFingerDto.userId}' already has a finger, please remove finger before creating a new one`,
       );
     }
+
+    const f = this.fingerRepository.create();
+    await this.fingerRepository.save(f);
+
+    user = await this.userRepository.preload({
+      uuid: createFingerDto.userId,
+      finger: f,
+    });
 
     return this.userRepository.save(user);
   }
