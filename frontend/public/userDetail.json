@@ -1,0 +1,22 @@
+{
+    "uuid": "48739af0-5bda-4ac7-a181-1f44af3f48ae",
+    "username": "sarah1234",
+    "role": "ADMIN",
+    "phonenumber": "",
+    "email": "",
+    "finger": {"uuid": "42342af0-21aa-c3c7-a171-1f22af3f48ae"},
+    "access":[
+        {
+            "uuid": "40839af0-5bda-1lkj-a181-1f44af3f48ae",
+            "doorname": "Haustür",
+            "ip": "10.0.0.1",
+            "color": "#fae6a0"
+        },
+        {
+            "uuid": "234a0-3eda-4ac7-a181-1f44af3f48ae",
+            "doorname": "Wohnzimmer",
+            "ip": "10.0.0.4",
+            "color": "lightgreen"
+        }
+    ]
+}

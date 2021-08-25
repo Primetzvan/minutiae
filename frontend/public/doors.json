@@ -1,0 +1,48 @@
+{ "doors":[
+    {
+        "uuid": "40839af0-5bda-1lkj-a181-1f44af3f48ae",
+        "doorname": "Haustür",
+        "ip": "10.0.0.1",
+        "color": "#fae6a0"
+    },
+    {
+        "uuid": "1459af0-3eda-4ac7-a181-1f44af3f48ae",
+        "doorname": "Küche",
+        "ip": "10.0.0.2",
+        "color": "#b0fffc"
+    },
+    {
+        "uuid": "2gsaf0-3eda-4ac7-a181-1f44af3f48ae",
+        "doorname": "Schlafzimmer",
+        "ip": "10.0.0.3",
+        "color": "#e2abff"
+    },
+    {
+        "uuid": "q4r9af0-3eda-4ac7-a181-1f44af3f48ae",
+        "doorname": "Wohnzimmer",
+        "ip": "10.0.0.4",
+        "color": "lightgreen"
+    },
+    {
+        "uuid": "353af0-3eda-4ac7-a181-1f44af3f48ae",
+        "doorname": "Büro",
+        "ip": "10.0.0.5",
+        "color": "#ff69e1"
+    },{
+        "uuid": "9483cf0-3eda-4ac7-a181-1f44af3f48ae",
+        "doorname": "Abstellkammer",
+        "ip": "10.0.0.6",
+        "color": "#7d69ff"
+    },{
+        "uuid": "7859af0-4fta-4tc7-a181-1f44af3f48ae",
+        "doorname": "Werkstatt",
+        "ip": "10.0.0.7",
+        "color": "#ff8080"
+    },{
+        "uuid": "249af0-3eda-4ac7-a181-1f44af3f48ae",
+        "doorname": "Lab",
+        "ip": "10.0.0.8",
+        "color": "#cdff69"
+    }
+]
+}
