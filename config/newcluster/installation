@@ -1,0 +1,30 @@
+#TODO:
+
+sudo blkid -o list -w /dev/null
+
+sudo mkdir /media/usb
+
+sudo mount -t vfat -o utf8,uid=pi,gid=pi /dev/sda1 /media/usb
+ 
+cp -r /media/usb/shdb/shdbnew .
+
+sudo umount /media/usb
+
+sudo raspi-config
+
+-> System Options -> Boot / Auto Login -> B2 Console Autologin
+
+Finish -> No Reboot
+
+cd shdbnew
+
+sudo chmod +x ./preinstallation
+
+./preinstallation.sh
+
+strg + alt + F2
+
+sudo chmod +x ./start.sh
+
+./start.sh
+
