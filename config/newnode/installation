@@ -1,15 +1,5 @@
 #TODO:
 
-sudo raspi-config
-
--> System Options -> Boot / Auto Login -> B2 Console Autologin
-
-Finish -> No Reboot
-
-#sudo apt-get install ufw
-
-#sudo reboot
-
 sudo blkid -o list -w /dev/null
 
 sudo mkdir /media/usb
@@ -20,13 +10,20 @@ cp -r /media/usb/shdb/shdbnew .
 
 sudo umount /media/usb
 
+sudo raspi-config
+
+-> System Options -> Boot / Auto Login -> B2 Console Autologin
+
+Finish -> No Reboot
+
 cd shdbnew
 
 sudo chmod +x ./preinstallation
 
-./preinstallation.sh
+sudo ./preinstallation.sh
 
 sudo chmod +x ./start.sh
 
 ./start.sh
+
 
