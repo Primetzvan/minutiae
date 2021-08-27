@@ -20,11 +20,10 @@ cd shdbnew
 
 sudo chmod +x ./preinstallation
 
-./preinstallation.sh
-
-strg + alt + F2
+sudo ./preinstallation.sh
 
 sudo chmod +x ./start.sh
 
 ./start.sh
+
 
