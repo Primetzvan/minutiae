@@ -52,7 +52,7 @@ export class User {
     nullable: true,
   })
   @Exclude()
-  public currentHashedRefreshToken?: string;
+  public currentHashedRefreshToken: string;
 }
 
 /* TEST:

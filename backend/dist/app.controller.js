@@ -25,12 +25,15 @@ let AppController = class AppController {
         this.configService = configService;
     }
     async login(response, req) {
-        const access_token = await this.authService.login(req.user);
-        response.cookie('ACCESS_TOKEN_COOKIE', access_token, {
+        const access = await this.authService.login(req.user);
+        const refresh_token = await this.authService.getRefreshToken(req.user);
+        response.cookie('ACCESS_TOKEN_COOKIE', access.token, {
             httpOnly: true,
         });
-        console.log('Access token: ' + access_token);
-        return { msg: 'success' };
+        response.cookie('REFRESH_TOKEN_COOKIE', refresh_token, {
+            httpOnly: true,
+        });
+        return { userId: access.userId };
     }
     getProfile(req) {
         return req.user;

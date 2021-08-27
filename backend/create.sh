@@ -1,9 +1,11 @@
+# TODO: download backend selbst
+# TODO: load files from github into files folder/sind schon da? -> github folder
+
 # Set environment Variables
   # TODO: has to be done by the docker container later
-  # TODO: fragen welches passwort hier sinnvoll wäre
-echo "export NESTJS_SECRET_KEY='gugelhupf'" >> ~/.bash_profile
-source ~/.bash_profile
-printenv # gibt alle environment variablen aus
+  # TODO: fragen welches passwort hier sinnvoll wäre -> Nano Id
+  # TODO: richtige node version installieren
+
 
 ##
 npm install
@@ -41,6 +43,25 @@ npm i nanoid
 npm i cookie-parser
 npm i -D @types/cookie-parser
 
+# Generating & returning files
+npm i file-saver
+npm install jszip
+##TODO install tar
 
 # Other dependencies
 npm i --save @nestjs/config
+
+###npm install --save joi
+###npm install --save-dev @types/joi
+
+
+## Set environment variables
+#TODO: kann man so machen?
+token=$(openssl rand -base64 20)
+echo "FRONTEND_KEY=${token}" | sudo tee ./.env > /dev/null #/dev/null mutes output
+token=$(openssl rand -base64 20)
+echo "M2M_KEY=${token}" | sudo tee -a ./.env > /dev/null #-a = appends
+#echo "export M2M_KEY=${token}" | sudo tee -a /etc/profile.d/nest_environmentvariables.sh > /dev/null #-a = appends
+
+#sudo shutdown -r now
+echo "please restart"

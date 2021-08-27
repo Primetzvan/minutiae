@@ -101,7 +101,7 @@ export class UsersService {
       ...updateUserDto,
     });
     if (!user) {
-      throw new NotFoundException(`User '${id}' not found`);
+      throw new NotFoundException(`User with id #'${id}' not found`);
     }
 
     if (user.role == UserRole.USER && user.password != null) {

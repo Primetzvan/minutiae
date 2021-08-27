@@ -27,11 +27,18 @@ const jwt_1 = require("@nestjs/jwt");
 const user_entity_1 = require("../users/entities/user.entity");
 const moment = require("moment");
 const nanoid_1 = require("nanoid");
-const update_user_dto_1 = require("../users/dto/update-user.dto");
+const bcrypt = require("bcrypt");
 let AuthService = class AuthService {
     constructor(usersService, jwtService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
+    }
+    async login(user) {
+        const payload = { username: user.username, sub: user.uuid };
+        return {
+            userId: user.uuid,
+            token: this.jwtService.sign(payload),
+        };
     }
     async validateUser(usernameormail, pass) {
         const user = await this.usersService.findOne(usernameormail);
@@ -44,16 +51,17 @@ let AuthService = class AuthService {
         }
         return null;
     }
-    async login(user) {
-        const payload = { username: user.username, sub: user.uuid };
-        return this.jwtService.sign(payload);
-    }
     async getRefreshToken(user) {
         const userDataToUpdate = {
             refreshToken: nanoid_1.nanoid(30),
             refreshTokenExp: moment().day(7).format('YYYY/MM/DD'),
         };
-        await this.usersService.update(user.username, new update_user_dto_1.UpdateUserDto());
+        userDataToUpdate.refreshToken = await this.generateHash(userDataToUpdate.refreshToken);
+        const userWithRefreshToken = {
+            username: user.username,
+            currentHashedRefreshToken: userDataToUpdate.refreshToken,
+        };
+        await this.usersService.update(user.uuid, userWithRefreshToken);
         return userDataToUpdate.refreshToken;
     }
     async validateRefreshToken(username, refreshToken) {
@@ -65,6 +73,10 @@ let AuthService = class AuthService {
         if (user.currentHashedRefreshToken == refreshToken) {
         }
         return user;
+    }
+    async generateHash(token) {
+        const saltOrRounds = 5;
+        return await bcrypt.hash(token, saltOrRounds);
     }
 };
 AuthService = __decorate([

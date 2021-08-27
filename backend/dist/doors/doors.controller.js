@@ -16,6 +16,7 @@ exports.DoorsController = void 0;
 const common_1 = require("@nestjs/common");
 const doors_service_1 = require("./doors.service");
 const create_door_dto_1 = require("./dto/create-door.dto");
+const update_door_dto_1 = require("./dto/update-door.dto");
 let DoorsController = class DoorsController {
     constructor(doorsService) {
         this.doorsService = doorsService;
@@ -26,11 +27,18 @@ let DoorsController = class DoorsController {
     findOne(uuid) {
         return this.doorsService.findOneById(uuid);
     }
-    create(createDoorDto) {
-        return this.doorsService.create(createDoorDto);
+    async create(response, createDoorDto) {
+        const zip = await this.doorsService.createZipRepo(createDoorDto);
+        await this.doorsService.create(createDoorDto).catch((err) => {
+            console.log(err);
+            return err;
+        });
+        response.setHeader('Content-Type', 'application/octet-stream');
+        response.setHeader('Content-Disposition', 'attachment; filename="setup.zip"');
+        return new common_1.StreamableFile(await zip.generateAsync({ type: 'nodebuffer' }));
     }
-    update(uuid, createDoorDto) {
-        return this.doorsService.update(uuid, createDoorDto);
+    update(uuid, updateDoorDto) {
+        return this.doorsService.update(uuid, updateDoorDto);
     }
     delete(uuid) {
         return this.doorsService.remove(uuid);
@@ -52,17 +60,18 @@ __decorate([
 ], DoorsController.prototype, "findOne", null);
 __decorate([
     common_1.Post(),
-    __param(0, common_1.Body()),
+    __param(0, common_1.Res()),
+    __param(1, common_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_door_dto_1.CreateDoorDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, create_door_dto_1.CreateDoorDto]),
+    __metadata("design:returntype", Promise)
 ], DoorsController.prototype, "create", null);
 __decorate([
     common_1.Patch(':uuid'),
     __param(0, common_1.Param('uuid')),
     __param(1, common_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, create_door_dto_1.CreateDoorDto]),
+    __metadata("design:paramtypes", [String, update_door_dto_1.UpdateDoorDto]),
     __metadata("design:returntype", void 0)
 ], DoorsController.prototype, "update", null);
 __decorate([
