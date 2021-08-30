@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 // import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { useQuery} from 'react-query';
 import ColorPicker from '../components/ColorPicker';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
@@ -10,13 +9,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import { Button, TextField } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
 import { getDoors } from '../shared/API';
-import AddIcon from '@material-ui/icons/Add';
 import AddNewDoor from '../components/AddNewDoor';
 import Loading from '../components/Loading';
 
@@ -66,7 +63,8 @@ import Loading from '../components/Loading';
         const StyledTableCell = withStyles((theme: Theme) =>
         createStyles({
             head: {
-            backgroundColor: theme.palette.common.black,
+            backgroundColor: '#2e2e2e',
+            //theme.palette.common.black,
             color: theme.palette.common.white,
             },
             body: {

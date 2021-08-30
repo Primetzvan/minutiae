@@ -6,10 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import NewUserProfile from './NewUserProfile';
 import AddIcon from '@material-ui/icons/Add';
 import { useForm, SubmitHandler } from "react-hook-form";
-import Download from './Download';
 
 
 type Inputs = {
@@ -20,7 +18,7 @@ type Inputs = {
 
 
 export default function FormDialog() {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+    const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
     const onSubmit: SubmitHandler<Inputs> = door => console.log(door);
 
   const [open, setOpen] = React.useState(false);

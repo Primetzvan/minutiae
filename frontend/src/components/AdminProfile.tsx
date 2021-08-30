@@ -74,11 +74,13 @@ const roles = [
 
 
 export default function NewUserForm() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
  
   const [currency, setCurrency] = useState('ADMIN');
   const [editable, setEditable] = useState(false);
+  const [passwordChange, setPasswordChange] = useState(false);
+
   const classes = useStyles();
   const params = useParams<NewUserFormRouteProps>();
 
@@ -109,6 +111,10 @@ export default function NewUserForm() {
 function changeEditableState(){
   setEditable(!editable);
   console.log(editable);
+}
+
+function handlePasswordChange(){
+  setPasswordChange(!passwordChange);
 }
 
 
@@ -145,7 +151,11 @@ function changeEditableState(){
             {editable ?<TextField {...register("address")} value={data?.address} margin="dense" id="address" label='address' variant='filled'/>: <h3 style={{ textAlign:'center', padding:'1%'}}>{data?.phonenumber}</h3> }<br></br>
             <Link to='/fingerprintscan'><Button variant='outlined' style={{marginTop:'10%'}} fullWidth><FingerprintIcon style={{color:'red', marginRight:'1%'}} /> hinzufügen</Button></Link>
         </div>
-        <div className={classes.root} style={{display: 'inline-block',width:'40%',float:'left', backgroundColor:'#A9C6B0', marginLeft:'3%',position:'relative', padding:'1%'}}>
+        <div hidden={!editable}>
+        <Button  type="submit" variant='contained' style={{float:'right', display:'inline-block', marginTop:'-4%'}} >Save</Button>
+        </div>
+
+        <div className={classes.root} style={{display: 'inline-block',width:'50%',float:'right', backgroundColor:'#A9C6B0', marginLeft:'3%',position:'relative', padding:'1%'}}>
             Door Access: 
             <Button data-cy="addDoorsbtn"><AddDoors /></Button>
             <br></br>
@@ -158,18 +168,28 @@ function changeEditableState(){
             
 
         </div>
-        <Button type="submit" variant='contained' style={{float: 'right', display:'inline-block', marginRight:'1%'}} >Save</Button>
-        <Card className={classes.root} style={{display: 'inline-block',width:'50%',float:'left',backgroundColor:'white', marginLeft:'47%',textAlign:'center', marginTop:'-17%'}}>
-            <p>Enter password: </p>
+        <div hidden={!passwordChange}>
+        <Card className={classes.root} style={{display: 'inline-block',width:'50%',float:'right',backgroundColor:'white',textAlign:'center', padding:'1%'}}>
+            <p>Enter your current password: </p>
             <TextField {...register("password")}placeholder="password" variant="filled" type="password" />
             <br></br>
-            <p>Repeat password:</p>
+            <p>Enter a new password: </p>
+            <TextField {...register("password")}placeholder="password" variant="filled" type="password" />
+            <br></br>
+            <p>Repeat the new password:</p>
             <TextField {...register("passwordRepeat")} placeholder="password" variant="filled" type="password" />
 
             <br></br>
             <Button variant='contained' style={{float:'right', margin:'2%'}}>save</Button>
             <br></br>
         </Card>
+        </div>
+        <div hidden={passwordChange}>
+        <Button onClick={handlePasswordChange} variant='contained' style={{marginTop:'20%', marginLeft:'25%', width:'15%',backgroundColor:'white',textAlign:'center', padding:'1%', placeItems:'center'}}>
+          Change password
+        </Button>
+        </div>
+
     </form>
     </Card>
   );

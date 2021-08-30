@@ -10,22 +10,10 @@ import { Checkbox } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import axios from 'axios';
 import { getDoors } from '../shared/API';
 import { useQuery } from 'react-query';
 import AddIcon from '@material-ui/icons/Add';
 import Loading from './Loading';
-
-type Door = {
-  id: number;
-  doorName: string;
-  IPAddress: string;
-  color: string;
-}
-
-type GetDoorsResponse = {
-  doors: Door[];
-}
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -71,6 +59,11 @@ export default function FormDialog() {
             renderOption={(option, { selected }) => (
             <React.Fragment>
               <Checkbox
+              // {...accesses.map((acc: Door) => (
+              //  if(acc.doorName == option.doorname){
+              //    selected === true;
+              //  }
+              // ))}
                icon={icon}
                 checkedIcon={checkedIcon}
                 style={{ marginRight: 8 }}
