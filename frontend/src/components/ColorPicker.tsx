@@ -11,6 +11,7 @@ class ColorPicker extends React.Component {
       b: '19',
       a: '1',
     },
+   
   };
 
   handleClick = () => {
@@ -56,6 +57,26 @@ class ColorPicker extends React.Component {
           bottom: '0px',
           left: '0px',
         },
+        colors:[
+          ["#7B81B5",
+           "#7FACC8",
+           "#9FCEEB",
+           "#D2F4FF",
+           "#D2D0E8",
+           "#ACB5E8",
+           "#A99AC2",
+           "#9F7FC8",
+           "#BE7FC8",
+           "#ECD1FF",
+           "#AB9999",
+           "#C29AB5",
+           "#FFA6A6",
+           "#FFD2D2",
+           "#FFD2F5",
+           "#839E89", 
+           "#9EB6A3", 
+           "#D0E8D2"]
+        ]
       },
     });
 

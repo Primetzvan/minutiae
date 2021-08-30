@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Button, Card, MenuItem, TextField } from '@material-ui/core';
+import { Button, Card, TextField } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddDoors from "./AddDoors";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
-import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import { useQuery } from "react-query";
 import {  useParams } from "react-router-dom";
-import { getUserDetail, getUsers } from "../shared/API";
+import { getUserDetail } from "../shared/API";
 import { NewUserFormRouteProps } from '../shared/API';
 
 type Inputs = {
@@ -80,9 +79,6 @@ export default function NewUserForm() {
   const params = useParams<NewUserFormRouteProps>();
 
 
-
-
-debugger;
   const handleChangeCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrency(event.target.value);
   };

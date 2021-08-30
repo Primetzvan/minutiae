@@ -13,14 +13,20 @@ import { Link } from 'react-router-dom';
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
 
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    //axios.delete(url, { data: { foo: "bar" } });
     setOpen(false);
   };
 
+ function deleteUser(){
+     //const { data, isLoading } = useQuery(deleteUser.name, getUsers);
+  alert("deleted user");
+  }
 
   return (
     <div>
@@ -37,7 +43,7 @@ export default function FormDialog() {
           <Button onClick={handleClose} color="inherit" data-cy="deleteUserCancel">
             No
           </Button>
-          <Button data-cy="deleteUserbtn" onClick={handleClose}>
+          <Button data-cy="deleteUserbtn" onClick={() => {deleteUser(); handleClose(); }}>
               <Link to='/users'>Yes</Link>
         </Button>
         </DialogActions>

@@ -13,9 +13,7 @@ import NewUserProfile from './components/NewUserProfile';
 import NewUserForm from './components/NewUserForm';
 import Loading from './components/Loading';
 import SearchBar from 'material-ui-search-bar';
-import fingerprintscanload from './components/fingerprintscanload';
 import UserDetail from './components/UserDetail';
-import Login from './pages/Login';
 import Login2 from './pages/Login2';
 import AdminProfile from './components/AdminProfile';
 import UserDetailProfile from './components/UserDetailProfile';
@@ -29,6 +27,7 @@ function App() {
     <QueryClientProvider client={queryClient}>                
       <div className="App">
       <Nav />
+      
         <Router>
                 <Route path="/" exact><Management /></Route>
                 <Route path="/doors" exact><Doors/></Route>
@@ -37,7 +36,7 @@ function App() {
                 <Route path="/users/:id"><UserProfile /></Route>
                 <Route path="/new-user"><NewUserProfile /></Route>
                 <Route path="/fingerprintscan"><FingerPrintScan /></Route>
-                <Route path="/userform/:userId"><UserDetailProfile /></Route>
+                <Route path="/userdetail/:userId"><UserDetailProfile /></Route>
                 <Route path="/userform"><NewUserForm /></Route>
                 <Route path="/loading"><Loading /></Route>
                 <Route path="/search"><SearchBar /></Route>

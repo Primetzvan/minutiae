@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import { useQuery } from "react-query";
 import {  useParams } from "react-router-dom";
-import { getUserDetail, getUsers } from "../shared/API";
+import { getUserDetail } from "../shared/API";
 import { NewUserFormRouteProps } from '../shared/API';
 import Loading from "./Loading";
 import { Door } from "../shared/API";
@@ -74,7 +74,7 @@ const roles = [
 
 
 export default function NewUserForm() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
  
   const [currency, setCurrency] = useState('ADMIN');

@@ -1,4 +1,3 @@
-import React from 'react'
 import axios from 'axios'
 
 export type Door = {
@@ -53,6 +52,12 @@ export const getUserDetail = (uuid: string) => async () => {
 
 export const getAdminProfile = (uuid: string) => async () => {
     const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/userDetail.json`, {params:{uuid}});
+    console.log(data);
+    return data;
+};
+
+export const deleteUser = (uuid: string) => async () => {
+    const { data } = await axios.delete(`${process.env.REACT_APP_API_URL}/users.json`, {data:{uuid}});
     console.log(data);
     return data;
 };

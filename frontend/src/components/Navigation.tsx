@@ -83,8 +83,8 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <Link to="/profile"><MenuItem onClick={handleClose}>Profile</MenuItem></Link>
-                <MenuItem onClick={handleClose}>Log out</MenuItem>
+                <MenuItem onClick={handleClose}><Link to='/profile' onClick={()=> window.location.href='/profile'}>Profile</Link></MenuItem>
+                <MenuItem component={Link} to='/login' onClick={handleClose}><Link to='/profile' onClick={()=> window.location.href='/login'}>Log out</Link></MenuItem>
               </Menu>
             </div>
        

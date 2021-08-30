@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 import { useQuery} from 'react-query';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -121,7 +120,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
                                         <Chip label={door.doorname} style={{margin:'0.5%', backgroundColor: door.color}}/>
                                     ))}
                                 </StyledTableCell> 
-                                <StyledTableCell align="right"><Link to={`/userform/${row.uuid}`} ><Button><ArrowForwardIosIcon /></Button></Link> </StyledTableCell>
+                                <StyledTableCell align="right"><Link to={`/userdetail/${row.uuid}`} ><Button><ArrowForwardIosIcon /></Button></Link> </StyledTableCell>
                             </StyledTableRow>
                         ))}
                         </TableBody>
