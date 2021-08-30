@@ -1,5 +1,4 @@
-import { Injectable, SetMetadata } from "@nestjs/common";
-import { registerAs } from "@nestjs/config";
+import { SetMetadata } from "@nestjs/common";
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
@@ -10,7 +9,7 @@ export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 // environment variable, or configuration service.
 // Environment variable setzen => docker
 
-// const dbUser = this.configService.get<string>('NESTJS_SECRET_KEY');
+// const dbUser = this.configService.get<string>('FRONTEND_KEY');
 //     console.log('db User: ', dbUser);
 
 // sudo echo ‚export NESTJS_SECRET_KEY='gugelhupf'‘ >> /etc/profile.d/nest_environmentvariables.sh

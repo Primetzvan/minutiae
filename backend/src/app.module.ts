@@ -8,6 +8,7 @@ import { DoorsModule } from './doors/doors.module';
 import { FingersModule } from './fingers/fingers.module';
 import { ConfigModule } from "@nestjs/config";
 import { AccessesController } from './accesses/accesses.controller';
+import { FilesGeneratorController } from './files-generator/files-generator.controller';
 
 @Module({
   imports: [
@@ -25,9 +26,9 @@ import { AccessesController } from './accesses/accesses.controller';
       autoLoadEntities: true,
       synchronize: true, // DISABLE in production
     }),
-    ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }),
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
-  controllers: [AppController, AccessesController],
+  controllers: [AppController, AccessesController, FilesGeneratorController],
   providers: [AppService],
 })
 export class AppModule {}

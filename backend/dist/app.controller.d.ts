@@ -6,7 +6,7 @@ export declare class AppController {
     private configService;
     constructor(authService: AuthService, configService: ConfigService);
     login(response: Response, req: any): Promise<{
-        msg: string;
+        userId: any;
     }>;
     getProfile(req: any): any;
 }

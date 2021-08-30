@@ -17,6 +17,7 @@ const doors_module_1 = require("./doors/doors.module");
 const fingers_module_1 = require("./fingers/fingers.module");
 const config_1 = require("@nestjs/config");
 const accesses_controller_1 = require("./accesses/accesses.controller");
+const files_generator_controller_1 = require("./files-generator/files-generator.controller");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -36,9 +37,9 @@ AppModule = __decorate([
                 autoLoadEntities: true,
                 synchronize: true,
             }),
-            config_1.ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }),
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
         ],
-        controllers: [app_controller_1.AppController, accesses_controller_1.AccessesController],
+        controllers: [app_controller_1.AppController, accesses_controller_1.AccessesController, files_generator_controller_1.FilesGeneratorController],
         providers: [app_service_1.AppService],
     })
 ], AppModule);
