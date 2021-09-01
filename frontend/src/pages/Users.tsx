@@ -71,7 +71,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
     
     
     export const Users: React.FC = () => {
-        const { data, isLoading } = useQuery(getUsers.name, getUsers); //isLoading
+        const { data, isLoading } = useQuery(getUsers.name, getUsers); 
         const [usernameSearchQuery, setUsernameSeachQuery] = useState("");
         const classes = useStyles();
         
@@ -85,13 +85,13 @@ const StyledTableCell = withStyles((theme: Theme) =>
             setUsernameSeachQuery(query);
         }
 
-         const filteredUsersByUsername = filterUsersByUsername(data?.users, usernameSearchQuery)
+         const filteredUsersByUsername = filterUsersByUsername(data, usernameSearchQuery)
 
         
              return (
 
                 <div>
-                <Link to='/' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
                 <h1 style={{textAlign:'center'}}>Users</h1>
                 <TableContainer style={{display: 'grid', placeItems: 'center'}}>
                 <SearchBar className={classes.searchBar} onChange={onSearchbarChange} />
@@ -116,7 +116,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
                                 <StyledTableCell align="center">{row.role}</StyledTableCell>
                                 <StyledTableCell align="center">{row.finger === null ? <FingerprintIcon style={{color: 'red'}}/> : <FingerprintIcon style={{color: 'green'}}/>}</StyledTableCell>
                                 <StyledTableCell align="left" style={{marginLeft: '20%'}}>
-                                    {row.access.map((door: Door) =>(
+                                    {row.accesses?.map((door: Door) =>(
                                         <Chip label={door.doorname} style={{margin:'0.5%', backgroundColor: door.color}}/>
                                     ))}
                                 </StyledTableCell> 

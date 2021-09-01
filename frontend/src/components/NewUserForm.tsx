@@ -112,7 +112,7 @@ export default function NewUserForm() {
     <form onSubmit={handleSubmit(onSubmit)}>
 
         <div style={{display: 'inline-block',float:'left', textAlign:'left', color:'black'}}>
-             <h3 style={{paddingBottom:'20%', paddingTop:'15%'}}>Username:*</h3>
+             <h3 style={{paddingBottom:'20%', paddingTop:'15%'}}>Username:</h3>
              <h3 style={{paddingBottom:'20%'}}>Firstname:</h3>
              <h3 style={{paddingBottom:'20%'}}>Lastname:</h3>
              <h3 style={{paddingBottom:'20%'}}>Role:</h3>
@@ -143,7 +143,7 @@ export default function NewUserForm() {
             <br></br>
 
             <ul>
-            {data?.access.map((door: Door) =>(
+            {data?.accesses.map((door: Door) =>(
                 <li>{door.doorname}</li>
             ))}
             </ul>

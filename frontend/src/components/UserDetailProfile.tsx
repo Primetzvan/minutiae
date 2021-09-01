@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import { useQuery } from "react-query";
 import {  useParams } from "react-router-dom";
-import { getAdminProfile } from "../shared/API";
+import { getAdminProfile, getUserDetail } from "../shared/API";
 import { NewUserFormRouteProps } from '../shared/API';
 import Loading from "./Loading";
 import { Door } from "../shared/API";
@@ -73,22 +73,25 @@ const roles = [
   ];
 
 
-export default function NewUserForm() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+export default function UserDetail() {
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
  
-  const [currency, setCurrency] = useState('USER');
+  const [currency, setCurrency] = useState('ADMIN');
   const [editable, setEditable] = useState(false);
+  const [passwordChange, setPasswordChange] = useState(false);
+
   const classes = useStyles();
   const params = useParams<NewUserFormRouteProps>();
 
 
+  console.log(params);
   const handleChangeCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrency(event.target.value);
   };
 
 
-  const { data, isLoading } = useQuery(getAdminProfile.name, getAdminProfile(params.uuid)); 
+  const { data, isLoading } = useQuery(getUserDetail.name, getUserDetail(params.uuid)); 
 //   let { data, isLoading } = useQuery(getUsers.name, getUsers); 
 
 //   const currentUser = data?.users.filter(user => {
@@ -111,6 +114,10 @@ function changeEditableState(){
   console.log(editable);
 }
 
+function handlePasswordChange(){
+  setPasswordChange(!passwordChange);
+}
+
 
   return (
     <Card style={{backgroundColor:'#c6d9cb', padding:'0.5%', margin:'0.5%'}}>    
@@ -126,50 +133,53 @@ function changeEditableState(){
              <h3 style={{paddingBottom:'20%'}}>Role:</h3>
              <h3 style={{paddingBottom:'20%'}}>Email:</h3>
              <h3 style={{paddingBottom:'20%'}}>Phone number:</h3>
-             <h3 style={{paddingBottom:'20%'}}>Address:</h3>
              <h3 style={{paddingBottom:'20%'}}>Fingerprint:</h3>
         </div>
         <div className={classes.root} style={{display: 'inline-block', float:'left', marginLeft: '10%', backgroundColor:'white', padding:'2%', width:'25ch'}}>
-            {editable ? <TextField  required {...register("userName", { required: true })} value={data?.username} margin="dense" id="username" label='username' variant='filled'/> :<h3 style={{ textAlign:'center', padding:'1%'}}>{data?.username}</h3>}
-            <br></br>{errors.userName  && <span style={{color:'red'}}>Please enter a unique username <br></br></span>}
-            {editable ? <TextField {...register("firstName")} value={data?.firstname} margin="dense" id="firstname" label='firstname' variant='filled' />: <h3 style={{ textAlign:'center', padding:'1%'}}>{data?.firstname}</h3> } <br></br>
-            {editable ?<TextField {...register("lastName")} value={data?.lastname} margin="dense" id="lastname" label='lastname' variant='filled' />: data?.lastname }<br></br>
-            {editable ? <TextField id="role" margin="dense" select variant='filled' label="Role" value={data?.role} onChange={handleChangeCurrency}>
+            {editable ? <TextField  required {...register("userName", { required: true })} value={data?.username} margin="dense" id="username" label='username' variant='filled'/> :<h3 style={{ textAlign:'center', padding:'1%',paddingBottom:'10%'}}>{data?.username}</h3>}
+            {errors.userName  && <span style={{color:'red'}}>Please enter a unique username <br></br></span>}
+            {editable ? <TextField {...register("firstName")} value={data?.firstname} margin="dense" id="firstname" label='firstname' variant='filled' />: <h3 style={{ textAlign:'center', padding:'1%', paddingBottom:'10%'}}>{data?.firstname}</h3> }
+            {editable ?<TextField {...register("lastName")} value={data?.lastname} margin="dense" id="lastname" label='lastname' variant='filled' />: <h3 style={{ textAlign:'center', padding:'1%',paddingBottom:'10%'}}>{data?.lastname}</h3> }
+            {editable ? <TextField id="role" margin="dense" select variant='filled' label="Role" value={currency} onChange={handleChangeCurrency}>
             {roles.map((option) => (
             <MenuItem key={option.value} value={option.value}>
                 {option.label}
-            </MenuItem> ))} </TextField> : <h3 style={{ textAlign:'center', padding:'1%'}}>{data?.role}</h3>} <br></br> 
-            {editable ?<TextField {...register("email", {required: true, pattern: /^\S+@\S+$/i})} value={data?.email} margin="dense" id="email" label='email' variant='filled' />: <h3 style={{ textAlign:'center', padding:'1%'}}>{data?.email}</h3>}
-            <br></br>{errors.email  && <span style={{color:'red'}}>Please enter a valid email </span>}<br></br>
-            {editable ?<TextField {...register("phonenr")} value={data?.phonenumber} margin="dense" id="phonenr" label='phonenr' variant='filled'/>: <h3 style={{ textAlign:'center', padding:'1%'}}>{data?.phonenumber} </h3> }<br></br>
-            {editable ?<TextField {...register("address")} value={data?.address} margin="dense" id="address" label='address' variant='filled'/>: <h3 style={{ textAlign:'center', padding:'1%'}}>{data?.phonenumber}</h3> }<br></br>
-            <Link to='/fingerprintscan'><Button variant='outlined' style={{marginTop:'10%'}} fullWidth startIcon={data?.finger === null ? <FingerprintIcon style={{color: 'red'}}/> : <FingerprintIcon style={{color: 'green'}}/>}> {data?.finger === null ? 'add' : 'delete'}</Button></Link>
+            </MenuItem> ))} </TextField> : <h3 style={{ textAlign:'center', padding:'1%',paddingBottom:'10%'}}>{data?.role}</h3>}
+            {editable ?<TextField {...register("email", {required: true, pattern: /^\S+@\S+$/i})} value={data?.email} margin="dense" id="email" label='email' variant='filled' />: <h3 style={{ textAlign:'center', padding:'1%',paddingBottom:'10%'}}>{data?.email}</h3>}
+            {errors.email  && <span style={{color:'red'}}>Please enter a valid email </span>}
+            {editable ?<TextField {...register("phonenr")} value={data?.phonenumber} margin="dense" id="phonenr" label='phonenr' variant='filled'/>: <h3 style={{ textAlign:'center', padding:'1%',paddingBottom:'10%'}}>{data?.phonenumber} </h3> }
+            <Link to='/fingerprintscan'><Button variant='outlined' style={{marginTop:'10%'}} fullWidth><FingerprintIcon style={{color:'red', marginRight:'1%'}} /> hinzufügen</Button></Link>
         </div>
-        <div className={classes.root} style={{display: 'inline-block',width:'40%',float:'left', backgroundColor:'#A9C6B0', marginLeft:'3%',position:'relative', padding:'1%'}}>
+        <div hidden={!editable}>
+        <Button  type="submit" variant='contained' style={{float:'right', display:'inline-block', marginTop:'-4%'}} >Save</Button>
+        </div>
+
+        <div className={classes.root} style={{display: 'inline-block',width:'50%',float:'right', backgroundColor:'#A9C6B0', marginLeft:'3%',position:'relative', padding:'1%'}}>
             Door Access: 
             <Button data-cy="addDoorsbtn"><AddDoors /></Button>
             <br></br>
 
             <ul>
-            {data?.access.map((door: Door) =>(
+            {data?.accesses.map((door: Door) =>(
                 <li>{door.doorname}</li>
             ))}
             </ul>
             
 
         </div>
-        <Button type="submit" variant='contained' style={{float: 'right', display:'inline-block', marginRight:'1%'}} >Save</Button>
-        <Card className={classes.root} style={{display: 'inline-block',width:'50%',float:'left',backgroundColor:'white', marginLeft:'47%',textAlign:'center', marginTop:'-17%'}}>
-            <p>Enter password: </p>
+        <div hidden={data?.role == 'User' || !editable}>
+        <Card className={classes.root} style={{display: 'inline-block',width:'50%',float:'right',backgroundColor:'white',textAlign:'center', padding:'1%'}}>
+            <p>Enter a password: </p>
             <TextField {...register("password")}placeholder="password" variant="filled" type="password" />
             <br></br>
-            <p>Repeat password:</p>
+            <p>Repeat the password:</p>
             <TextField {...register("passwordRepeat")} placeholder="password" variant="filled" type="password" />
 
             <br></br>
             <Button variant='contained' style={{float:'right', margin:'2%'}}>save</Button>
             <br></br>
         </Card>
+        </div>
     </form>
     </Card>
   );

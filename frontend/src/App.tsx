@@ -17,6 +17,7 @@ import UserDetail from './components/UserDetail';
 import Login2 from './pages/Login2';
 import AdminProfile from './components/AdminProfile';
 import UserDetailProfile from './components/UserDetailProfile';
+import Login from './pages/Login';
 
 
 
@@ -29,14 +30,15 @@ function App() {
       <Nav />
       
         <Router>
-                <Route path="/" exact><Management /></Route>
+                <Route path="/" exact><Login /></Route>
+                <Route path="/management" exact><Management /></Route>
                 <Route path="/doors" exact><Doors/></Route>
                 <Route path="/users" component={Users} />
                 <Route path="/delete-user"><DeleteUser /></Route>
                 <Route path="/users/:id"><UserProfile /></Route>
                 <Route path="/new-user"><NewUserProfile /></Route>
                 <Route path="/fingerprintscan"><FingerPrintScan /></Route>
-                <Route path="/userdetail/:userId"><UserDetailProfile /></Route>
+                <Route path="/userdetail/:uuid"><UserDetailProfile /></Route>
                 <Route path="/userform"><NewUserForm /></Route>
                 <Route path="/loading"><Loading /></Route>
                 <Route path="/search"><SearchBar /></Route>

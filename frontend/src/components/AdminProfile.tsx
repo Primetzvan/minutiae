@@ -161,7 +161,7 @@ function handlePasswordChange(){
             <br></br>
 
             <ul>
-            {data?.access.map((door: Door) =>(
+            {data?.accesses.map((door: Door) =>(
                 <li>{door.doorname}</li>
             ))}
             </ul>

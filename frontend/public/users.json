@@ -1,4 +1,4 @@
-{ "users":[
+[
     {
         "uuid": "48739af0-5bda-4ac7-a181-1f44af3f48ae",
         "username": "sarah1234",
@@ -6,7 +6,7 @@
         "phonenumber": "",
         "email": "",
         "finger": {"uuid": "42342af0-21aa-c3c7-a171-1f22af3f48ae"},
-        "access":[
+        "accesses":[
             {
                 "uuid": "40839af0-5bda-1lkj-a181-1f44af3f48ae",
                 "doorname": "Haustür",
@@ -28,7 +28,7 @@
         "phonenumber": "",
         "email": "",
         "finger": {"uuid": "68939af0-5bda-4ac7-a181-1f44af3f48ae"},
-        "access":[
+        "accesses":[
             {
                 "uuid": "1459af0-3eda-4ac7-a181-1f44af3f48ae",
                 "doorname": "Haustür",
@@ -57,7 +57,7 @@
         "phonenumber": "",
         "email": "",
         "finger": {"uuid": "4a345f0-5bda-4ac7-a181-1f44af3f48ae"},
-        "access":[
+        "accesses":[
             {
                 "uuid": "40839af0-5bda-1lkj-a181-1f44af3f48ae",
                 "doorname": "Haustür",
@@ -111,7 +111,7 @@
         "phonenumber": "",
         "email": "",
         "finger": null,
-        "access":[
+        "accesses":[
             {
                 "uuid": "1459af0-3eda-4ac7-a181-1f44af3f48ae",
                 "doorname": "Haustür",
@@ -127,4 +127,3 @@
         ]
     }
 ]
-}

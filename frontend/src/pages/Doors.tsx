@@ -44,7 +44,7 @@ import Loading from '../components/Loading';
         }
 
         
-        const rows = data?.doors.map((door, index) => (
+        const rows = data?.sort((a, b) => a.ip> b.ip ? 1:-1).map((door, index) => (
             
             <tr key={index}>
               <td style={{border: '1px solid black'}}>{door.doorname}</td>
@@ -108,7 +108,7 @@ import Loading from '../components/Loading';
              return (
         
                 <div>
-                <Link to='/' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
                     <h1 style={{textAlign:'center', marginBottom:'5%'}}>Doors</h1>
                     <AddNewDoor />
 
@@ -125,7 +125,7 @@ import Loading from '../components/Loading';
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        {data?.doors.map((row) => (
+                        {data?.map((row) => (
                             <StyledTableRow key={row.uuid}>
                             <StyledTableCell align="left">{editable ? <TextField value={row.doorname} />: row.doorname }</StyledTableCell>
                             <StyledTableCell align="center">{row.ip}</StyledTableCell>
