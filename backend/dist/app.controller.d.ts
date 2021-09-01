@@ -8,5 +8,6 @@ export declare class AppController {
     login(response: Response, req: any): Promise<{
         userId: any;
     }>;
+    logout(): string;
     getProfile(req: any): any;
 }

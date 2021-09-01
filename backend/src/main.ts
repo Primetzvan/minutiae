@@ -2,10 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.use(cookieParser());
+  //app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // removes not expected attributes in post/update request body, help prevent malicious data from being sent into our Requests
@@ -16,6 +18,18 @@ async function bootstrap() {
       },
     }),
   );
+  const microserviceMQTT = app.connectMicroservice<MicroserviceOptions>({
+      transport: Transport.MQTT,
+      options: {
+        url: 'mqtt://localhost:1883',
+        username: 'sarah',
+        password: 'lalala',
+      },
+    },
+    { inheritAppConfig: true },
+  );
+
+  await app.startAllMicroservices();
   await app.listen(3000);
 }
 bootstrap();

@@ -35,6 +35,9 @@ let AppController = class AppController {
         });
         return { userId: access.userId };
     }
+    logout() {
+        return 'logout';
+    }
     getProfile(req) {
         return req.user;
     }
@@ -49,6 +52,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "login", null);
+__decorate([
+    common_1.Get('auth/logout'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "logout", null);
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Get('profile'),

@@ -18,6 +18,9 @@ import {
 import { DoorsService } from './doors.service';
 import { CreateDoorDto } from './dto/create-door.dto';
 import { UpdateDoorDto } from './dto/update-door.dto';
+import { Public } from "../auth/constants";
+import { LocalAuthGuard } from "../auth/local-auth.guard";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 
 @Controller('doors')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -25,7 +28,9 @@ export class DoorsController {
   constructor(private readonly doorsService: DoorsService) {}
 
   @Get()
-  async findAll(@Req() req) {
+  //@UseGuards(JwtAuthGuard)
+  //@Public()
+  async findAll() {
     return this.doorsService.findAll();
   }
 

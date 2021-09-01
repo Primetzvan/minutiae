@@ -46,7 +46,10 @@ npm i -D @types/cookie-parser
 # Generating & returning files
 npm i file-saver
 npm install jszip
-##TODO install tar
+
+# MQTT
+npm i --save mqtt
+npm i --save @nestjs/microservices
 
 # Other dependencies
 npm i --save @nestjs/config
@@ -56,12 +59,8 @@ npm i --save @nestjs/config
 
 
 ## Set environment variables
-#TODO: kann man so machen?
 token=$(openssl rand -base64 20)
 echo "FRONTEND_KEY=${token}" | sudo tee ./.env > /dev/null #/dev/null mutes output
 token=$(openssl rand -base64 20)
 echo "M2M_KEY=${token}" | sudo tee -a ./.env > /dev/null #-a = appends
 #echo "export M2M_KEY=${token}" | sudo tee -a /etc/profile.d/nest_environmentvariables.sh > /dev/null #-a = appends
-
-#sudo shutdown -r now
-echo "please restart"

@@ -17,7 +17,8 @@ const doors_module_1 = require("./doors/doors.module");
 const fingers_module_1 = require("./fingers/fingers.module");
 const config_1 = require("@nestjs/config");
 const accesses_controller_1 = require("./accesses/accesses.controller");
-const files_generator_controller_1 = require("./files-generator/files-generator.controller");
+const mqtt_controller_1 = require("./mqtt/mqtt.controller");
+const mqtt_module_1 = require("./mqtt/mqtt.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -38,8 +39,13 @@ AppModule = __decorate([
                 synchronize: true,
             }),
             config_1.ConfigModule.forRoot({ isGlobal: true }),
+            mqtt_module_1.MqttModule,
         ],
-        controllers: [app_controller_1.AppController, accesses_controller_1.AccessesController, files_generator_controller_1.FilesGeneratorController],
+        controllers: [
+            app_controller_1.AppController,
+            accesses_controller_1.AccessesController,
+            mqtt_controller_1.MqttController,
+        ],
         providers: [app_service_1.AppService],
     })
 ], AppModule);

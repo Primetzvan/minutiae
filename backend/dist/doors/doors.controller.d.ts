@@ -5,7 +5,7 @@ import { UpdateDoorDto } from './dto/update-door.dto';
 export declare class DoorsController {
     private readonly doorsService;
     constructor(doorsService: DoorsService);
-    findAll(req: any): Promise<import("./entities/door.entity").Door[]>;
+    findAll(): Promise<import("./entities/door.entity").Door[]>;
     findOne(uuid: string): Promise<import("./entities/door.entity").Door>;
     create(response: any, createDoorDto: CreateDoorDto): Promise<StreamableFile>;
     update(uuid: string, updateDoorDto: UpdateDoorDto): Promise<import("./entities/door.entity").Door>;

@@ -1,4 +1,4 @@
-import { Controller, Get, Request, Post, UseGuards, Res, Req } from "@nestjs/common";
+import { Controller, Get, Request, Post, UseGuards, Res, Req, Param } from "@nestjs/common";
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
@@ -31,6 +31,11 @@ export class AppController {
     });
 
     return { userId: access.userId };
+  }
+
+  @Get('auth/logout')
+  logout() {
+    return 'logout';
   }
 
   @UseGuards(JwtAuthGuard)

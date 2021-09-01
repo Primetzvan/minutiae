@@ -21,7 +21,7 @@ let DoorsController = class DoorsController {
     constructor(doorsService) {
         this.doorsService = doorsService;
     }
-    async findAll(req) {
+    async findAll() {
         return this.doorsService.findAll();
     }
     findOne(uuid) {
@@ -46,9 +46,8 @@ let DoorsController = class DoorsController {
 };
 __decorate([
     common_1.Get(),
-    __param(0, common_1.Req()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], DoorsController.prototype, "findAll", null);
 __decorate([
