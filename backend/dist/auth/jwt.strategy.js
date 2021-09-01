@@ -20,7 +20,7 @@ let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport
     constructor(userService, configService) {
         super({
             ignoreExpiration: false,
-            secretOrKey: configService.get('NESTJS_SECRET_KEY'),
+            secretOrKey: configService.get('FRONTEND_KEY'),
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromExtractors([
                 (request) => {
                     const access_token = request === null || request === void 0 ? void 0 : request.cookies['ACCESS_TOKEN_COOKIE'];
@@ -36,6 +36,7 @@ let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport
     }
     async validate(payload) {
         return {
+            currentHashedRefreshToken: '',
             accesses: [],
             email: '',
             firstname: '',

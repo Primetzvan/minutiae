@@ -8,6 +8,8 @@ import { DoorsModule } from './doors/doors.module';
 import { FingersModule } from './fingers/fingers.module';
 import { ConfigModule } from "@nestjs/config";
 import { AccessesController } from './accesses/accesses.controller';
+import { MqttController } from './mqtt/mqtt.controller';
+import { MqttModule } from './mqtt/mqtt.module';
 
 @Module({
   imports: [
@@ -25,9 +27,14 @@ import { AccessesController } from './accesses/accesses.controller';
       autoLoadEntities: true,
       synchronize: true, // DISABLE in production
     }),
-    ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }),
+    ConfigModule.forRoot({ isGlobal: true }),
+    MqttModule,
   ],
-  controllers: [AppController, AccessesController],
+  controllers: [
+    AppController,
+    AccessesController,
+    MqttController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}

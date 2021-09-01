@@ -68,7 +68,7 @@ let UsersService = class UsersService {
     async update(id, updateUserDto) {
         const user = await this.userRepository.preload(Object.assign({ uuid: id }, updateUserDto));
         if (!user) {
-            throw new common_1.NotFoundException(`User '${id}' not found`);
+            throw new common_1.NotFoundException(`User with id #'${id}' not found`);
         }
         if (user.role == user_entity_1.UserRole.USER && user.password != null) {
             user.password = null;

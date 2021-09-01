@@ -15,6 +15,8 @@ import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AuthGuard } from "@nestjs/passport";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { Public } from "../auth/constants";
 
 
 @Controller('users')
@@ -25,7 +27,7 @@ export class UsersController {
   }
 
   @Get()
-  async findAll(@Req() req) {
+  async findAll() {
     return this.userService.findAll();
   }
 
@@ -33,11 +35,6 @@ export class UsersController {
   // can be number cuz validation pipe
   findOne(@Param('uuid') uuid: string) {
     return this.userService.findOneById(uuid);
-  }
-
-  @Get(':id')
-  logout(@Param('id') id: string) {
-    return `This action returns #${id} user`;
   }
 
   @Post()
