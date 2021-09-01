@@ -16,5 +16,5 @@ wsrep_cluster_address="gcomm://10.20.86.120,10.20.86.119,10.20.86.114"
 wsrep_sst_method=rsync
 
 # Galera Node Configuration
-wsrep_node_address="10.20.86.119"
-wsrep_node_name="this_node_name2"
+wsrep_node_address="10.20.86.120"
+wsrep_node_name="this_node_name1"
