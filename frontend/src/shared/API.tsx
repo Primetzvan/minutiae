@@ -21,7 +21,7 @@ export type User = {
     email: string;
     address: string;
     finger: object;
-    access: [];
+    accesses: [];
 }
 
 export type GetUsersResponse = {
@@ -32,26 +32,31 @@ export type NewUserFormRouteProps = {
     uuid: string;
 }
 
+export type loginUsers = {
+    userNameOrEmail: string;
+    password: string;
+}
+
 export const getDoors = async () => {
-    const { data } = await axios.get<GetDoorsResponse>(`${process.env.REACT_APP_API_URL}/doors.json`);
+    const { data } = await axios.get<Door[]>(`${process.env.REACT_APP_API_URL}/doors`);
     console.log(data);
     return data;
 };
 
 
 export const getUsers = async () => {
-    const { data } = await axios.get<GetUsersResponse>(`${process.env.REACT_APP_API_URL}/users.json`);
+    const { data } = await axios.get<User[]>(`${process.env.REACT_APP_API_URL}/users`);
     console.log(data);
     return data;
 };
 export const getUserDetail = (uuid: string) => async () => {
-    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/userDetail.json`, {params:{uuid}});
+    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {params:{uuid}});
     console.log(data);
     return data;
 };
 
 export const getAdminProfile = (uuid: string) => async () => {
-    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/userDetail.json`, {params:{uuid}});
+    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {params:{uuid}});
     console.log(data);
     return data;
 };
@@ -59,5 +64,16 @@ export const getAdminProfile = (uuid: string) => async () => {
 export const deleteUser = (uuid: string) => async () => {
     const { data } = await axios.delete(`${process.env.REACT_APP_API_URL}/users.json`, {data:{uuid}});
     console.log(data);
+    return data;
+};
+
+export const createUser = (data: User) => async () => {
+    const { data: response } = await axios.post(`${process.env.REACT_APP_API_URL}/users`, data);
+    return response.data;
+    };
+
+
+export const loginUser = (loginusers: loginUsers ) => async () => {
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, loginusers);
     return data;
 };

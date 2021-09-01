@@ -35,7 +35,7 @@ export default function FormDialog() {
     setOpen(false);
   };
 
-  let array = data?.doors;
+  let array = data;
  
   if (array === undefined) {
     array = [];
