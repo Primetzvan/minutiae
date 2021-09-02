@@ -1,10 +1,10 @@
 #!/bin/sh
 
-#Enable SSH
+# Enable SSH
 
 sudo systemctl enable ssh
 
-#Datenbank Setup
+# Database setup
 
 sudo chmod +x additional_Node.sh
 
