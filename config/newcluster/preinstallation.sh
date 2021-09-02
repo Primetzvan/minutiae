@@ -1,4 +1,4 @@
-#Ports freigeben
+# Opening ports
 
 sudo apt-get install ufw
 

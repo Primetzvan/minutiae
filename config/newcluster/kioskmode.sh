@@ -9,5 +9,5 @@ sudo apt install --no-install-recommends chromium-browser libgles2-mesa -y
 
 cat conf.txt >> /etc/xdg/openbox/autostart 
 
-echo "[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && startx -- -nocursor" >> /home/pi/.bash_profile
+echo "[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && startx --" >> /home/pi/.bash_profile
 
