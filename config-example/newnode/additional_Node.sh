@@ -18,5 +18,3 @@ sudo cp galera.cnf /etc/mysql/conf.d/
  
 sudo systemctl stop mysql
 sudo sudo systemctl start mysql
-
-sudo mysql -u root -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'" --password=root

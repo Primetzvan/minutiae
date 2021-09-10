@@ -6,24 +6,22 @@ sudo mkdir /media/usb
 
 sudo mount -t vfat -o utf8,uid=pi,gid=pi /dev/sda1 /media/usb
  
-cp -r /media/usb/shdb/shdbnew .
+sudo cp -r /media/usb/shdb/newcluster .
 
 sudo umount /media/usb
 
 sudo raspi-config
 
--> System Options -> Boot / Auto Login -> B2 Console Autologin
+-> System Options -> Boot / Auto Login -> B2 Console Autologin -> Finish -> No Reboot
 
-Finish -> No Reboot
-
-cd shdbnew
+cd newcluster
 
 sudo chmod +x ./preinstallation
 
 sudo ./preinstallation.sh
 
-sudo chmod +x ./start.sh
+sudo chmod +x ./setup.sh 
 
-./start.sh
+sudo ./setup.sh yourpassword
 
 

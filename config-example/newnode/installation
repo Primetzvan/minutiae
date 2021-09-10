@@ -6,7 +6,7 @@ sudo mkdir /media/usb
 
 sudo mount -t vfat -o utf8,uid=pi,gid=pi /dev/sda1 /media/usb
  
-cp -r /media/usb/shdb/shdbnew .
+cp -r /media/usb/shdb/newnode .
 
 sudo umount /media/usb
 
@@ -16,14 +16,14 @@ sudo raspi-config
 
 Finish -> No Reboot
 
-cd shdbnew
+cd newnode
 
 sudo chmod +x ./preinstallation
 
 sudo ./preinstallation.sh
 
-sudo chmod +x ./start.sh
+sudo chmod +x ./setup.sh
 
-./start.sh
+./setup.sh
 
 

@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-/home/pi/shdb/startcluster.sh
+/home/pi/newcluster/startcluster.sh
 
 exit 0 
 
