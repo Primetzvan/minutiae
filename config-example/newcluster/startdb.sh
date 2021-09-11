@@ -22,7 +22,7 @@ sudo sed -i "1s/^/$SQL1$1$SQL2\n/" db_setup.sql
 sudo systemctl start mysql
 sudo mysql --user=root < db_setup.sql
 
-#sudo sed -i "2d" db_setup.sql
+sudo sed -i "1d" db_setup.sql
 
 sudo cp galera.cnf /etc/mysql/conf.d/
  

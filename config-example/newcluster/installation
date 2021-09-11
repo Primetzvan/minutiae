@@ -1,8 +1,8 @@
 #TODO:
 
-sudo blkid -o list -w /dev/null
-
 sudo mkdir /media/usb
+
+sudo blkid -o list -w /dev/null
 
 sudo mount -t vfat -o utf8,uid=pi,gid=pi /dev/sda1 /media/usb
  
