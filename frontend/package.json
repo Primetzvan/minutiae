@@ -28,7 +28,7 @@
     "react-scripts": "4.0.3",
     "react-search-bar": "2.2.0",
     "react-window": "1.8.6",
-    "typescript": "4.3.5",
+    "typescript": "4.4.3",
     "web-vitals": "1.1.2"
   },
   "scripts": {
