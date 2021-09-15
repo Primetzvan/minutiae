@@ -11,7 +11,7 @@ export declare class User {
     role: UserRole;
     finger: Finger;
     accesses: Door[];
-    currentHashedRefreshToken?: string;
+    currentHashedRefreshToken: string;
 }
 export declare enum UserRole {
     USER = "User",

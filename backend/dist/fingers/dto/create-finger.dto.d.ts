@@ -1,3 +1,4 @@
+import { User } from "../../users/entities/user.entity";
 export declare class CreateFingerDto {
-    readonly userUIDD: string;
+    readonly user: User;
 }

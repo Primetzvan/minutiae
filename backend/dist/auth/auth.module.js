@@ -28,7 +28,7 @@ AuthModule = __decorate([
             config_1.ConfigModule,
             jwt_1.JwtModule.registerAsync({
                 useFactory: async (configService) => ({
-                    secret: configService.get('NESTJS_SECRET_KEY'),
+                    secret: configService.get('FRONTEND_KEY'),
                     signOptions: { expiresIn: constants_1.jwtConstants.expireTimeAccess },
                 }),
                 inject: [config_1.ConfigService],

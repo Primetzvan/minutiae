@@ -3,7 +3,6 @@ import { User } from '../entities/user.entity';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-
   /*private async getUserWithDoornames(userId: number) {
     const user = await this.findOne(userId);
 

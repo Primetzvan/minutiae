@@ -15,32 +15,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FingersController = void 0;
 const common_1 = require("@nestjs/common");
 const constants_1 = require("../auth/constants");
+const fingers_service_1 = require("./fingers.service");
+const create_finger_entity_1 = require("./dto/create-finger.entity");
 let FingersController = class FingersController {
-    findOne(user_id) {
-        return `This action returns the id of the finger`;
+    constructor(fingersService) {
+        this.fingersService = fingersService;
     }
-    create(fingerId) {
-        return fingerId;
+    create(createFingerDto) {
+        return this.fingersService.create(createFingerDto);
     }
     match(body) {
         return 'success';
     }
-    remove(user_id) {
-        return `This action removes the finger finger of user ${user_id}`;
+    remove(userId) {
+        return this.fingersService.remove(userId);
     }
 };
 __decorate([
-    common_1.Get(':user_id'),
-    __param(0, common_1.Param('user_id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], FingersController.prototype, "findOne", null);
-__decorate([
-    common_1.Post(':userId'),
+    common_1.Post(),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [create_finger_entity_1.CreateFingerDto]),
     __metadata("design:returntype", void 0)
 ], FingersController.prototype, "create", null);
 __decorate([
@@ -53,13 +48,14 @@ __decorate([
 ], FingersController.prototype, "match", null);
 __decorate([
     common_1.Delete(':userId'),
-    __param(0, common_1.Param('user_id')),
+    __param(0, common_1.Param('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], FingersController.prototype, "remove", null);
 FingersController = __decorate([
-    common_1.Controller('fingers')
+    common_1.Controller('fingers'),
+    __metadata("design:paramtypes", [fingers_service_1.FingersService])
 ], FingersController);
 exports.FingersController = FingersController;
 //# sourceMappingURL=fingers.controller.js.map

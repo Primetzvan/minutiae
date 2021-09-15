@@ -17,6 +17,10 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const door_entity_1 = require("./entities/door.entity");
+const JSZip = require("jszip");
+const fs = require("fs");
+const constants_1 = require("./constants");
+const path = require("path");
 let DoorsService = class DoorsService {
     constructor(doorRepository) {
         this.doorRepository = doorRepository;
@@ -69,6 +73,66 @@ let DoorsService = class DoorsService {
     async remove(uuid) {
         const door = await this.findOneById(uuid);
         return this.doorRepository.remove(door);
+    }
+    async createZipRepo(createDoorDto) {
+        const zip = JSZip();
+        await this.generateFolders(createDoorDto, zip);
+        const newNodeFolder = zip.folder(createDoorDto.doorname);
+        const route = path.resolve(process.cwd(), './files/');
+        fs.readdir(route, (err, files) => {
+            files.forEach((file) => {
+                if (!file.match('installation')) {
+                    console.log(file);
+                    newNodeFolder.file(file, fs.readFileSync(route + '/' + file));
+                }
+            });
+        });
+        zip.file('installationsanleitung.txt', fs.readFileSync(route + '/' + 'installation'));
+        return zip;
+    }
+    async generateFolders(createDoorDto, zip) {
+        const doors = await this.findAll();
+        const newDoorName = createDoorDto.doorname;
+        const newDoorIp = createDoorDto.ip;
+        let doorIpString = '';
+        doors.forEach((door) => {
+            doorIpString += door.ip + ',';
+        });
+        doorIpString += newDoorIp;
+        doors.forEach((door) => this.generateSpecificDoorFile(door.doorname, door.ip, doorIpString, zip));
+        this.generateSpecificDoorFile(newDoorName, newDoorIp, doorIpString, zip);
+    }
+    generateSpecificDoorFile(doorname, ip, allDoorIps, zip) {
+        const overwrite = '[mysqld]\n' +
+            'binlog_format=ROW\n' +
+            'default-storage-engine=innodb\n' +
+            'innodb_autoinc_lock_mode=2\n' +
+            'bind-address=0.0.0.0\n' +
+            '\n' +
+            '# Galera Provider Configuration\n' +
+            'wsrep_on=ON\n' +
+            'wsrep_provider=/usr/lib/galera/libgalera_smm.so\n' +
+            '\n' +
+            '# Galera Cluster Configuration\n' +
+            'wsrep_cluster_name="' +
+            constants_1.clusterName +
+            '"' +
+            'wsrep_cluster_address="gcomm://' +
+            allDoorIps +
+            '"\n' +
+            '\n' +
+            '# Galera Synchronization Configuration\n' +
+            'wsrep_sst_method=rsync\n' +
+            '\n' +
+            '# Galera Node Configuration\n' +
+            'wsrep_node_address="' +
+            ip +
+            '"\n' +
+            'wsrep_node_name="' +
+            doorname +
+            '"\n';
+        const folder = zip.folder(doorname);
+        folder.file('galera.cnf', overwrite);
     }
 };
 DoorsService = __decorate([
