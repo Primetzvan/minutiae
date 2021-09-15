@@ -1,18 +1,28 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
-import { User, UserRole } from "./entities/user.entity";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import * as bcrypt from "bcrypt";
-import { plainToClass } from 'class-transformer';
-import { UserRepository } from "./repositories/user.repository";
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { User, UserRole } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
+import { UserRepository } from './repositories/user.repository';
+import { Door } from '../doors/entities/door.entity';
+import { CreateAccessDto } from './dto/create-access.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: UserRepository,
+
+    @InjectRepository(Door)
+    private readonly doorRepository: Repository<Door>,
   ) {}
 
   findAll() {
@@ -91,7 +101,7 @@ export class UsersService {
       ...updateUserDto,
     });
     if (!user) {
-      throw new NotFoundException(`User '${id}' not found`);
+      throw new NotFoundException(`User with id #'${id}' not found`);
     }
 
     if (user.role == UserRole.USER && user.password != null) {
@@ -99,7 +109,6 @@ export class UsersService {
     }
 
     if (user.role !== UserRole.ADMIN && updateUserDto.password != null) {
-      console.log(updateUserDto.password);
       throw new BadRequestException(
         "User with Role 'User' cant have a password",
       );
@@ -144,5 +153,94 @@ export class UsersService {
   async remove(id: string) {
     const user = await this.findOneById(id);
     return this.userRepository.remove(user);
+  }
+
+  async addAccess(createAccessDto: CreateAccessDto) {
+    const door = await this.doorRepository.findOne({
+      uuid: createAccessDto.doorId,
+    });
+    if (!door) {
+      throw new NotFoundException(`Door '${createAccessDto.doorId}' not found`);
+    }
+
+    let user = await this.userRepository.findOne(
+      {
+        uuid: createAccessDto.userId,
+      },
+      {
+        relations: ['accesses'],
+      },
+    );
+    if (!user) {
+      throw new NotFoundException(`User '${createAccessDto.userId}' not found`);
+    }
+
+    const accesses = user.accesses ?? [];
+    if (user.accesses != []) {
+      accesses.forEach(function (door) {
+        if (door.uuid === createAccessDto.doorId) {
+          throw new BadRequestException(
+            `User '${createAccessDto.userId}' already has access to door '${createAccessDto.doorId}'`,
+          );
+        }
+      });
+    }
+    accesses.push(door);
+
+    // TODO: geht evtl hübscher?
+    user = await this.userRepository.preload({
+      uuid: createAccessDto.userId,
+      accesses: accesses,
+    });
+
+    return this.userRepository.save(user);
+  }
+
+  async removeAccess(createAccessDto: CreateAccessDto) {
+    const { userId, doorId } = createAccessDto;
+
+    const door = await this.doorRepository.findOne({
+      uuid: doorId,
+    });
+    if (!door) {
+      throw new NotFoundException(`Door '${doorId}' not found`);
+    }
+
+    let user = await this.userRepository.findOne(
+      {
+        uuid: userId,
+      },
+      {
+        relations: ['accesses'],
+      },
+    );
+    if (!user) {
+      throw new NotFoundException(`User '${userId}' not found`);
+    }
+
+    const accesses = user.accesses ?? [];
+    let found = false;
+    let index = 0;
+
+    accesses.forEach(function (door) {
+      if (door.uuid === doorId) {
+        accesses.splice(index, 1);
+        found = true;
+      }
+      index++;
+    });
+
+    if (!found) {
+      throw new BadRequestException(
+        `User '${userId}' has no Access to Door '${doorId}'`,
+      );
+    }
+
+    // remove reference
+    user = await this.userRepository.preload({
+      uuid: userId,
+      accesses: accesses,
+    });
+    await this.userRepository.save(user);
   }
 }

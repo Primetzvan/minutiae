@@ -25,12 +25,18 @@ let AppController = class AppController {
         this.configService = configService;
     }
     async login(response, req) {
-        const access_token = await this.authService.login(req.user);
-        response.cookie('ACCESS_TOKEN_COOKIE', access_token, {
+        const access = await this.authService.login(req.user);
+        const refresh_token = await this.authService.getRefreshToken(req.user);
+        response.cookie('ACCESS_TOKEN_COOKIE', access.token, {
             httpOnly: true,
         });
-        console.log('Access token: ' + access_token);
-        return { msg: 'success' };
+        response.cookie('REFRESH_TOKEN_COOKIE', refresh_token, {
+            httpOnly: true,
+        });
+        return { userId: access.userId };
+    }
+    logout() {
+        return 'logout';
     }
     getProfile(req) {
         return req.user;
@@ -46,6 +52,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "login", null);
+__decorate([
+    common_1.Get('auth/logout'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "logout", null);
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Get('profile'),

@@ -15,11 +15,12 @@ const user_entity_1 = require("./entities/user.entity");
 const jwt_strategy_1 = require("../auth/jwt.strategy");
 const config_1 = require("@nestjs/config");
 const user_repository_1 = require("./repositories/user.repository");
+const door_entity_1 = require("../doors/entities/door.entity");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
     common_1.Module({
-        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, user_repository_1.UserRepository])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, user_repository_1.UserRepository, door_entity_1.Door])],
         providers: [users_service_1.UsersService, jwt_strategy_1.JwtStrategy, config_1.ConfigService],
         controllers: [users_controller_1.UsersController],
         exports: [users_service_1.UsersService],

@@ -12,11 +12,12 @@ const typeorm_1 = require("@nestjs/typeorm");
 const finger_entity_1 = require("./entities/finger.entity");
 const fingers_service_1 = require("./fingers.service");
 const fingers_controller_1 = require("./fingers.controller");
+const user_entity_1 = require("../users/entities/user.entity");
 let FingersModule = class FingersModule {
 };
 FingersModule = __decorate([
     common_1.Module({
-        imports: [typeorm_1.TypeOrmModule.forFeature([finger_entity_1.Finger])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([finger_entity_1.Finger, user_entity_1.User])],
         providers: [fingers_service_1.FingersService],
         controllers: [fingers_controller_1.FingersController],
         exports: [fingers_service_1.FingersService],

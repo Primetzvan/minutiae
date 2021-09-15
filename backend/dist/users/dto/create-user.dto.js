@@ -39,6 +39,10 @@ __decorate([
 ], AdditionalUserInfo.prototype, "email", void 0);
 __decorate([
     class_validator_1.IsString(),
+    class_validator_1.MaxLength(30),
+    class_validator_1.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, {
+        message: 'password too weak',
+    }),
     __metadata("design:type", String)
 ], AdditionalUserInfo.prototype, "password", void 0);
 __decorate([

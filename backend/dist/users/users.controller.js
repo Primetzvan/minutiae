@@ -22,14 +22,11 @@ let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
     }
-    async findAll(req) {
+    async findAll() {
         return this.userService.findAll();
     }
     findOne(uuid) {
         return this.userService.findOneById(uuid);
-    }
-    logout(id) {
-        return `This action returns #${id} user`;
     }
     create(createUserDto) {
         console.log(createUserDto instanceof create_user_dto_1.CreateUserDto);
@@ -44,9 +41,8 @@ let UsersController = class UsersController {
 };
 __decorate([
     common_1.Get(),
-    __param(0, common_1.Req()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findAll", null);
 __decorate([
@@ -56,13 +52,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findOne", null);
-__decorate([
-    common_1.Get(':id'),
-    __param(0, common_1.Param('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "logout", null);
 __decorate([
     common_1.Post(),
     __param(0, common_1.Body()),
