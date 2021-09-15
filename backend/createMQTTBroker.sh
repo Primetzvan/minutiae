@@ -1,7 +1,6 @@
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install mosquitto
-sudo nano /etc/mosquitto/mosquitto.conf
 
 # mosquitto client for checking if everything worked purposes
 #sudo apt-get install mosquitto-clients
