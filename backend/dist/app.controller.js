@@ -18,20 +18,22 @@ const jwt_auth_guard_1 = require("./auth/jwt-auth.guard");
 const local_auth_guard_1 = require("./auth/local-auth.guard");
 const auth_service_1 = require("./auth/auth.service");
 const constants_1 = require("./auth/constants");
-const config_1 = require("@nestjs/config");
 let AppController = class AppController {
-    constructor(authService, configService) {
+    constructor(authService) {
         this.authService = authService;
-        this.configService = configService;
     }
     async login(response, req) {
         const access = await this.authService.login(req.user);
         const refresh_token = await this.authService.getRefreshToken(req.user);
         response.cookie('ACCESS_TOKEN_COOKIE', access.token, {
             httpOnly: true,
+            path: '/',
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
         response.cookie('REFRESH_TOKEN_COOKIE', refresh_token, {
             httpOnly: true,
+            path: '/',
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
         return { userId: access.userId };
     }
@@ -68,8 +70,7 @@ __decorate([
 ], AppController.prototype, "getProfile", null);
 AppController = __decorate([
     common_1.Controller(),
-    __metadata("design:paramtypes", [auth_service_1.AuthService,
-        config_1.ConfigService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AppController);
 exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map

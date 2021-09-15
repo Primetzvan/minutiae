@@ -1,10 +1,8 @@
 import { AuthService } from './auth/auth.service';
 import { Response } from 'express';
-import { ConfigService } from "@nestjs/config";
 export declare class AppController {
     private authService;
-    private configService;
-    constructor(authService: AuthService, configService: ConfigService);
+    constructor(authService: AuthService);
     login(response: Response, req: any): Promise<{
         userId: any;
     }>;

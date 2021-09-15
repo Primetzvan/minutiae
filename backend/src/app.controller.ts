@@ -4,16 +4,10 @@ import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { Public } from './auth/constants';
 import { Response } from 'express';
-import { nanoid } from 'nanoid';
-import { ConfigService } from "@nestjs/config";
-import { AuthGuard } from "@nestjs/passport";
 
 @Controller()
 export class AppController {
-  constructor(
-    private authService: AuthService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
@@ -24,10 +18,14 @@ export class AppController {
 
     response.cookie('ACCESS_TOKEN_COOKIE', access.token, {
       httpOnly: true,
+      path: '/',
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24), //TODO
     });
 
     response.cookie('REFRESH_TOKEN_COOKIE', refresh_token, {
       httpOnly: true,
+      path: '/',
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
 
     return { userId: access.userId };

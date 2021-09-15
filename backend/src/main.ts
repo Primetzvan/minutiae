@@ -5,9 +5,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule /*, { cors: true }*/);
   app.use(cookieParser());
-  //app.enableCors();
+  app.enableCors({ credentials: true, origin: 'http://localhost:3001' });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // removes not expected attributes in post/update request body, help prevent malicious data from being sent into our Requests

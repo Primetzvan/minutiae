@@ -6,8 +6,9 @@ const cookieParser = require("cookie-parser");
 const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: true });
+    const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use(cookieParser());
+    app.enableCors({ credentials: true, origin: 'http://localhost:3001' });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         transform: true,
