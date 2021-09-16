@@ -15,17 +15,17 @@ import { AccessesController } from './accesses/accesses.controller';
     UsersModule,
     DoorsModule,
     FingersModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mariadb',
       host: '127.0.0.1',
       port: 3306,
-      username: 'root',
-      password: 'test',
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
       database: 'mariadb',
       autoLoadEntities: true,
       synchronize: true, // DISABLE in production
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [
     AppController,
