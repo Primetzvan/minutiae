@@ -21,8 +21,6 @@ async function bootstrap() {
         transport: microservices_1.Transport.MQTT,
         options: {
             url: 'mqtt://localhost:1883',
-            username: 'sarah',
-            password: 'lalala',
         },
     }, { inheritAppConfig: true });
     await app.startAllMicroservices();

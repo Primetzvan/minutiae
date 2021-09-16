@@ -18,12 +18,11 @@ async function bootstrap() {
       },
     }),
   );
-  const microserviceMQTT = app.connectMicroservice<MicroserviceOptions>({
+  const microserviceMQTT = app.connectMicroservice<MicroserviceOptions>(
+    {
       transport: Transport.MQTT,
       options: {
         url: 'mqtt://localhost:1883',
-        username: 'sarah',
-        password: 'lalala',
       },
     },
     { inheritAppConfig: true },
