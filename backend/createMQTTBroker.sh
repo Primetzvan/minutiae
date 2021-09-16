@@ -8,6 +8,6 @@ apt-get install mosquitto
 # Make mosquitto only accessible on localhost
 echo -e "\nlistener 1883 localhost" | sudo tee -a /etc/mosquitto/mosquitto.conf > /dev/null
 
-sudo mosquitto -c /etc/mosquitto/mosquitto.conf
+mosquitto -c /etc/mosquitto/mosquitto.conf
 
-sudo systemctl restart mosquitto
+systemctl restart mosquitto
