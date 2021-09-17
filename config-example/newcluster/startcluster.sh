@@ -1,4 +1,4 @@
 #!/bin/sh
 
-galera_new_cluster
+sudo galera_new_cluster
 

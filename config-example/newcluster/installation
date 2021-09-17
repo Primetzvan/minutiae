@@ -22,6 +22,6 @@ sudo ./preinstallation.sh
 
 sudo chmod +x ./setup.sh 
 
-sudo ./setup.sh yourpassword
+sudo ./setup.sh your username yourpassword
 
 
