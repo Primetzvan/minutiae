@@ -36,7 +36,7 @@ export class FingersService {
     const f = this.fingerRepository.create({
       sessionId: sessionIdCache,
       user: user,
-      sessionExpires: new Date(Date.now() + 1000 * 60 * parseInt(process.env.CREATE_FINGER_SESSION_EXPIRES)), //TODO
+      sessionExpires: new Date(Date.now() + 1000 * 60 * parseInt(process.env.CREATE_FINGER_SESSION_EXPIRES)),
     });
     await this.fingerRepository.save(f).catch((err) => {
       return err;
