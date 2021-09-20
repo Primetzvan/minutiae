@@ -45,6 +45,12 @@ export class FingersController {
     };
   }
 
+  // Cancel fingerscan
+  @Get('stop/:sessionId')
+  async stopCreateFinger(@Param('sessionId') sessionId: string) {
+    await this.fingersService.removeBySessionId(sessionId);
+  }
+
   @Delete(':userId')
   remove(@Param('userId') userId: string) {
     return this.fingersService.remove(userId);
