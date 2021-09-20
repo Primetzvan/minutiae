@@ -1,20 +1,31 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query } from "@nestjs/common";
 import { Public } from '../auth/constants';
 import { FingersService } from "./fingers.service";
 import { CreateFingerDto } from "./dto/create-finger.entity";
+import { ClientProxy } from "@nestjs/microservices";
 
 @Controller('fingers')
 export class FingersController {
-  constructor(private readonly fingersService: FingersService) {}
-
-  @Post()
-  create(@Body() createFingerDto: CreateFingerDto) {
-    return this.fingersService.create(createFingerDto);
+  constructor(
+    private readonly fingersService: FingersService,
+    @Inject('MQ_CLIENT') private client: ClientProxy,
+  ) {
+    client.connect();
   }
 
-  // FRITZ Schnittstelle
-  // Man muss nicht eingeloggt sein um auf diese zuzugreifen (passt so?) TODO: nein
-  @Public()
+  @Post()
+  async create(@Body() createFingerDto: CreateFingerDto) {
+    const sessionId = await this.fingersService.create(createFingerDto); // returns sessionId from finger
+
+    console.log(sessionId);
+
+    this.client.emit('ENROLL', {
+      run: true,
+    }); // enroll: true - start enroll mode (=scan)
+
+    return sessionId;
+  }
+
   @Post('/match/:userId')
   match(@Body() body) {
     // log in db
