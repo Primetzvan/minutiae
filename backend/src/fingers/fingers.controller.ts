@@ -35,9 +35,7 @@ export class FingersController {
     const status = await this.fingersService.getCreateStatus(sessionId);
 
     if (status === 'expired') {
-      this.client.emit('ENROLL', {
-        run: false,
-      }); // enroll: false - stop enroll mode (=scan)
+      this.client.emit('ENROLL', { run: false }); // enroll: false - stop enroll mode (=scan)
     }
 
     return {
@@ -45,9 +43,10 @@ export class FingersController {
     };
   }
 
-  // Cancel fingerscan
+  // Cancel finger scan
   @Get('stop/:sessionId')
   async stopCreateFinger(@Param('sessionId') sessionId: string) {
+    this.client.emit('ENROLL', { run: false });
     await this.fingersService.removeBySessionId(sessionId);
   }
 
