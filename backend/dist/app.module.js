@@ -17,6 +17,7 @@ const doors_module_1 = require("./doors/doors.module");
 const fingers_module_1 = require("./fingers/fingers.module");
 const config_1 = require("@nestjs/config");
 const accesses_controller_1 = require("./accesses/accesses.controller");
+const constants_1 = require("./constants");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -33,7 +34,7 @@ AppModule = __decorate([
                 port: 3306,
                 username: process.env.DATABASE_USER,
                 password: process.env.DATABASE_PASSWORD,
-                database: 'mariadb',
+                database: constants_1.DATABASE_NAME,
                 autoLoadEntities: true,
                 synchronize: true,
             }),

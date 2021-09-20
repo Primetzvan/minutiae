@@ -6,6 +6,7 @@ export declare class FingersService {
     private readonly fingerRepository;
     private readonly userRepository;
     constructor(fingerRepository: Repository<Finger>, userRepository: Repository<User>);
-    create(createFingerDto: CreateFingerDto): Promise<User>;
+    create(createFingerDto: CreateFingerDto): Promise<any>;
     remove(userId: string): Promise<Finger>;
+    private findUserById;
 }

@@ -50,15 +50,12 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
-    typeorm_1.OneToOne(() => finger_entity_1.Finger),
-    typeorm_1.JoinColumn(),
+    typeorm_1.OneToOne(() => finger_entity_1.Finger, (finger) => finger.user),
     __metadata("design:type", finger_entity_1.Finger)
 ], User.prototype, "finger", void 0);
 __decorate([
-    typeorm_1.ManyToMany(() => door_entity_1.Door, (door) => door.accessors, {
-        cascade: true,
-    }),
-    typeorm_1.JoinTable({ name: 'accesses' }),
+    typeorm_1.ManyToMany(() => door_entity_1.Door, (door) => door.accessors),
+    typeorm_1.JoinTable({ name: 'access' }),
     __metadata("design:type", Array)
 ], User.prototype, "accesses", void 0);
 __decorate([

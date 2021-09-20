@@ -1,10 +1,9 @@
 import {
   Column,
-  Entity, JoinColumn,
+  Entity,
   JoinTable,
   ManyToMany, OneToOne,
   PrimaryGeneratedColumn,
-  Unique
 } from "typeorm";
 import { Finger } from '../../fingers/entities/finger.entity';
 import { Door } from '../../doors/entities/door.entity';
@@ -12,7 +11,6 @@ import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
-  // auto increment id shouldnt be used external => generated uuid
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
@@ -38,14 +36,11 @@ export class User {
   @Column({ default: 'User' }) // Default: User
   role: UserRole;
 
-  @OneToOne(() => Finger)
-  @JoinColumn()
+  @OneToOne(() => Finger, (finger) => finger.user)
   finger: Finger;
 
-  @ManyToMany(() => Door, (door) => door.accessors, {
-    cascade: true,
-  })
-  @JoinTable({ name: 'accesses' })
+  @ManyToMany(() => Door, (door) => door.accessors)
+  @JoinTable({ name: 'access' })
   accesses: Door[];
 
   @Column({
@@ -54,20 +49,6 @@ export class User {
   @Exclude()
   public currentHashedRefreshToken: string;
 }
-
-/* TEST:
-      {
-       accesses: [],
-       email: 'max.musterman@gmail.com',
-       firstname: 'max',
-       lastname: 'mustermann',
-       password: 'geheim',
-       phonenumber: '0667/99021145',
-       finger: undefined,
-       role: 'User',
-       username: maxi
-      };
- */
 
 export enum UserRole {
   USER = 'User',

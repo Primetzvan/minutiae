@@ -1,9 +1,4 @@
-# TODO: download backend selbst
 # TODO: load files from github into files folder/sind schon da? -> github folder
-
-# Set environment Variables
-  # TODO: richtige node version installieren
-
 
 ##
 npm install
@@ -11,3 +6,7 @@ npm install
 ## Set environment variables
 token=$(openssl rand -base64 20)
 echo "FRONTEND_KEY=${token}" | sudo tee ./.env > /dev/null #/dev/null mutes output
+
+echo "DATABASE_USER='root'" | sudo tee -a ./.env > /dev/null #/dev/null mutes output
+echo "DATABASE_PASSWORD='test'" | sudo tee -a ./.env > /dev/null #/dev/null mutes output
+echo "CREATE_FINGER_SESSION_EXPIRES=10" | sudo tee -a ./.env > /dev/null #/dev/null mutes output
