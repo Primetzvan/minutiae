@@ -8,5 +8,5 @@ export declare class UsersController {
     findOne(uuid: string): Promise<import("./entities/user.entity").User>;
     create(createUserDto: CreateUserDto): Promise<import("./entities/user.entity").User>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<import("./entities/user.entity").User>;
-    delete(id: string): Promise<import("./entities/user.entity").User>;
+    delete(id: string, req: any): Promise<import("./entities/user.entity").User>;
 }

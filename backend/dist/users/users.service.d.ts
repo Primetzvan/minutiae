@@ -15,7 +15,7 @@ export declare class UsersService {
     create(createUserDto: CreateUserDto): Promise<User>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<User>;
     generateHash(password: string): Promise<string>;
-    remove(id: string): Promise<User>;
+    remove(id: string, loggedInAdmin: User): Promise<User>;
     addAccess(createAccessDto: CreateAccessDto): Promise<User>;
     removeAccess(createAccessDto: CreateAccessDto): Promise<void>;
 }

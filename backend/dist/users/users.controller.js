@@ -18,6 +18,7 @@ const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const passport_1 = require("@nestjs/passport");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
@@ -35,8 +36,8 @@ let UsersController = class UsersController {
     update(id, updateUserDto) {
         return this.userService.update(id, updateUserDto);
     }
-    delete(id) {
-        return this.userService.remove(id);
+    delete(id, req) {
+        return this.userService.remove(id, req.user);
     }
 };
 __decorate([
@@ -68,10 +69,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "update", null);
 __decorate([
+    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Delete(':id'),
     __param(0, common_1.Param('id')),
+    __param(1, common_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "delete", null);
 UsersController = __decorate([

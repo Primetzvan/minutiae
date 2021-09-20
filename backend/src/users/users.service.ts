@@ -150,9 +150,13 @@ export class UsersService {
     return await bcrypt.hash(password, saltOrRounds);
   }
 
-  async remove(id: string) {
+  async remove(id: string, loggedInAdmin: User) {
     const user = await this.findOneById(id);
-    return this.userRepository.remove(user);
+
+    // check if logged in user is not deleting himself and (included) if he isnt the last admin
+    if (user.uuid != loggedInAdmin.uuid) {
+      return this.userRepository.remove(user);
+    }
   }
 
   async addAccess(createAccessDto: CreateAccessDto) {

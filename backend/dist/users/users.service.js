@@ -101,9 +101,14 @@ let UsersService = class UsersService {
         const saltOrRounds = 5;
         return await bcrypt.hash(password, saltOrRounds);
     }
-    async remove(id) {
+    async remove(id, loggedInAdmin) {
+        const usersWithRoleAdmin = await this.userRepository.find({
+            role: user_entity_1.UserRole.ADMIN,
+        });
         const user = await this.findOneById(id);
-        return this.userRepository.remove(user);
+        if (usersWithRoleAdmin.length > 1 && user.uuid != loggedInAdmin.uuid) {
+            return this.userRepository.remove(user);
+        }
     }
     async addAccess(createAccessDto) {
         var _a;

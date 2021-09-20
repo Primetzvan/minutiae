@@ -8,7 +8,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, Request,
   UseGuards, UseInterceptors
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
@@ -48,8 +48,9 @@ export class UsersController {
     return this.userService.update(id, updateUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.userService.remove(id);
+  delete(@Param('id') id: string, @Request() req) {
+    return this.userService.remove(id, req.user);
   }
 }
