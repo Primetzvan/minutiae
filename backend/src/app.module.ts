@@ -8,6 +8,7 @@ import { DoorsModule } from './doors/doors.module';
 import { FingersModule } from './fingers/fingers.module';
 import { ConfigModule } from "@nestjs/config";
 import { AccessesController } from './accesses/accesses.controller';
+import { DATABASE_NAME } from "./constants";
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { AccessesController } from './accesses/accesses.controller';
       port: 3306,
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
-      database: 'mariadb',
+      database: DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true, // DISABLE in production
     }),
