@@ -7,6 +7,21 @@ else
 
 # Enable SSH
 sudo systemctl enable ssh
+# Install nodejs 12
+REQUIRED_PKG="nodejs"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: "$PKG_OK"
+if [ "" = "$PKG_OK" ]; then
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt update
+  sudo apt -y upgrade
+  sudo apt update
+  sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+  curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+  sudo apt -y install $REQUIRED_PKG
+  sudo apt -y  install gcc g++ make
+  dpkg -s $REQUIRED_PKG
+fi
 # Database Setup
 sudo chmod +x startdb.sh
 sudo ./startdb.sh $1 $2
