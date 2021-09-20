@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Finger = void 0;
+exports.FingerStatus = exports.Finger = void 0;
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../../users/entities/user.entity");
 let Finger = class Finger {
@@ -19,11 +19,37 @@ __decorate([
     __metadata("design:type", String)
 ], Finger.prototype, "uuid", void 0);
 __decorate([
-    typeorm_1.OneToOne(() => user_entity_1.User, { nullable: false }),
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", String)
+], Finger.prototype, "externalId", void 0);
+__decorate([
+    typeorm_1.Column({ unique: true, nullable: true }),
+    __metadata("design:type", String)
+], Finger.prototype, "sessionId", void 0);
+__decorate([
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", Date)
+], Finger.prototype, "sessionExpires", void 0);
+__decorate([
+    typeorm_1.Column({ default: 'running' }),
+    __metadata("design:type", String)
+], Finger.prototype, "status", void 0);
+__decorate([
+    typeorm_1.OneToOne(() => user_entity_1.User, (user) => user.finger, {
+        nullable: true,
+        onDelete: 'CASCADE',
+    }),
+    typeorm_1.JoinColumn(),
     __metadata("design:type", user_entity_1.User)
 ], Finger.prototype, "user", void 0);
 Finger = __decorate([
     typeorm_1.Entity()
 ], Finger);
 exports.Finger = Finger;
+var FingerStatus;
+(function (FingerStatus) {
+    FingerStatus["RUNNING"] = "running";
+    FingerStatus["OK"] = "ok";
+    FingerStatus["FAILED"] = "failed";
+})(FingerStatus = exports.FingerStatus || (exports.FingerStatus = {}));
 //# sourceMappingURL=finger.entity.js.map

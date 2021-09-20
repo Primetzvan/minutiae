@@ -17,8 +17,6 @@ export class FingersController {
   async create(@Body() createFingerDto: CreateFingerDto) {
     const sessionId = await this.fingersService.create(createFingerDto); // returns sessionId from finger
 
-    console.log(sessionId);
-
     this.client.emit('ENROLL', {
       run: true,
     }); // enroll: true - start enroll mode (=scan)
