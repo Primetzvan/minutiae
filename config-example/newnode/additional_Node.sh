@@ -18,3 +18,6 @@ sudo cp galera.cnf /etc/mysql/conf.d/
  
 sudo systemctl stop mysql
 sudo sudo systemctl start mysql
+
+echo "MARIADB_USER='$1'" | sudo tee ./MARIADBDB.env > /dev/null
+echo "MARIADB_SECRET_KEY='$2'" | sudo tee ./MARIADBDB.env > /dev/null

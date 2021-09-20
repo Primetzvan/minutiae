@@ -15,10 +15,6 @@ sudo apt install mariadb-server -y
 SQL1="CREATE USER $1@'%' identified by '$2';"
 SQL2="GRANT ALL PRIVILEGES ON *.* TO $1@'%' WITH GRANT OPTION;"
 
-sudo echo $SQL1
-
-sudo echo $SQL2
-
 sudo sed -i "1s/^/$SQL1\n$SQL2\n/" db_setup.sql
 
 sudo systemctl start mysql
@@ -32,3 +28,6 @@ sudo systemctl stop mysql
 sudo galera_new_cluster
 
 sudo mysql -u $1 -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'" --password=$2
+
+echo "export MARIADB_USER='$1'" | sudo tee /etc/profile.d/raspenv.sh > /dev/null
+echo "export MARIADB_KEY='$2'" | sudo tee -a /etc/profile.d/raspenv.sh > /dev/null
