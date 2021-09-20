@@ -156,6 +156,8 @@ export class UsersService {
     // check if logged in user is not deleting himself and (included) if he isnt the last admin
     if (user.uuid != loggedInAdmin.uuid) {
       return this.userRepository.remove(user);
+    } else {
+      throw new BadRequestException(`Cant delete logged in admin`);
     }
   }
 
