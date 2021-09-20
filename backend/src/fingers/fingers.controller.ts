@@ -47,11 +47,13 @@ export class FingersController {
   @Get('stop/:sessionId')
   async stopCreateFinger(@Param('sessionId') sessionId: string) {
     this.client.emit('ENROLL', { run: false });
-    await this.fingersService.removeBySessionId(sessionId);
+    return this.fingersService.removeBySessionId(sessionId);
   }
 
   @Delete(':userId')
-  remove(@Param('userId') userId: string) {
-    return this.fingersService.remove(userId);
+  async remove(@Param('userId') userId: string) {
+    const finger = await this.fingersService.removeForUser(userId);
+    this.client.emit('DELETE', { externalFingerId: finger.externalFingerId });
+    return finger.removed;
   }
 }

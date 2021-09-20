@@ -63,24 +63,17 @@ export class FingersService {
     return this.fingerRepository.remove(finger);
   }
 
-  async remove(userId: string) {
-    let user = await this.findUserById(userId);
-
+  async removeForUser(userId: string) {
+    const user = await this.findUserById(userId);
     const finger = user.finger;
-
-    // remove reference
-    user = await this.userRepository.preload({
-      uuid: userId,
-      finger: null,
-    });
-    await this.userRepository.save(user);
-
     if (!finger) {
-      throw new NotFoundException(`User '${userId}' has no finger`);
+      throw new NotFoundException(`User #'${userId}' has no finger`);
     }
-
     // remove finger
-    return this.fingerRepository.remove(finger);
+    return {
+      externalFingerId: finger.externalId,
+      removed: this.fingerRepository.remove(finger),
+    };
   }
 
   private async findUserById(userId: string) {
