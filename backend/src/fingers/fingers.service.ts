@@ -1,11 +1,6 @@
 import {
   BadRequestException,
-  ForbiddenException,
-  HttpException,
-  HttpStatus,
   Injectable,
-  InternalServerErrorException,
-  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +8,9 @@ import { Repository } from 'typeorm';
 import { Finger } from './entities/finger.entity';
 import { User } from '../users/entities/user.entity';
 import { CreateFingerDto } from './dto/create-finger.entity';
+import { nanoid } from "nanoid";
+
+let sessionIdCache;
 
 @Injectable()
 export class FingersService {
@@ -25,45 +23,30 @@ export class FingersService {
   ) {}
 
   async create(createFingerDto: CreateFingerDto) {
-    let user = await this.userRepository.findOne(
-      {
-        uuid: createFingerDto.userId,
-      },
-      {
-        relations: ['finger'],
-      },
-    );
+    const user = await this.findUserById(createFingerDto.userId);
 
-    if (!user) {
-      throw new NotFoundException(`User '${createFingerDto.userId}' not found`);
-    } else if (user.finger !== null) {
+    if (user.finger !== null) {
       throw new BadRequestException(
         `User '${createFingerDto.userId}' already has a finger, please remove finger before creating a new one`,
       );
     }
 
-    const f = this.fingerRepository.create();
-    await this.fingerRepository.save(f);
+    sessionIdCache = nanoid(10);
 
-    user = await this.userRepository.preload({
-      uuid: createFingerDto.userId,
-      finger: f,
+    const f = this.fingerRepository.create({
+      sessionId: sessionIdCache,
+      user: user,
+      sessionExpires: new Date(Date.now() + 1000 * 60 * parseInt(process.env.CREATE_FINGER_SESSION_EXPIRES)), //TODO
+    });
+    await this.fingerRepository.save(f).catch((err) => {
+      return err;
     });
 
-    return this.userRepository.save(user);
+    return sessionIdCache;
   }
 
   async remove(userId: string) {
-    let user = await this.userRepository.findOne(
-      { uuid: userId },
-      {
-        relations: ['finger'],
-      },
-    );
-
-    if (!user) {
-      throw new NotFoundException(`User '${userId}' not found`);
-    }
+    let user = await this.findUserById(userId);
 
     const finger = user.finger;
 
@@ -80,5 +63,21 @@ export class FingersService {
 
     // remove finger
     return this.fingerRepository.remove(finger);
+  }
+
+  private async findUserById(userId: string) {
+    const user = await this.userRepository.findOne(
+      {
+        uuid: userId,
+      },
+      {
+        relations: ['finger'],
+      },
+    );
+
+    if (!user) {
+      throw new NotFoundException(`User '${userId}' not found`);
+    }
+    return user;
   }
 }

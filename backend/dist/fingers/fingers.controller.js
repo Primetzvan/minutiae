@@ -14,15 +14,22 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FingersController = void 0;
 const common_1 = require("@nestjs/common");
-const constants_1 = require("../auth/constants");
 const fingers_service_1 = require("./fingers.service");
 const create_finger_entity_1 = require("./dto/create-finger.entity");
+const microservices_1 = require("@nestjs/microservices");
 let FingersController = class FingersController {
-    constructor(fingersService) {
+    constructor(fingersService, client) {
         this.fingersService = fingersService;
+        this.client = client;
+        client.connect();
     }
-    create(createFingerDto) {
-        return this.fingersService.create(createFingerDto);
+    async create(createFingerDto) {
+        const sessionId = await this.fingersService.create(createFingerDto);
+        console.log(sessionId);
+        this.client.emit('ENROLL', {
+            run: true,
+        });
+        return sessionId;
     }
     match(body) {
         return 'success';
@@ -36,10 +43,9 @@ __decorate([
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_finger_entity_1.CreateFingerDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], FingersController.prototype, "create", null);
 __decorate([
-    constants_1.Public(),
     common_1.Post('/match/:userId'),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
@@ -55,7 +61,9 @@ __decorate([
 ], FingersController.prototype, "remove", null);
 FingersController = __decorate([
     common_1.Controller('fingers'),
-    __metadata("design:paramtypes", [fingers_service_1.FingersService])
+    __param(1, common_1.Inject('MQ_CLIENT')),
+    __metadata("design:paramtypes", [fingers_service_1.FingersService,
+        microservices_1.ClientProxy])
 ], FingersController);
 exports.FingersController = FingersController;
 //# sourceMappingURL=fingers.controller.js.map

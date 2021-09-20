@@ -1,7 +1,7 @@
 #backend
 /backend/node_modules
 /backend/.env
-/backend/dist
+/backend/dist/*
 
 #frontend
 /frontend/node_modules

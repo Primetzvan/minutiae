@@ -18,38 +18,31 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const finger_entity_1 = require("./entities/finger.entity");
 const user_entity_1 = require("../users/entities/user.entity");
+const nanoid_1 = require("nanoid");
+let sessionIdCache;
 let FingersService = class FingersService {
     constructor(fingerRepository, userRepository) {
         this.fingerRepository = fingerRepository;
         this.userRepository = userRepository;
     }
     async create(createFingerDto) {
-        let user = await this.userRepository.findOne({
-            uuid: createFingerDto.userId,
-        }, {
-            relations: ['finger'],
-        });
-        if (!user) {
-            throw new common_1.NotFoundException(`User '${createFingerDto.userId}' not found`);
-        }
-        else if (user.finger !== null) {
+        const user = await this.findUserById(createFingerDto.userId);
+        if (user.finger !== null) {
             throw new common_1.BadRequestException(`User '${createFingerDto.userId}' already has a finger, please remove finger before creating a new one`);
         }
-        const f = this.fingerRepository.create();
-        await this.fingerRepository.save(f);
-        user = await this.userRepository.preload({
-            uuid: createFingerDto.userId,
-            finger: f,
+        sessionIdCache = nanoid_1.nanoid(10);
+        const f = this.fingerRepository.create({
+            sessionId: sessionIdCache,
+            user: user,
+            sessionExpires: new Date(Date.now() + 1000 * 60 * parseInt(process.env.CREATE_FINGER_SESSION_EXPIRES)),
         });
-        return this.userRepository.save(user);
+        await this.fingerRepository.save(f).catch((err) => {
+            return err;
+        });
+        return sessionIdCache;
     }
     async remove(userId) {
-        let user = await this.userRepository.findOne({ uuid: userId }, {
-            relations: ['finger'],
-        });
-        if (!user) {
-            throw new common_1.NotFoundException(`User '${userId}' not found`);
-        }
+        let user = await this.findUserById(userId);
         const finger = user.finger;
         user = await this.userRepository.preload({
             uuid: userId,
@@ -60,6 +53,17 @@ let FingersService = class FingersService {
             throw new common_1.NotFoundException(`User '${userId}' has no finger`);
         }
         return this.fingerRepository.remove(finger);
+    }
+    async findUserById(userId) {
+        const user = await this.userRepository.findOne({
+            uuid: userId,
+        }, {
+            relations: ['finger'],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException(`User '${userId}' not found`);
+        }
+        return user;
     }
 };
 FingersService = __decorate([

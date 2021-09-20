@@ -13,11 +13,23 @@ const finger_entity_1 = require("./entities/finger.entity");
 const fingers_service_1 = require("./fingers.service");
 const fingers_controller_1 = require("./fingers.controller");
 const user_entity_1 = require("../users/entities/user.entity");
+const microservices_1 = require("@nestjs/microservices");
 let FingersModule = class FingersModule {
 };
 FingersModule = __decorate([
     common_1.Module({
-        imports: [typeorm_1.TypeOrmModule.forFeature([finger_entity_1.Finger, user_entity_1.User])],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([finger_entity_1.Finger, user_entity_1.User]),
+            microservices_1.ClientsModule.register([
+                {
+                    name: 'MQ_CLIENT',
+                    transport: microservices_1.Transport.MQTT,
+                    options: {
+                        url: 'mqtt://localhost:1883'
+                    },
+                },
+            ]),
+        ],
         providers: [fingers_service_1.FingersService],
         controllers: [fingers_controller_1.FingersController],
         exports: [fingers_service_1.FingersService],
