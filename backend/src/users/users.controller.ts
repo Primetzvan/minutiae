@@ -7,8 +7,7 @@ import {
   Param,
   Patch,
   Post,
-  Query,
-  Req, Request,
+  Request,
   UseGuards, UseInterceptors
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
@@ -16,7 +15,6 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { Public } from "../auth/constants";
 
 
 @Controller('users')
@@ -24,6 +22,12 @@ import { Public } from "../auth/constants";
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly userService: UsersService) {
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return this.userService.findOneById(req.user.uuid);
   }
 
   @Get()

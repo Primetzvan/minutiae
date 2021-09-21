@@ -36,12 +36,6 @@ export class AppController {
     return 'logout';
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
   /*@Get('refresh')
   @UseGuards(AuthGuard('refresh'))
   async regenerateTokens(
