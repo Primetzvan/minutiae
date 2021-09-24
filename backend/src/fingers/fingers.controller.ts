@@ -30,10 +30,19 @@ export class FingersController {
     return sessionId;
   }
 
-  @Post('/match/:userId')
-  match(@Body() body) {
-    // log in db
-    return 'success';
+  @Get('status/:sessionId')
+  async getCreateFingerStatus(@Param('sessionId') sessionId: string) {
+    const status = await this.fingersService.getCreateStatus(sessionId);
+
+    if (status === 'expired') {
+      this.client.emit('ENROLL', {
+        run: false,
+      }); // enroll: false - stop enroll mode (=scan)
+    }
+
+    return {
+      status: status,
+    };
   }
 
   @Delete(':userId')

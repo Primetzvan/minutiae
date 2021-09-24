@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Finger } from './entities/finger.entity';
+import { Finger, FingerStatus } from "./entities/finger.entity";
 import { User } from '../users/entities/user.entity';
 import { CreateFingerDto } from './dto/create-finger.entity';
 import { nanoid } from "nanoid";
@@ -43,6 +43,27 @@ export class FingersService {
     });
 
     return sessionIdCache;
+  }
+
+  async getCreateStatus(sessionId: string) {
+    const finger = await this.fingerRepository.findOne({
+      sessionId: sessionId,
+    });
+
+    if (!finger) {
+      throw new NotFoundException(
+        `Finger with sessionId #'${sessionId}' not found`,
+      );
+    }
+
+    if (finger.sessionExpires != null && +Date.now() > +finger.sessionExpires) {
+      await this.fingerRepository.remove(finger);
+      return 'expired';
+    } else if (finger.status === FingerStatus.FAILED) {
+      await this.fingerRepository.remove(finger);
+    }
+
+    return finger.status;
   }
 
   async remove(userId: string) {
