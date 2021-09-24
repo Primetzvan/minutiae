@@ -46,15 +46,7 @@ export class FingersService {
   }
 
   async getCreateStatus(sessionId: string) {
-    const finger = await this.fingerRepository.findOne({
-      sessionId: sessionId,
-    });
-
-    if (!finger) {
-      throw new NotFoundException(
-        `Finger with sessionId #'${sessionId}' not found`,
-      );
-    }
+    const finger = await this.findFingerBySessionId(sessionId);
 
     if (finger.sessionExpires != null && +Date.now() > +finger.sessionExpires) {
       await this.fingerRepository.remove(finger);
@@ -64,6 +56,11 @@ export class FingersService {
     }
 
     return finger.status;
+  }
+
+  async removeBySessionId(sessionId: string) {
+    const finger = await this.findFingerBySessionId(sessionId);
+    return this.fingerRepository.remove(finger);
   }
 
   async remove(userId: string) {
@@ -100,5 +97,15 @@ export class FingersService {
       throw new NotFoundException(`User '${userId}' not found`);
     }
     return user;
+  }
+
+  private async findFingerBySessionId(sessionId: string) {
+    const finger = await this.fingerRepository.findOne({
+      sessionId: sessionId,
+    });
+    if (!finger) {
+      throw new NotFoundException(`There is no finger with '${sessionId}'`);
+    }
+    return finger;
   }
 }
