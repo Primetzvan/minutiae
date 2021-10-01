@@ -32,48 +32,64 @@ export type NewUserFormRouteProps = {
     uuid: string;
 }
 
+export type CreateNewUserFormRouteProps = {
+    username: string;
+}
+
+
 export type loginUsers = {
-    userNameOrEmail: string;
+    usernameoremail: string;
     password: string;
 }
 
+export let loggedInUserId: string;
+
 export const getDoors = async () => {
-    const { data } = await axios.get<Door[]>(`${process.env.REACT_APP_API_URL}/doors`);
+    const { data } = await axios.get<Door[]>(`${process.env.REACT_APP_API_URL}/doors`, { withCredentials: true });
     console.log(data);
     return data;
 };
 
-
 export const getUsers = async () => {
-    const { data } = await axios.get<User[]>(`${process.env.REACT_APP_API_URL}/users`);
+    const { data } = await axios.get<User[]>(`${process.env.REACT_APP_API_URL}/users`, { withCredentials: true });
     console.log(data);
     return data;
 };
 export const getUserDetail = (uuid: string) => async () => {
-    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {params:{uuid}});
+    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, { withCredentials: true });
     console.log(data);
     return data;
 };
 
-export const getAdminProfile = (uuid: string) => async () => {
-    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {params:{uuid}});
-    console.log(data);
+// export const getAdminProfile = (uuid: string) => async () => {
+//     const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {params:{uuid}});
+//     console.log(data);
+//     return data;
+// };
+
+export const getAdminProfile = async () => {
+    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/profile`, { withCredentials: true });
+    //console.log(data);
     return data;
 };
 
 export const deleteUser = (uuid: string) => async () => {
-    const { data } = await axios.delete(`${process.env.REACT_APP_API_URL}/users.json`, {data:{uuid}});
+    const { data } = await axios.delete<User[]>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {data:{uuid}});
     console.log(data);
     return data;
 };
 
-export const createUser = (data: User) => async () => {
-    const { data: response } = await axios.post(`${process.env.REACT_APP_API_URL}/users`, data);
-    return response.data;
-    };
+// export const createUser = (newUserdata: User) => async () => {
+//     const { data } = await axios.post<User>(`${process.env.REACT_APP_API_URL}/users`, newUserdata);
+//     return data;
+//     };
 
+export const createUser = (username: string) => async () => {
+    const { data } = await axios.post<User>(`${process.env.REACT_APP_API_URL}/users`, username);
+    return data;
+};
 
 export const loginUser = (loginusers: loginUsers ) => async () => {
-    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, loginusers);
+    const { data } = await axios.post<User>(`${process.env.REACT_APP_API_URL}/auth/login`, loginusers);
     return data;
 };

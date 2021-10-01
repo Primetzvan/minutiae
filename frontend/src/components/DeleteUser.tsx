@@ -8,24 +8,52 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getUserDetail, getUsers, User } from '../shared/API';
+import { useState } from 'react';
+import axios from 'axios';
 
 
-export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
+export default function FormDialog(props: { uuid: string; }) {
+  const [open, setOpen] = useState(false);
+ // const [users, setUsers] = useState<User[]>([]);
+  //const { data, isLoading } = useQuery(getUsers.name, getUsers);
+  
 
+  //console.log("del:" + props.uuid);
+
+
+  const { data, isLoading } = useQuery(getUserDetail.name, getUserDetail(props.uuid)); 
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-    //axios.delete(url, { data: { foo: "bar" } });
+
     setOpen(false);
   };
 
- function deleteUser(){
-     //const { data, isLoading } = useQuery(deleteUser.name, getUsers);
-  alert("deleted user");
+ const deleteUser = async () => {
+
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${props.uuid}`, {
+    method: 'DELETE',
+    headers: { 
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+         
+    },
+    credentials: "include",
+});
+
+if(response.ok){
+ // alert("user gelöscht");
+}else{
+ // alert("user konnte nicht gelöscht werden");
+}
+
+
   }
 
   return (
@@ -37,6 +65,7 @@ export default function FormDialog() {
           <DeleteForeverIcon style={{float:'left', display:'inline-block', fontSize:'400%'}}/>
           <DialogContentText style={{float:'left', display:'inline-block'}}>
             Do you really want to delete the user?
+            {/* {data?.username} */}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

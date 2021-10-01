@@ -8,6 +8,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getAdminProfile, getUsers } from '../shared/API';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,6 +31,7 @@ export default function MenuAppBar() {
  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { data, isLoading } = useQuery(getAdminProfile.name, getAdminProfile); 
 
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setAuth(event.target.checked);
@@ -41,6 +44,14 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logout = () => {
+    
+  };
+
+  if(data == null){
+   // window.location.href='/'
+  }
 
   return (
     <div className={classes.root}>
@@ -58,7 +69,7 @@ export default function MenuAppBar() {
           </Typography>
          {/* {auth &&  */}
      
-            <div>
+            <div hidden={data == null}>
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -83,8 +94,8 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose} ><Link to='/profile' onClick={()=> window.location.href='/profile'}>Profile</Link></MenuItem>
-                <MenuItem component={Link} to='/login' onClick={handleClose}><Link to='/profile' onClick={()=> window.location.href='/login'}>Log out</Link></MenuItem>
+                <MenuItem onClick={handleClose} ><Link to={`/profile/${data?.uuid}`} onClick={()=> window.location.href='/profile'} style={{color:'black', textDecoration:'none'}}>Profile</Link></MenuItem>
+                <MenuItem onClick={handleClose}><Link to='/' onClick={()=> window.location.href='/'} style={{color:'black', textDecoration:'none'}}>Log out</Link></MenuItem>
               </Menu>
             </div>
        

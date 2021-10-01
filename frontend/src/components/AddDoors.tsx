@@ -10,18 +10,21 @@ import { Checkbox } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import { getDoors } from '../shared/API';
+import { getDoors, getUserDetail, NewUserFormRouteProps, User } from '../shared/API';
 import { useQuery } from 'react-query';
 import AddIcon from '@material-ui/icons/Add';
 import Loading from './Loading';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const { data, isLoading } = useQuery(getDoors.name, getDoors); //isLoading
+  const params = useParams<NewUserFormRouteProps>();
 
-  console.log(data);
+
   if(isLoading){
     console.log("is Loading ...");
     <Loading />
@@ -87,7 +90,5 @@ export default function FormDialog() {
       </Dialog>
     </div>
   );
-
-
 
 };

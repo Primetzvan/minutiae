@@ -84,24 +84,13 @@ export default function UserDetail() {
   const classes = useStyles();
   const params = useParams<NewUserFormRouteProps>();
 
-
-  console.log(params);
   const handleChangeCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrency(event.target.value);
   };
 
 
   const { data, isLoading } = useQuery(getUserDetail.name, getUserDetail(params.uuid)); 
-//   let { data, isLoading } = useQuery(getUsers.name, getUsers); 
 
-//   const currentUser = data?.users.filter(user => {
-//       user.uuid === params.uuid}
-//       )
-
-//       console.log(currentUser);
-    
-//        // @ts-ignore: Object is possibly 'undefined'.
-//       const cuurent = currentUser[0] ?? null;
 
   if(isLoading){
       console.log("is Loading...");
@@ -111,7 +100,6 @@ export default function UserDetail() {
 
 function changeEditableState(){
   setEditable(!editable);
-  console.log(editable);
 }
 
 function handlePasswordChange(){
@@ -123,7 +111,7 @@ function handlePasswordChange(){
     <Card style={{backgroundColor:'#c6d9cb', padding:'0.5%', margin:'0.5%'}}>    
         <Link to='/users' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
     
-    <Button onClick={changeEditableState}>edit</Button>
+    <Button onClick={changeEditableState} >edit</Button>
     <form onSubmit={handleSubmit(onSubmit)}>
 
         <div style={{display: 'inline-block',float:'left', textAlign:'left', color:'black'}}>

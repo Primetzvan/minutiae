@@ -17,9 +17,11 @@ import { getDoors } from '../shared/API';
 import AddNewDoor from '../components/AddNewDoor';
 import Loading from '../components/Loading';
 
-    //const [doors, setDoors] = useState<Door[]>([]);
+
 
     //#region 
+
+    //const [doors, setDoors] = useState<Door[]>([]);
     // useEffect(()=>{
     //     axios.get('./doors.json')
     //     .then(response => {
@@ -57,7 +59,6 @@ import Loading from '../components/Loading';
             </tr>
         ))
 
-        //endregion
         
 
         const StyledTableCell = withStyles((theme: Theme) =>
@@ -117,7 +118,7 @@ import Loading from '../components/Loading';
                         <TableHead>
                         <TableRow>
                             <StyledTableCell align="left">Doorname 
-                                <Button onClick={handleDoornameState}><EditIcon style={{backgroundColor:'#70A07C', color:'white', borderRadius:'10%', marginLeft:'2%', marginTop:'2%'}}/></Button>
+                                <Button data-cy="editDoornamebtn" onClick={handleDoornameState}><EditIcon style={{backgroundColor:'#70A07C', color:'white', borderRadius:'10%', marginLeft:'2%', marginTop:'2%'}}/></Button>
                             </StyledTableCell>
                             <StyledTableCell align="center">IP-Address</StyledTableCell>
                             <StyledTableCell align="center">Color</StyledTableCell>
@@ -127,7 +128,7 @@ import Loading from '../components/Loading';
                         <TableBody>
                         {data?.map((row) => (
                             <StyledTableRow key={row.uuid}>
-                            <StyledTableCell align="left">{editable ? <TextField value={row.doorname} />: row.doorname }</StyledTableCell>
+                            <StyledTableCell align="left">{editable ? <TextField value={row.doorname}  />: row.doorname }</StyledTableCell>
                             <StyledTableCell align="center">{row.ip}</StyledTableCell>
                             <StyledTableCell align="center" ><ColorPicker /></StyledTableCell>
                             </StyledTableRow>
@@ -137,7 +138,7 @@ import Loading from '../components/Loading';
                     </Table>
 
                 </TableContainer>
-              <Button variant="outlined" disabled={!editable} style={{float:'right',marginTop:'1%', marginRight:'20%', marginBottom:'5%'}} onClick={saveDoors}>Save</Button>
+              <Button variant="outlined" disabled={!editable} data-cy="saveDoorbtn" style={{float:'right',marginTop:'1%', marginRight:'20%', marginBottom:'5%'}} onClick={saveDoors}>Save</Button>
 
                 </div>
         //#region 

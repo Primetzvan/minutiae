@@ -21,7 +21,6 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useState } from 'react';
 
 
-
 function filterUsersByUsername(users: User[] | undefined, usernameSearchQuery: string){
 
     if(!users){
@@ -87,6 +86,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
 
          const filteredUsersByUsername = filterUsersByUsername(data, usernameSearchQuery)
 
+        //debugger;
         
              return (
 
@@ -109,9 +109,10 @@ const StyledTableCell = withStyles((theme: Theme) =>
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        {filteredUsersByUsername.map((row) => (
+                        {filteredUsersByUsername.sort((a, b) => a.username> b.username ? 1:-1).map((row) => (
                             <StyledTableRow key={row.uuid}>
-                                <StyledTableCell><Button data-cy="deleteUser"><DeleteUser /></Button></StyledTableCell>
+                                {/*hidden={row.uuid == }*/}
+                                <StyledTableCell><Button data-cy="deleteUser" ><DeleteUser uuid={row.uuid}/></Button></StyledTableCell>
                                 <StyledTableCell align="center">{row.username}</StyledTableCell>
                                 <StyledTableCell align="center">{row.role}</StyledTableCell>
                                 <StyledTableCell align="center">{row.finger === null ? <FingerprintIcon style={{color: 'red'}}/> : <FingerprintIcon style={{color: 'green'}}/>}</StyledTableCell>
@@ -120,7 +121,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
                                         <Chip label={door.doorname} style={{margin:'0.5%', backgroundColor: door.color}}/>
                                     ))}
                                 </StyledTableCell> 
-                                <StyledTableCell align="right"><Link to={`/userdetail/${row.uuid}`} ><Button><ArrowForwardIosIcon /></Button></Link> </StyledTableCell>
+                                <StyledTableCell align="right"><Link to={`/userdetail/${row.uuid}`} ><Button data-cy="userDetail"><ArrowForwardIosIcon /></Button></Link> </StyledTableCell>
                             </StyledTableRow>
                         ))}
                         </TableBody>

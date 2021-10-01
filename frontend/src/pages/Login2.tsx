@@ -7,7 +7,15 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import Loading from '../components/Loading';
+import { loginUsers } from '../shared/API';
 
+type Inputs = {
+  usernameoremail: string,
+  password: string,
+
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -94,7 +102,36 @@ const reducer = (state: State, action: Action): State => {
   }
 }
 
+
 const Login = () => {
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+    const onSubmit: SubmitHandler<Inputs> = async (userData: loginUsers)  => {
+
+
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Origin": "http://localhost:3000",
+        },
+        credentials: "include",
+        body: JSON.stringify(userData)
+    });
+    const jsonData = await response.json();
+
+    if(response.ok){
+    
+        <Loading />
+        window.location.href='/management';
+    }else{
+        {errors.password  && <span style={{color:'red'}}>Please enter a password <br></br></span>}
+    }
+
+   console.log(jsonData);
+    } 
+
   const classes = useStyles();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -148,12 +185,13 @@ const Login = () => {
       });
     }
   return (
-    <form className={classes.container} noValidate autoComplete="off">
+    <form className={classes.container} onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
       <Card className={classes.card}>
         <CardHeader className={classes.header} style={{}}  title="log in"></CardHeader>
         <CardContent>
           <div>
             <TextField
+              {...register("usernameoremail", { required: true})}
               error={state.isError}
               fullWidth
               id="username"
@@ -165,6 +203,7 @@ const Login = () => {
               onKeyPress={handleKeyPress}
             />
             <TextField
+              {...register("password", { required: true})}
               error={state.isError}
               fullWidth
               id="password"
@@ -175,6 +214,7 @@ const Login = () => {
               helperText={state.helperText}
               onChange={handlePasswordChange}
               onKeyPress={handleKeyPress}
+              
             />
           </div>
         </CardContent>

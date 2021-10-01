@@ -11,16 +11,38 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 
 type Inputs = {
-    doorName: string,
-    IPAddress: string,
-  
+    doorname: string,
+    ip: string,  
   };
 
 
 export default function FormDialog() {
     const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
-    const onSubmit: SubmitHandler<Inputs> = door => console.log(door);
-
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    
+      console.log(data);
+      // debugger;
+       const response = await fetch(`${process.env.REACT_APP_API_URL}/doors`, {
+         method: 'POST',
+         headers: { 
+             'Content-Type': 'application/json',
+             "Access-Control-Allow-Credentials": "true",
+             "Access-Control-Allow-Origin": "http://localhost:3000",
+         
+         },
+         credentials: "include",
+         body: JSON.stringify(data)
+       });
+       const jsonData = await response.json();
+   
+       if(response.ok){
+       //  alert("ok");
+         handleClose();
+       } else {
+       //  alert("nicht ok");
+       }
+   
+     }
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -37,33 +59,34 @@ export default function FormDialog() {
       <Button variant="contained" style={{float:'right', marginRight:'20%', marginBottom:'1%'}} color="inherit" onClick={handleClickOpen} data-cy="addNewDoorbtn">
       <AddIcon />
       </Button>
-      <form onSubmit={handleSubmit(onSubmit)}>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add new Door</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Enter a unique doorname please:
-          </DialogContentText>
-          <TextField {...register("doorName", { required: true })}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogTitle id="form-dialog-title">Add new Door</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Enter a unique doorname please:
+          <TextField 
+          {...register("doorname", { required: true })}
            margin="dense"
            label="Doorname"
            variant="filled"
            fullWidth
         
           />
-        {errors.doorName  && <span style={{color:'red'}}>Please enter a unique doorname! <br></br></span>}
+        {errors.doorname  && <span style={{color:'red'}}>Please enter a unique doorname! <br></br></span>}
+        </DialogContentText>
 
         <DialogContentText>
             Enter a valid IP-address please:
           </DialogContentText>
-          <TextField {...register("IPAddress", { required: true })}
+          <TextField {...register("ip", { required: true })}
             margin="dense"
             label="IP-Address"
             variant="filled"
             fullWidth
         
           />
-          <br></br>{errors.IPAddress  && <span style={{color:'red'}}>Please enter a valid IP-Address! <br></br></span>}
+          <br></br>{errors.ip  && <span style={{color:'red'}}>Please enter a valid IP-Address! <br></br></span>}
 
         </DialogContent>
         <DialogActions>
@@ -71,10 +94,11 @@ export default function FormDialog() {
             Cancel
           </Button>
                  
-          <Button type="submit" variant='contained' onClick={handleClose}><a href="" download>Download</a></Button>
+          <Button type="submit" variant='contained' onClick={handleClose}>Download</Button> 
+       {/* <a href="" download>Download</a> */}
         </DialogActions>
+        </form>
       </Dialog>
-      </form>
     </div>
   );
 }
