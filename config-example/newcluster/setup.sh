@@ -30,8 +30,11 @@ sudo echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
 sudo chmod +x startdb.sh
 sudo ./startdb.sh $1 $2
 # Frontend & Backend Setup
+sudo npm install pm2 - g
 sudo chmod +x installfrontendbackend.sh
-sudo ./installfrontendbackend.sh
+sudo ./installfrontendbackend.sh $1 $2
+sudo pm2 start npm -- start --prefix /home/pi/newcluster/backend
+sudo pm2 start npm -- start --prefix /home/pi/newcluster/frontend
 sudo chmod +x createMQTTBroker.sh
 sudo ./createMQTTBroker.sh
 # Autostart Frontend/Backend
