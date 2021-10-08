@@ -10,6 +10,8 @@ import Menu from '@material-ui/core/Menu';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { getAdminProfile, getUsers } from '../shared/API';
+import logo from '../pages/Minutiae2Logo.png';
+import { Button } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -63,7 +65,9 @@ export default function MenuAppBar() {
       </FormGroup> */}
       <AppBar position="static">
         <Toolbar style={{backgroundColor:'#70A07C'}}>
-            
+            <div style={{ borderRadius:'6px', marginRight:'1%'}}>
+              <img src={logo} alt="Logo" width="35" style={{backgroundColor:'white',paddingRight:'1%', borderRadius:'3px'}}/>
+            </div>
           <Typography variant="h6" className={classes.title}>
             Minutiae
           </Typography>
