@@ -8,6 +8,7 @@ import { loginUser, loginUsers } from '../shared/API';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import Loading from '../components/Loading';
+import logo from './Minutiae2.png';
 
 type Inputs = {
     usernameoremail: string,
@@ -61,24 +62,24 @@ export default function Login(){
     return(
 
             <div style={{width:'100%', display: 'grid', placeItems: 'center'}}>
-                <h1 style={{textAlign:'center', marginBottom:'10%'}}>Log in</h1>
-                    <Card style={{width:'35%',marginLeft:'3%',float:'left', textAlign:'center', padding:'5%'}}>
-                    <CardHeader title=""></CardHeader>
-                    <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                <h1 style={{textAlign:'center', marginBottom:'10%'}}></h1>
+                    <Card style={{border:'2px solid #70a07c',width:'35%',marginLeft:'3%',float:'left', textAlign:'center', padding:'3%'}}>
+                        <img src={logo} alt="Logo" width="300" />
+                        <CardContent style={{marginTop:'4%'}}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
 
-                    {/* pattern: /^\S+@\S+$/i */}
-                        <TextField   {...register("usernameoremail", { required: true})} margin="dense" id="username" label='username' variant='filled'/><br></br>
-                        {errors.usernameoremail  && <span style={{color:'red'}}>Please enter a unique username <br></br></span>}
+                                {/* pattern: /^\S+@\S+$/i */}
+                                <TextField   {...register("usernameoremail", { required: true})} margin="dense" id="username" label='username' variant='filled'/><br></br>
+                                {errors.usernameoremail  && <span style={{color:'red'}}>Please enter a unique username <br></br></span>}
 
-                        <TextField   {...register("password", { required: true })} type='password' margin="dense" id="password" label='password' variant='filled'/> <br></br>
-                        {errors.password  && <span style={{color:'red'}}>Please enter a password <br></br></span>}
+                                <TextField   {...register("password", { required: true })} type='password' margin="dense" id="password" label='password' variant='filled'/> <br></br>
+                                {errors.password  && <span style={{color:'red'}}>Please enter a password <br></br></span>}
 
-                        <br></br>
-                        <Button type="submit" variant='contained' >Login</Button>
+                                <br></br>
+                                <Button type="submit" variant='contained' style={{marginTop:'2%'}}>Login</Button>
 
-                    </form>
-                    </CardContent>
+                            </form>
+                        </CardContent>
                     </Card>
 
             </div>

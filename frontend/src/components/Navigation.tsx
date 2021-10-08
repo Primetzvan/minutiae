@@ -50,7 +50,7 @@ export default function MenuAppBar() {
   };
 
   if(data == null){
-   // window.location.href='/'
+    //window.location.href='/'
   }
 
   return (
@@ -77,7 +77,7 @@ export default function MenuAppBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <AccountCircle display={data?.uuid}></AccountCircle>
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -95,7 +95,7 @@ export default function MenuAppBar() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose} ><Link to={`/profile/${data?.uuid}`} onClick={()=> window.location.href='/profile'} style={{color:'black', textDecoration:'none'}}>Profile</Link></MenuItem>
-                <MenuItem onClick={handleClose}><Link to='/' onClick={()=> window.location.href='/'} style={{color:'black', textDecoration:'none'}}>Log out</Link></MenuItem>
+                <MenuItem onClick={handleClose}><Link to='/' onClick={()=> {logout(); window.location.href='/'}} style={{color:'black', textDecoration:'none'}}>Log out</Link></MenuItem>
               </Menu>
             </div>
        
