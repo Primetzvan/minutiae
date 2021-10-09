@@ -4,9 +4,10 @@ if [ -z "$1" ] || [ -z "$2" ]
 then
 	echo "Enter new username and password!"
 else
-
 # Enable SSH
 sudo systemctl enable ssh
+# Install Git
+sudo apt install git -y
 # Install nodejs 12
 REQUIRED_PKG="nodejs"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
@@ -22,15 +23,26 @@ if [ "" = "$PKG_OK" ]; then
   sudo apt -y  install gcc g++ make
   dpkg -s $REQUIRED_PKG
 fi
+# npm update
+sudo npm install -g npm@latest
+sudo echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
 # Database setup
 sudo chmod +x additional_Node.sh
-sudo ./additional_Node.sh
-sudo echo "sudo systemctl start mysql" > /etc/init.d/StartDatabase.sh
-sudo chmod 755 /etc/init.d/StartDatabase.sh
-sudo update-rc.d /etc/init.d/StartDatabase.sh defaults
+sudo ./additional_Node.sh $1 $2
+# Frontend & Backend Setup
+sudo npm install pm2 - g
+sudo npm i -g pm2
+sudo chmod +x installfrontendbackend.sh
+sudo ./installfrontendbackend.sh $1 $2
+sudo pm2 start npm --name backend -- start --prefix /home/pi/newnode/backend
+sudo pm2 start npm --name frontend -- start --prefix /home/pi/newnode/frontend
+sudo chmod +x createMQTTBroker.sh
+sudo ./createMQTTBroker.sh
+# Autostart Frontend/Backend
+sudo chmod +x startcluster.sh
+echo "$(cat autostart.sh)" > /etc/rc.local
+# Kioskmode Setup
 sudo chmod +x kioskmode.sh
 sudo ./kioskmode.sh
 sudo reboot
-
 fi
-
