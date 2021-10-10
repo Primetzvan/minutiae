@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-/home/pi/newnode/startcluster.sh
+/home/pi/systemstart.sh
 
 exit 0 
 

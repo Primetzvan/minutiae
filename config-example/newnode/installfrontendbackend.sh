@@ -15,8 +15,12 @@ cd ../
 
 ## Set environment variables
 token=$(openssl rand -base64 20)
-echo "FRONTEND_KEY=${token}" | sudo tee /home/pi/newnode/backend/.env > /dev/null #/dev/null mutes output
+echo "FRONTEND_KEY=${token}" | sudo tee /home/pi/backend/.env > /dev/null #/dev/null mutes output
 
-echo "DATABASE_USER='$1'" | sudo tee -a /home/pi/newnode/backend/.env > /dev/null #/dev/null mutes output
-echo "DATABASE_PASSWORD='$2'" | sudo tee -a /home/pi/newnode/backend/.env > /dev/null #/dev/null mutes output
-echo "CREATE_FINGER_SESSION_EXPIRES=10" | sudo tee -a /home/pi/newnode/backend/.env > /dev/null #/dev/null mutes output
+echo "DATABASE_USER='$1'" | sudo tee -a /home/pi/backend/.env > /dev/null #/dev/null mutes output
+echo "DATABASE_PASSWORD='$2'" | sudo tee -a /home/pi/backend/.env > /dev/null #/dev/null mutes output
+echo "CREATE_FINGER_SESSION_EXPIRES=10" | sudo tee -a /home/pi/backend/.env > /dev/null #/dev/null mutes output
+echo "PORT=3000" | sudo tee -a /home/pi/backend/.env > /dev/null #/dev/null mutes output
+## Set environment variables frontend
+echo "REACT_APP_API_URL=http://localhost:3001" | sudo tee -a /home/pi/frontend/.env > /dev/null #/dev/null mutes output
+echo "PORT=3001" | sudo tee -a /home/pi/frontend/.env > /dev/null #/dev/null mutes output
