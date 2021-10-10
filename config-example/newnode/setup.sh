@@ -39,7 +39,7 @@ sudo pm2 start npm --name frontend -- start --prefix /home/pi/frontend
 sudo chmod +x createMQTTBroker.sh
 sudo ./createMQTTBroker.sh
 # Autostart Frontend/Backend
-sudo chmod +x startcluster.sh
+sudo chmod +x systemstart.sh
 echo "$(cat autostart.sh)" > /etc/rc.local
 # Kioskmode Setup
 sudo chmod +x kioskmode.sh
