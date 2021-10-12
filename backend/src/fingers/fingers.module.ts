@@ -14,7 +14,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'MQ_CLIENT',
         transport: Transport.MQTT,
         options: {
-          url: 'mqtt://localhost:1883'
+          url: 'mqtt://localhost:1883',
         },
       },
     ]),

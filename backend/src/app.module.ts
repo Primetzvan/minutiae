@@ -9,6 +9,7 @@ import { FingersModule } from './fingers/fingers.module';
 import { ConfigModule } from "@nestjs/config";
 import { AccessesController } from './accesses/accesses.controller';
 import { DATABASE_NAME } from "./constants";
+import { MqttModule } from "./mqtt/mqtt.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DATABASE_NAME } from "./constants";
     UsersModule,
     DoorsModule,
     FingersModule,
+    MqttModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mariadb',
