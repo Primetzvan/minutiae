@@ -29,7 +29,7 @@
     "react-search-bar": "^2.2.0",
     "react-window": "^1.8.6",
     "typescript": "^4.3.5",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "2.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
