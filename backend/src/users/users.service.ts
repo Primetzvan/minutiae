@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { UserRepository } from './repositories/user.repository';
 import { Door } from '../doors/entities/door.entity';
 import { CreateAccessDto } from './dto/create-access.dto';
+import { IP } from '../mqtt/constants';
 
 @Injectable()
 export class UsersService {
@@ -200,6 +201,30 @@ export class UsersService {
     });
 
     return this.userRepository.save(user);
+  }
+
+  async hasAccess(user: User) {
+    console.log(IP);
+    const ip = '10.0.1.5'; //TODO - use IP from constants instead
+
+    const door = await this.doorRepository.findOne({
+      ip: ip,
+    });
+    if (!door) {
+      throw new NotFoundException(
+        `Door with IP '${ip}' not found, is actual Raspberry even added to the System?`,
+      );
+    }
+
+    const accesses = user.accesses ?? [];
+
+    let ret = false;
+    accesses.forEach((accessableDoor) => {
+      if (door.uuid === accessableDoor.uuid) {
+        ret = true;
+      }
+    });
+    return ret;
   }
 
   async removeAccess(createAccessDto: CreateAccessDto) {

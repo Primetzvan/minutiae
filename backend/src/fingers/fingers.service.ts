@@ -1,14 +1,11 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { Finger, FingerStatus } from "./entities/finger.entity";
-import { User } from '../users/entities/user.entity';
-import { CreateFingerDto } from './dto/create-finger.entity';
+import { User } from "../users/entities/user.entity";
+import { CreateFingerDto } from "./dto/create-finger.entity";
 import { nanoid } from "nanoid";
+import { EnrollFinished } from "../mqtt/dto/dtos.entity";
 
 let sessionIdCache;
 
@@ -17,10 +14,10 @@ export class FingersService {
   constructor(
     @InjectRepository(Finger)
     private readonly fingerRepository: Repository<Finger>,
-
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) {
+  }
 
   async create(createFingerDto: CreateFingerDto) {
     const user = await this.findUserById(createFingerDto.userId);
@@ -100,5 +97,61 @@ export class FingersService {
       throw new NotFoundException(`There is no finger with '${sessionId}'`);
     }
     return finger;
+  }
+
+
+  async getUserByExternalFingerId(externalId: string) {
+    const finger = await this.fingerRepository.findOne({
+      externalId: externalId,
+    });
+    if (!finger) {
+      throw new NotFoundException(
+        `There is no finger with externalId '${externalId}'`,
+      );
+    }
+
+    return await this.userRepository
+      .findOne(
+        {
+          finger: finger,
+        },
+        {
+          relations: ['finger', 'accesses'],
+        },
+      )
+      .catch(() => {
+        throw new NotFoundException(
+          `Finger with externalId '${externalId}' is not assigned to a user`,
+        );
+      });
+  }
+
+  async changeStatus(data: EnrollFinished) {
+    const status = data.success ? FingerStatus.OK : FingerStatus.FAILED;
+
+    let finger = await this.fingerRepository.findOne({
+      sessionId: sessionIdCache,
+    });
+    if (!finger) {
+      throw new NotFoundException(
+        `There is no finger with sessionId '${sessionIdCache}'`,
+      );
+    }
+
+    if (+Date.now() > +finger.sessionExpires) {
+      await this.fingerRepository.remove(finger);
+      throw new InternalServerErrorException(
+        `Adding the finger process is already expired, finger with externalID #'${finger.externalId}' can be removed from fingertable2`,
+      );
+    }
+
+    finger = await this.fingerRepository.preload({
+      uuid: finger.uuid,
+      status: status,
+      externalId: data.externalFingerId,
+      sessionExpires: null,
+    });
+
+    return this.fingerRepository.save(finger);
   }
 }
