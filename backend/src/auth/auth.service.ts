@@ -1,11 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { UsersService } from "../users/users.service";
-import { JwtService } from "@nestjs/jwt";
-import { User, UserRole } from "../users/entities/user.entity";
+import { Injectable } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import { User, UserRole } from '../users/entities/user.entity';
 import * as moment from 'moment';
-import { nanoid } from "nanoid";
-import { UpdateUserDto } from "../users/dto/update-user.dto";
-import * as bcrypt from "bcrypt";
+import { nanoid } from 'nanoid';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {

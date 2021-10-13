@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { MqttController } from "./mqtt.controller";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Finger } from "../fingers/entities/finger.entity";
-import { FingersService } from "../fingers/fingers.service";
-import { User } from "../users/entities/user.entity";
-import { UsersService } from "../users/users.service";
-import { Door } from "../doors/entities/door.entity";
-import { ClientsModule, Transport } from "@nestjs/microservices";
+import { MqttController } from './mqtt.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Finger } from '../fingers/entities/finger.entity';
+import { FingersService } from '../fingers/fingers.service';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+import { Door } from '../doors/entities/door.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   controllers: [MqttController],

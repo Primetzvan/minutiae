@@ -2,9 +2,10 @@ import {
   Column,
   Entity,
   JoinTable,
-  ManyToMany, OneToOne,
+  ManyToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
-} from "typeorm";
+} from 'typeorm';
 import { Finger } from '../../fingers/entities/finger.entity';
 import { Door } from '../../doors/entities/door.entity';
 import { Exclude } from 'class-transformer';

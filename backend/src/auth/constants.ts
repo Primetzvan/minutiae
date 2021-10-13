@@ -1,4 +1,4 @@
-import { SetMetadata } from "@nestjs/common";
+import { SetMetadata } from '@nestjs/common';
 
 // tODO: delete or generate public
 export const IS_PUBLIC_KEY = 'isPublic';

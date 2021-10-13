@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Finger, FingerStatus } from "./entities/finger.entity";
-import { User } from "../users/entities/user.entity";
-import { CreateFingerDto } from "./dto/create-finger.entity";
-import { nanoid } from "nanoid";
-import { EnrollFinished } from "../mqtt/dto/dtos.entity";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Finger, FingerStatus } from './entities/finger.entity';
+import { User } from '../users/entities/user.entity';
+import { CreateFingerDto } from './dto/create-finger.entity';
+import { nanoid } from 'nanoid';
+import { EnrollFinished } from '../mqtt/dto/dtos.entity';
 
 let sessionIdCache;
 
@@ -16,8 +16,7 @@ export class FingersService {
     private readonly fingerRepository: Repository<Finger>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {
-  }
+  ) {}
 
   async create(createFingerDto: CreateFingerDto) {
     const user = await this.findUserById(createFingerDto.userId);

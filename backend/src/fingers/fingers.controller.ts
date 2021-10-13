@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query, Request } from "@nestjs/common";
-import { Public } from '../auth/constants';
-import { FingersService } from "./fingers.service";
-import { CreateFingerDto } from "./dto/create-finger.entity";
-import { ClientProxy } from "@nestjs/microservices";
+import { Body, Controller, Delete, Get, Inject, Param, Post } from "@nestjs/common";
+import { FingersService } from './fingers.service';
+import { CreateFingerDto } from './dto/create-finger.entity';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('fingers')
 export class FingersController {

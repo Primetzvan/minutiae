@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -13,8 +12,7 @@ import { UpdateDoorDto } from './dto/update-door.dto';
 import * as JSZip from 'jszip';
 import * as fs from 'fs';
 import { clusterName } from './constants';
-import * as path from "path";
-
+import * as path from 'path';
 
 @Injectable()
 export class DoorsService {

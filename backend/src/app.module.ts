@@ -6,10 +6,10 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DoorsModule } from './doors/doors.module';
 import { FingersModule } from './fingers/fingers.module';
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule } from '@nestjs/config';
 import { AccessesController } from './accesses/accesses.controller';
-import { DATABASE_NAME } from "./constants";
-import { MqttModule } from "./mqtt/mqtt.module";
+import { DATABASE_NAME } from './constants';
+import { MqttModule } from './mqtt/mqtt.module';
 
 @Module({
   imports: [
@@ -30,10 +30,7 @@ import { MqttModule } from "./mqtt/mqtt.module";
       synchronize: true, // DISABLE in production
     }),
   ],
-  controllers: [
-    AppController,
-    AccessesController,
-  ],
+  controllers: [AppController, AccessesController],
   providers: [AppService],
 })
 export class AppModule {}

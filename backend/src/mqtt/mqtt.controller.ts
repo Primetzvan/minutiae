@@ -1,10 +1,10 @@
-import { Controller, Inject, UseGuards } from "@nestjs/common";
+import { Controller, Inject, UseGuards } from '@nestjs/common';
 import { ClientProxy, Ctx, MessagePattern, MqttContext, Payload } from "@nestjs/microservices";
-import { FingersService } from "../fingers/fingers.service";
-import { EnrollFinished, Match } from "./dto/dtos.entity";
-import { UsersService } from "../users/users.service";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { Public } from "../auth/constants";
+import { FingersService } from '../fingers/fingers.service';
+import { EnrollFinished, Match } from './dto/dtos.entity';
+import { UsersService } from '../users/users.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Public } from '../auth/constants';
 
 @Controller('mqtt')
 @UseGuards(JwtAuthGuard)

@@ -43,15 +43,6 @@ export class UsersService {
       throw new NotFoundException(`user #${id} not found`);
     }
 
-    /*
-    // TODO: test with finger
-    const dto = {
-      ...user,
-      finger: user.finger !== null,
-    };
-    return plainToClass(User, dto);
-     */
-
     return user;
   }
 
@@ -72,7 +63,6 @@ export class UsersService {
     return user;
   }
 
-  // TODO: username already in use exception
   create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
 
@@ -95,7 +85,6 @@ export class UsersService {
     });
   }
 
-  // TODO: check for "username already used", "user has password", "admin has no password"
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.preload({
       uuid: id,
@@ -194,7 +183,6 @@ export class UsersService {
     }
     accesses.push(door);
 
-    // TODO: geht evtl hübscher?
     user = await this.userRepository.preload({
       uuid: createAccessDto.userId,
       accesses: accesses,
@@ -204,8 +192,8 @@ export class UsersService {
   }
 
   async hasAccess(user: User) {
-    console.log(IP);
-    const ip = '10.0.1.5'; //TODO - use IP from constants instead
+    //const ip = '10.0.1.5';
+    const ip = IP;
 
     const door = await this.doorRepository.findOne({
       ip: ip,
