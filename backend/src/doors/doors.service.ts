@@ -11,7 +11,6 @@ import { Door } from './entities/door.entity';
 import { CreateDoorDto } from './dto/create-door.dto';
 import { UpdateDoorDto } from './dto/update-door.dto';
 import * as JSZip from 'jszip';
-import { saveAs } from 'file-saver';
 import * as fs from 'fs';
 import { clusterName } from './constants';
 import * as path from "path";
@@ -102,7 +101,9 @@ export class DoorsService {
 
     await this.generateFolders(createDoorDto, zip);
 
-    const newNodeFolder = zip.folder(createDoorDto.doorname);
+    const newNodeFolder = zip.folder(
+      createDoorDto.ip + '_' + createDoorDto.doorname,
+    );
 
     const route = path.resolve(process.cwd(), './files/');
 
@@ -176,7 +177,7 @@ export class DoorsService {
       doorname +
       '"\n';
 
-    const folder = zip.folder(doorname);
+    const folder = zip.folder(ip + '_' + doorname);
     folder.file('galera.cnf', overwrite);
   }
 }
