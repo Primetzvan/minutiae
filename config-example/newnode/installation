@@ -16,7 +16,7 @@ sudo raspi-config
 
 Finish -> No Reboot
 
-sudo chmod +x ./preinstallation
+sudo chmod +x ./preinstallation.sh
 
 sudo ./preinstallation.sh
 
