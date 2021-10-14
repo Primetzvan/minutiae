@@ -1,0 +1,23 @@
+#TODO:
+
+sudo mkdir /media/usb
+
+sudo blkid -o list -w /dev/null
+
+sudo mount -t vfat -o utf8,uid=pi,gid=pi /dev/sda1 /media/usb
+ 
+sudo cp -r /media/usb/shdb/newcluster/* .
+
+sudo umount /media/usb
+
+sudo raspi-config
+
+-> System Options -> Boot / Auto Login -> B2 Console Autologin -> Finish -> No Reboot
+
+sudo chmod +x ./preinstallation.sh
+
+sudo ./preinstallation.sh
+
+sudo ./setup.sh your username yourpassword
+
+
