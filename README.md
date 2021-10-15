@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/images/logo.svg" width="320" alt="Minutiae Logo" />
+  <img src="/design/logo.svg" width="320" alt="Minutiae Logo" />
 </p>
 
 # Minutiae
@@ -24,7 +24,7 @@ The project idea is a system in which users and administrators exist. Users can 
 - **frontend**: Provides the website
 - **datamodels**: Contains all the datamodels
 - **docker**: An unfinished dockerscript for mariadb with galera cluster on raspberry pi
-- **images**: Contains logos
+- **design**: Contains logos and design concept
 - **config-example**: An example of the startscript we use
 
 ## Getting Started
