@@ -4,9 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Finger } from '../fingers/entities/finger.entity';
 import { FingersService } from '../fingers/fingers.service';
 import { User } from '../users/entities/user.entity';
-import { UsersService } from '../users/users.service';
 import { Door } from '../doors/entities/door.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   controllers: [MqttController],
@@ -21,7 +21,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         },
       },
     ]),
+    UsersModule,
   ],
-  providers: [FingersService, UsersService],
+  providers: [FingersService],
 })
 export class MqttModule {}

@@ -24,10 +24,7 @@ export class AuthService {
   async validateUser(usernameormail: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(usernameormail);
 
-    // TODO: nicht plain speichern - statt "pass" einfügen, nicht als variable, wirkft fehler
-    //const isValidPassword = await bcrypt.compare(pass, user.password);
-
-    if (user && user.password == pass) {
+    if (user && (await bcrypt.compare(pass, user.password))) {
       if (user.role != UserRole.ADMIN) {
         return null;
       }

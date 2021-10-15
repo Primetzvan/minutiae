@@ -4,20 +4,21 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { User, UserRole } from './entities/user.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import * as bcrypt from 'bcrypt';
-import { UserRepository } from './repositories/user.repository';
-import { Door } from '../doors/entities/door.entity';
-import { CreateAccessDto } from './dto/create-access.dto';
-import { IP } from '../mqtt/constants';
+  OnModuleInit
+} from "@nestjs/common";
+import { User, UserRole } from "./entities/user.entity";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import * as bcrypt from "bcrypt";
+import { UserRepository } from "./repositories/user.repository";
+import { Door } from "../doors/entities/door.entity";
+import { CreateAccessDto } from "./dto/create-access.dto";
+import { IP } from "../mqtt/constants";
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: UserRepository,
@@ -25,6 +26,24 @@ export class UsersService {
     @InjectRepository(Door)
     private readonly doorRepository: Repository<Door>,
   ) {}
+
+  async onModuleInit() {
+    if ((await this.userRepository.count()) === 0) {
+      const user = this.userRepository.create({
+        username: 'admin',
+        password: await this.generateHash('admin'),
+        role: UserRole.ADMIN,
+      });
+      this.userRepository.save(user).catch((err) => {
+        throw new HttpException(
+          {
+            message: err.message,
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+    }
+  }
 
   findAll() {
     return this.userRepository.find({
