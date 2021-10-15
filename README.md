@@ -4,9 +4,11 @@
 
 # Minutiae
 
+## proof of concept
+
 ## About The Project
 
-Minutiae is an open source, MIT Licenced software for a fingerprint system and a cooperation project with the OTELO Gmunden and Pcode. While Minutiae provides the frontend, the backend and the database, the co-projects takes over the hardware and the hardware related code.
+Minutiae is an open source, MIT Licenced software for a fingerprint system and a cooperation project with the [OTELO Gmunden](https://otelo.or.at/standort/gmunden/) and [pcode](https://www.pcode.at/). While Minutiae provides the frontend, the backend and the database, the co-projects takes over the hardware and the hardware related code.
 
 The project idea is a system in which users and administrators exist. Users can use fingerprint sensors and unlock / lock doors according to their authorizations. There is a web interface for administrators through which they can make various system settings. This eg. includes adding new users and doors.
 
