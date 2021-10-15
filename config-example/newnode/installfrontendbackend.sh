@@ -1,5 +1,5 @@
 git init
-git remote add -f origin https://github.com/primetzvan/minutiae.git
+git remote add -f origin https://github.com/sarahfeichtinger/minutiae.git
 git config core.sparsecheckout true
 echo frontend >> .git/info/sparse-checkout
 echo backend >> .git/info/sparse-checkout
