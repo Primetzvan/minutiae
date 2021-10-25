@@ -10,11 +10,11 @@ wsrep_provider=/usr/lib/galera/libgalera_smm.so
 
 # Galera Cluster Configuration
 wsrep_cluster_name="test_cluster"
-wsrep_cluster_address="gcomm://10.20.86.120,10.20.86.119,10.20.86.114"
+wsrep_cluster_address="gcomm://192.168.8.124,192.168.8.118"
 
 # Galera Synchronization Configuration
 wsrep_sst_method=rsync
 
 # Galera Node Configuration
-wsrep_node_address="10.20.86.119"
+wsrep_node_address="192.168.8.118"
 wsrep_node_name="this_node_name2"

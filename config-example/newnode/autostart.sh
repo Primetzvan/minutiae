@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-/home/pi/systemstart.sh
+/home/pi/newnode/systemstart.sh
 
 exit 0 
 
