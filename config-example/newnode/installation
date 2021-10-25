@@ -12,7 +12,7 @@ This path/name and fs_type you have to insert into the next command:
 `sudo mount -t <fs_type> -o utf8,uid=pi,gid=pi /dev/<usb stick name> /media/usb`
 
 ```
-sudo cp -r /media/usb/<yourPathOnYourStick>/newnode/* .
+sudo cp -r /media/usb/<yourPathOnYourStick>/newnode/ .
 
 sudo umount /media/usb
 ```
@@ -46,6 +46,7 @@ The installations scripts come with the system and automatically install and set
 and the Kiosk Mode.
 
 ```
+cd newnode
 sudo chmod +x ./preinstallation.sh
 sudo ./preinstallation.sh
 ```
@@ -58,6 +59,7 @@ After the reboot put the following commands
 
 
 ```
+cd newnode
 sudo chmod +x ./setup.sh
 sudo ./setup.sh your_username your_password
 ```
