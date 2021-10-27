@@ -16,6 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { User } from "./entities/user.entity";
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'))
@@ -36,8 +37,14 @@ export class UsersController {
 
   @Get(':uuid')
   // can be number cuz validation pipe
-  findOne(@Param('uuid') uuid: string) {
+  async findOne(@Param('uuid') uuid: string) {
     return this.userService.findOneById(uuid);
+  }
+
+  @Get('username/:uname')
+  // can be number cuz validation pipe
+  async findOneByUsername(@Param('uname') username: string) {
+    return this.userService.findOne(username);
   }
 
   @Post()

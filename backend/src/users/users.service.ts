@@ -83,6 +83,10 @@ export class UsersService implements OnModuleInit {
       user = await this.userRepository.findOne({ username: usernameormail });
     }
 
+    if (!user) {
+      throw new NotFoundException(`user '${usernameormail}' not found`);
+    }
+
     return user;
   }
 
