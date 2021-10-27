@@ -7,6 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { Door } from '../doors/entities/door.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersModule } from '../users/users.module';
+import { LogsModule } from "../logs/logs.module";
 
 @Module({
   controllers: [MqttController],
@@ -22,6 +23,7 @@ import { UsersModule } from '../users/users.module';
       },
     ]),
     UsersModule,
+    LogsModule,
   ],
   providers: [FingersService],
 })

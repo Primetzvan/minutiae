@@ -3,10 +3,11 @@ import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { Public } from './auth/constants';
 import { Response } from 'express';
+import { LogsService } from "./logs/logs.service";
 
 @Controller()
 export class AppController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private readonly logsService: LogsService) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
@@ -26,6 +27,16 @@ export class AppController {
       path: '/',
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
+
+    await this.logsService.createConfigLog(
+      {
+        action: 'LOGIN',
+        modifiedTable: 'USER',
+        newValue: 'NONE',
+        oldValue: 'NONE',
+      },
+      req.user,
+    );
 
     return { userId: access.userId };
   }

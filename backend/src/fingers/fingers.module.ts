@@ -5,6 +5,7 @@ import { FingersService } from './fingers.service';
 import { FingersController } from './fingers.controller';
 import { User } from '../users/entities/user.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { LogsModule } from "../logs/logs.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         },
       },
     ]),
+    LogsModule,
   ],
   providers: [FingersService],
   controllers: [FingersController],

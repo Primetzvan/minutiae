@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule /*, { cors: true }*/);
+  const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.enableCors({ credentials: true, origin: 'http://localhost:3001' });
   app.useGlobalPipes(

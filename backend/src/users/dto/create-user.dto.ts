@@ -22,7 +22,7 @@ export class AdditionalUserInfo {
   @IsString()
   @MaxLength(30)
   //Minimum eight characters, at least one uppercase letter, one lowercase letter and one number:
-  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, {
+  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
     message: 'password too weak',
   })
   readonly password: string;

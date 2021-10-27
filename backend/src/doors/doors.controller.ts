@@ -6,11 +6,11 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  Post, Req,
   Res,
   StreamableFile,
-  UseInterceptors,
-} from '@nestjs/common';
+  UseInterceptors
+} from "@nestjs/common";
 import { DoorsService } from './doors.service';
 import { CreateDoorDto } from './dto/create-door.dto';
 import { UpdateDoorDto } from './dto/update-door.dto';
@@ -31,11 +31,11 @@ export class DoorsController {
   }
 
   @Post()
-  async create(@Res() response, @Body() createDoorDto: CreateDoorDto) {
+  async create(@Req() req, @Res() response, @Body() createDoorDto: CreateDoorDto) {
     // generate folders for return (important: it must happen before adding door to db)
     const zip = await this.doorsService.createZipRepo(createDoorDto);
     // add door to db
-    await this.doorsService.create(createDoorDto).catch((err) => {
+    await this.doorsService.create(createDoorDto, req.user).catch((err) => {
       console.log(err);
       return err;
     });
@@ -52,12 +52,12 @@ export class DoorsController {
   }
 
   @Patch(':uuid')
-  update(@Param('uuid') uuid: string, @Body() updateDoorDto: UpdateDoorDto) {
-    return this.doorsService.update(uuid, updateDoorDto);
+  update(@Param('uuid') uuid: string, @Body() updateDoorDto: UpdateDoorDto, @Req() req) {
+    return this.doorsService.update(uuid, updateDoorDto, req.user);
   }
 
   @Delete(':uuid')
-  delete(@Param('uuid') uuid: string) {
-    return this.doorsService.remove(uuid);
+  delete(@Param('uuid') uuid: string, @Req() req) {
+    return this.doorsService.remove(uuid, req.user);
   }
 }
