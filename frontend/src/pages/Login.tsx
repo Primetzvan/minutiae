@@ -76,7 +76,7 @@ export default function Login(){
                                 {errors.password  && <span style={{color:'red'}}>Please enter a password <br></br></span>}
 
                                 <br></br>
-                                <Button type="submit" variant='contained' style={{marginTop:'2%'}}>Login</Button>
+                                <Button id="cp_login" type="submit" variant='contained' style={{marginTop:'2%'}}>Login</Button>
 
                             </form>
                         </CardContent>
