@@ -18,3 +18,7 @@ export class Door {
   @ManyToMany(() => User, (user) => user.accesses, { onDelete: 'CASCADE' })
   accessors: User[];
 }
+
+Door.prototype.toString = function fingerToString() {
+  return `{ #${this.uuid}, name: ${this.doorname}, ip: ${this.ip}  }`;
+};

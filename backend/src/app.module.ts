@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AccessesController } from './accesses/accesses.controller';
 import { DATABASE_NAME } from './constants';
 import { MqttModule } from './mqtt/mqtt.module';
+import { LogsModule } from "./logs/logs.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MqttModule } from './mqtt/mqtt.module';
     DoorsModule,
     FingersModule,
     MqttModule,
+    LogsModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mariadb',

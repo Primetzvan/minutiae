@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, ViewColumn } from "typeorm";
 import { User } from '../../users/entities/user.entity';
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class Finger {
@@ -22,9 +23,16 @@ export class Finger {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'userUuid' })
   user: User;
+  @Exclude()
+  @ViewColumn()
+  userUuid: string;
 }
+
+Finger.prototype.toString = function fingerToString() {
+  return `ExternalId: #${this.externalId}, Status: ${this.status}, User: { #${this.userUuid} }`;
+};
 
 export enum FingerStatus {
   RUNNING = 'running',

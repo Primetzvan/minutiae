@@ -51,6 +51,10 @@ export class User {
   public currentHashedRefreshToken: string;
 }
 
+User.prototype.toString = function fingerToString() {
+  return `{ #${this.uuid}, name: ${this.username} }`;
+};
+
 export enum UserRole {
   USER = 'User',
   ADMIN = 'Admin',

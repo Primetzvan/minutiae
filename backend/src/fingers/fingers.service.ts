@@ -6,6 +6,7 @@ import { User } from '../users/entities/user.entity';
 import { CreateFingerDto } from './dto/create-finger.entity';
 import { nanoid } from 'nanoid';
 import { EnrollFinished } from '../mqtt/dto/dtos.entity';
+import { LogsService } from "../logs/logs.service";
 
 let sessionIdCache;
 
@@ -16,9 +17,11 @@ export class FingersService {
     private readonly fingerRepository: Repository<Finger>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    private readonly logsService: LogsService,
   ) {}
 
-  async create(createFingerDto: CreateFingerDto) {
+  async create(createFingerDto: CreateFingerDto, modifier: User) {
     const user = await this.findUserById(createFingerDto.userId);
 
     if (user.finger !== null) {
@@ -36,6 +39,10 @@ export class FingersService {
     });
     await this.fingerRepository.save(f).catch((err) => {
       return err;
+    });
+
+    this.createFingerLog(modifier, 'CREATE -> START SCAN', f.toString(), null).catch(() => {
+      console.log('No log created');
     });
 
     return sessionIdCache;
@@ -59,16 +66,23 @@ export class FingersService {
     return this.fingerRepository.remove(finger);
   }
 
-  async removeForUser(userId: string) {
+  async removeForUser(userId: string, modifier: User) {
     const user = await this.findUserById(userId);
     const finger = user.finger;
     if (!finger) {
       throw new NotFoundException(`User #'${userId}' has no finger`);
     }
+
+    const removed = this.fingerRepository.remove(finger);
+
+    this.createFingerLog(modifier, 'DELETE', null, finger.toString()).catch(() => {
+      console.log('No log created');
+    });
+
     // remove finger
     return {
       externalFingerId: finger.externalId,
-      removed: this.fingerRepository.remove(finger),
+      removed: removed,
     };
   }
 
@@ -144,13 +158,36 @@ export class FingersService {
       );
     }
 
-    finger = await this.fingerRepository.preload({
+    let newFinger = await this.fingerRepository.preload({
       uuid: finger.uuid,
       status: status,
       externalId: data.externalFingerId,
       sessionExpires: null,
     });
+    newFinger = await this.fingerRepository.save(newFinger);
 
-    return this.fingerRepository.save(finger);
+    await this.logsService.createConfigLog(
+      {
+        action: 'CREATE -> ENROLL_FINISHED',
+        modifiedTable: 'FINGER',
+        newValue: newFinger.toString(),
+        oldValue: finger.toString(),
+      },
+      null,
+    );
+
+    return newFinger;
+  }
+
+  async createFingerLog(modifier: User, action: string, newVal: string, oldVal: string) {
+    await this.logsService.createConfigLog(
+      {
+        action: action,
+        modifiedTable: 'FINGER',
+        newValue: newVal || 'NONE',
+        oldValue: oldVal || 'NONE',
+      },
+      modifier,
+    );
   }
 }

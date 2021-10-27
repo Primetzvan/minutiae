@@ -49,7 +49,7 @@ export class AuthService {
       currentHashedRefreshToken: userDataToUpdate.refreshToken,
     };
 
-    await this.usersService.update(user.uuid, userWithRefreshToken);
+    await this.usersService.update(user.uuid, userWithRefreshToken, null);
     return userDataToUpdate.refreshToken;
   }
 
