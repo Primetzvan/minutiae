@@ -35,7 +35,7 @@ export default function FormDialog() {
 
     if(response.ok){
      // alert("ok");
-      window.location.href=`/new-user/${data.username}`;
+      //window.location.href=`/new-user/${data.username}`;
     } else {
      // alert("nicht ok");
     }

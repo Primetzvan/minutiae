@@ -10,4 +10,4 @@ and afterwards [start.sh](start.sh)
 
 ### Run the System
 If you want to run the whole system, we recommend following the instructions on the
-[official githubpages]()
+[official githubpages](https://sarahfeichtinger.github.io/minutiae-website/)

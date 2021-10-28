@@ -99,7 +99,8 @@ export default function MenuAppBar() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose} ><Link to={`/profile/${data?.uuid}`} onClick={()=> window.location.href='/profile'} style={{color:'black', textDecoration:'none'}}>Profile</Link></MenuItem>
-                <MenuItem data-cy="logout" onClick={handleClose}><Link to='/' onClick={()=> {logout(); window.location.href='/'}} style={{color:'black', textDecoration:'none'}}>Log out</Link></MenuItem>
+                <MenuItem onClick={handleClose}><Link to='/logs' onClick={()=> {window.location.href='/logs'}} style={{color:'black', textDecoration:'none'}}>Logs</Link></MenuItem>
+                <MenuItem onClick={handleClose} data-cy="logout" ><Link to='/' onClick={()=> {logout(); window.location.href='/'}} style={{color:'black', textDecoration:'none'}}>Log out</Link></MenuItem>
               </Menu>
             </div>
        

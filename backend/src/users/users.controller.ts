@@ -16,7 +16,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { User } from "./entities/user.entity";
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'))

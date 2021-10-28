@@ -73,6 +73,12 @@ export const getAdminProfile = async () => {
     return data;
 };
 
+export const getNewUserProfile = (username: string) => async () => {
+    const { data } = await axios.get<User>(`${process.env.REACT_APP_API_URL}/users/username/${username}`, { withCredentials: true });
+    //console.log(data);
+    return data;
+};
+
 export const deleteUser = (uuid: string) => async () => {
     const { data } = await axios.delete<User[]>(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {data:{uuid}});
     console.log(data);

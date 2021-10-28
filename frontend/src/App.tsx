@@ -19,6 +19,9 @@ import AdminProfile from './components/AdminProfile';
 import UserDetailProfile from './components/UserDetailProfile';
 import Login from './pages/Login';
 import CreateNewUser from './components/CreateNewUser';
+import Logs from './components/Logs';
+import TestNewUser from './components/testNewUser';
+
 
 
 
@@ -42,10 +45,10 @@ function App() {
                 <Route path="/userform"><NewUserForm /></Route>
                 <Route path="/loading"><Loading /></Route>
                 <Route path="/search"><SearchBar /></Route>
-                <Route path="/usr"><UserDetail /></Route>
-                <Route path="/login"><Login2 /></Route>
                 <Route path="/profile"><AdminProfile /></Route>
                 <Route path="/new-user/:username"><CreateNewUser /></Route>
+                <Route path="/logs"><Logs /></Route>
+                <Route path="/test/"><TestNewUser /></Route>
 
 
         </Router>

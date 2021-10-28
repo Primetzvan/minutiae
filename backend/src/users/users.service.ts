@@ -299,8 +299,8 @@ export class UsersService implements OnModuleInit {
   }
 
   async findActualRaspberryInDoortable() {
-    const ip = '10.0.0.2';
-    //const ip = IP;
+    //const ip = '10.0.0.1';
+    const ip = IP;
 
     const door = await this.doorRepository.findOne({
       ip: ip,

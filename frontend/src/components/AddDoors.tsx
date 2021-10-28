@@ -39,6 +39,9 @@ export default function FormDialog() {
   };
 
   let array = data;
+  let checkedArray = [];
+
+  
  
   if (array === undefined) {
     array = [];
@@ -49,7 +52,7 @@ export default function FormDialog() {
         <AddIcon />
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Create new User</DialogTitle>
+        <DialogTitle id="form-dialog-title">Add Door access</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Select the doors please:
