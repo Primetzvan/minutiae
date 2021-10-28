@@ -50,7 +50,7 @@ export default function FormDialog(props: { uuid: string; }) {
 if(response.ok){
  // alert("user gelöscht");
 }else{
- // alert("user konnte nicht gelöscht werden");
+  alert("You can't delete the last admin.");
 }
 
 

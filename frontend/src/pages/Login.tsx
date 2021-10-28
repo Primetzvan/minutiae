@@ -22,7 +22,6 @@ export default function Login(){
     const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
     const onSubmit: SubmitHandler<Inputs> = async (userData: loginUsers)  => {
 
-
     const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
         method: 'POST',
         headers: { 
@@ -64,7 +63,7 @@ export default function Login(){
             <div style={{width:'100%', display: 'grid', placeItems: 'center'}}>
                 <h1 style={{textAlign:'center', marginBottom:'10%'}}></h1>
                     <Card style={{border:'2px solid #70a07c',width:'35%',marginLeft:'3%',float:'left', textAlign:'center', padding:'3%'}}>
-                        <img src={logo} alt="Logo" width="300" style={{maxWidth:'100%'}} />
+                        <img src={logo} alt="Logo" width="300" style={{maxWidth:'100%'}}/>
                         <CardContent style={{marginTop:'4%'}}>
                             <form onSubmit={handleSubmit(onSubmit)}>
 
