@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Post, Req } from "@nestjs/common";
 import { FingersService } from './fingers.service';
 import { CreateFingerDto } from './dto/create-finger.entity';
 import { ClientProxy } from '@nestjs/microservices';
@@ -19,8 +19,11 @@ export class FingersController {
   }
 
   @Post()
-  async create(@Body() createFingerDto: CreateFingerDto) {
-    const sessionId = await this.fingersService.create(createFingerDto); // returns sessionId from finger
+  async create(@Body() createFingerDto: CreateFingerDto, @Req() req) {
+    const sessionId = await this.fingersService.create(
+      createFingerDto,
+      req.user,
+    ); // returns sessionId from finger
 
     this.client.emit('ENROLL', {
       run: true,
@@ -50,8 +53,8 @@ export class FingersController {
   }
 
   @Delete(':userId')
-  async remove(@Param('userId') userId: string) {
-    const finger = await this.fingersService.removeForUser(userId);
+  async remove(@Param('userId') userId: string, @Req() req) {
+    const finger = await this.fingersService.removeForUser(userId, req.user);
     this.client.emit('DELETE', { externalFingerId: finger.externalFingerId });
     return finger.removed;
   }

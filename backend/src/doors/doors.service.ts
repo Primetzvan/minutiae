@@ -13,12 +13,16 @@ import * as JSZip from 'jszip';
 import * as fs from 'fs';
 import { clusterName } from './constants';
 import * as path from 'path';
+import { User } from "../users/entities/user.entity";
+import { LogsService } from "../logs/logs.service";
 
 @Injectable()
 export class DoorsService {
   constructor(
     @InjectRepository(Door)
     private readonly doorRepository: Repository<Door>,
+
+    private readonly logsService: LogsService,
   ) {}
 
   findAll() {
@@ -39,10 +43,38 @@ export class DoorsService {
     return door;
   }
 
-  create(createDoorDto: CreateDoorDto) {
-    const door = this.doorRepository.create(createDoorDto);
+  async create(createDoorDto: CreateDoorDto, modifier: User) {
+    let door = this.doorRepository.create(createDoorDto);
 
-    return this.doorRepository.save(door).catch((err) => {
+    door = await this.saveDoor(door);
+
+    this.createDoorLog(modifier, 'CREATE', door.toString(), null).catch(() => {
+      console.log('No log created');
+    });
+
+    return door;
+  }
+
+  async update(uuid: string, updateDoorDto: UpdateDoorDto, modifier: User) {
+    const oldDoor = await this.doorRepository.findOne(uuid);
+    let door = await this.doorRepository.preload({
+      uuid: uuid,
+      ...updateDoorDto,
+    });
+    if (!door) {
+      throw new NotFoundException(`Door '${uuid}' not found`);
+    }
+    door = await this.saveDoor(door);
+
+    await this.createDoorLog(modifier, 'UPDATE', door.toString(), oldDoor.toString()).catch(() => {
+      console.log('No log created');
+    });
+
+    return door;
+  }
+
+  async saveDoor(door: Door) {
+    return await this.doorRepository.save(door).catch((err) => {
       if (err && err.code === 'ER_DUP_ENTRY') {
         throw new HttpException(
           {
@@ -61,36 +93,13 @@ export class DoorsService {
     });
   }
 
-  async update(uuid: string, updateDoorDto: UpdateDoorDto) {
-    const door = await this.doorRepository.preload({
-      uuid: uuid,
-      ...updateDoorDto,
-    });
-    if (!door) {
-      throw new NotFoundException(`Door '${uuid}' not found`);
-    }
-    return this.doorRepository.save(door).catch((err) => {
-      // Unique constraint Verletzung
-      if (err && err.code === 'ER_DUP_ENTRY') {
-        throw new HttpException(
-          {
-            message: 'Ip address and doorname must be unique',
-          },
-          HttpStatus.BAD_REQUEST,
-        );
-      } else {
-        throw new HttpException(
-          {
-            message: err.message,
-          },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    });
-  }
-
-  async remove(uuid: string) {
+  async remove(uuid: string, modifier: User) {
     const door = await this.findOneById(uuid);
+
+    this.createDoorLog(modifier, 'DELETE', null, door.toString()).catch(() => {
+      console.log('No log created');
+    });
+
     return this.doorRepository.remove(door);
   }
 
@@ -177,5 +186,17 @@ export class DoorsService {
 
     const folder = zip.folder(ip + '_' + doorname);
     folder.file('galera.cnf', overwrite);
+  }
+
+  async createDoorLog(modifier: User, action: string, newVal: string, oldVal: string) {
+    await this.logsService.createConfigLog(
+      {
+        action: action,
+        modifiedTable: 'DOOR',
+        newValue: newVal || 'NONE',
+        oldValue: oldVal || 'NONE',
+      },
+      modifier,
+    );
   }
 }

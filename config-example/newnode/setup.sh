@@ -34,8 +34,8 @@ sudo npm install pm2 - g
 sudo npm i -g pm2
 sudo chmod +x installfrontendbackend.sh
 sudo ./installfrontendbackend.sh $1 $2
-sudo pm2 start npm --name backend -- start --prefix /home/pi/backend
-sudo pm2 start npm --name frontend -- start --prefix /home/pi/frontend
+sudo pm2 start npm --name backend -- start --prefix /home/pi/newnode/backend
+sudo pm2 start npm --name frontend -- start --prefix /home/pi/newnode/frontend
 sudo chmod +x createMQTTBroker.sh
 sudo ./createMQTTBroker.sh
 # Autostart Frontend/Backend

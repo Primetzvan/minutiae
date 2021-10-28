@@ -16,13 +16,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { User } from "./entities/user.entity";
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'))
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
-  constructor(private readonly userService: UsersService) {
-  }
+  constructor(private readonly userService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
@@ -37,19 +37,24 @@ export class UsersController {
 
   @Get(':uuid')
   // can be number cuz validation pipe
-  findOne(@Param('uuid') uuid: string) {
+  async findOne(@Param('uuid') uuid: string) {
     return this.userService.findOneById(uuid);
   }
 
+  @Get('username/:uname')
+  // can be number cuz validation pipe
+  async findOneByUsername(@Param('uname') username: string) {
+    return this.userService.findOne(username);
+  }
+
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto instanceof CreateUserDto);
-    return this.userService.create(createUserDto);
+  create(@Request() req, @Body() createUserDto: CreateUserDto) {
+    return this.userService.create(req.user, createUserDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Request() req) {
+    return this.userService.update(id, updateUserDto, req.user);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,21 +1,22 @@
 import {
-  BadRequestException,
+  BadRequestException, forwardRef,
   HttpException,
-  HttpStatus,
+  HttpStatus, Inject,
   Injectable,
   NotFoundException,
   OnModuleInit
 } from "@nestjs/common";
-import { User, UserRole } from "./entities/user.entity";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import * as bcrypt from "bcrypt";
-import { UserRepository } from "./repositories/user.repository";
-import { Door } from "../doors/entities/door.entity";
-import { CreateAccessDto } from "./dto/create-access.dto";
-import { IP } from "../mqtt/constants";
+import { User, UserRole } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
+import { UserRepository } from './repositories/user.repository';
+import { Door } from '../doors/entities/door.entity';
+import { CreateAccessDto } from './dto/create-access.dto';
+import { IP } from '../mqtt/constants';
+import { LogsService } from "../logs/logs.service";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -25,6 +26,9 @@ export class UsersService implements OnModuleInit {
 
     @InjectRepository(Door)
     private readonly doorRepository: Repository<Door>,
+
+    @Inject(forwardRef(() => LogsService))
+    private readonly logsService: LogsService,
   ) {}
 
   async onModuleInit() {
@@ -79,33 +83,28 @@ export class UsersService implements OnModuleInit {
       user = await this.userRepository.findOne({ username: usernameormail });
     }
 
+    if (!user) {
+      throw new NotFoundException(`user '${usernameormail}' not found`);
+    }
+
     return user;
   }
 
-  create(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create(createUserDto);
+  async create(modifier: User, createUserDto: CreateUserDto) {
+    let user = this.userRepository.create(createUserDto);
 
-    return this.userRepository.save(user).catch((err) => {
-      if (err && err.code === 'ER_DUP_ENTRY') {
-        throw new HttpException(
-          {
-            message: 'Username must be unique',
-          },
-          HttpStatus.BAD_REQUEST,
-        );
-      } else {
-        throw new HttpException(
-          {
-            message: err.message,
-          },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
+    user = await this.saveUser(user);
+
+    this.createUserLog(modifier, 'CREATE', user.toString(), null).catch(() => {
+      console.log('No log created');
     });
+
+    return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.userRepository.preload({
+  async update(id: string, updateUserDto: UpdateUserDto, modifier: User) {
+    const userBeforeUpdate = await this.findOneById(id);
+    let user = await this.userRepository.preload({
       uuid: id,
       ...updateUserDto,
     });
@@ -123,7 +122,8 @@ export class UsersService implements OnModuleInit {
       );
     } else if (
       updateUserDto.role == UserRole.ADMIN &&
-      updateUserDto.password == null
+      updateUserDto.password == null &&
+      userBeforeUpdate.role == UserRole.USER
     ) {
       throw new BadRequestException(
         "User with Role 'Admin' must have a password",
@@ -134,7 +134,25 @@ export class UsersService implements OnModuleInit {
     ) {
       user.password = await this.generateHash(updateUserDto.password);
     }
-    return this.userRepository.save(user).catch((err) => {
+
+    user = await this.saveUser(user);
+
+    const { password, currentHashedRefreshToken, accesses, finger, ...newUser } = user;
+    delete userBeforeUpdate.password;
+    delete userBeforeUpdate.currentHashedRefreshToken;
+    delete userBeforeUpdate.accesses;
+    delete userBeforeUpdate.finger;
+
+    if (modifier != null){
+      this.createUserLog(modifier, 'UPDATE', JSON.stringify(newUser), JSON.stringify(userBeforeUpdate)).catch((err) => {
+        console.log('no log created');
+      });
+    }
+    return user;
+  }
+
+  async saveUser(user: User) {
+    return await this.userRepository.save(user).catch((err) => {
       // Unique constraint Verletzung
       if (err && err.code === 'ER_DUP_ENTRY') {
         throw new HttpException(
@@ -164,19 +182,19 @@ export class UsersService implements OnModuleInit {
 
     // check if logged in user is not deleting himself and (included) if he isnt the last admin
     if (user.uuid != loggedInAdmin.uuid) {
+      this.createUserLog(loggedInAdmin, 'DELETE', null, user.toString()).catch(() => {
+        console.log('No log created');
+      });
       return this.userRepository.remove(user);
     } else {
       throw new BadRequestException(`Cant delete logged in admin`);
     }
   }
 
-  async addAccess(createAccessDto: CreateAccessDto) {
+  async addAccess(createAccessDto: CreateAccessDto, modifier: User) {
     const door = await this.doorRepository.findOne({
       uuid: createAccessDto.doorId,
     });
-    if (!door) {
-      throw new NotFoundException(`Door '${createAccessDto.doorId}' not found`);
-    }
 
     let user = await this.userRepository.findOne(
       {
@@ -202,6 +220,10 @@ export class UsersService implements OnModuleInit {
     }
     accesses.push(door);
 
+    this.createUserLog(modifier, 'CREATE', 'User: ' + user.toString() + ' -> Door: ' + door.toString(), null).catch(() => {
+      console.log('No log created');
+    });
+
     user = await this.userRepository.preload({
       uuid: createAccessDto.userId,
       accesses: accesses,
@@ -211,17 +233,7 @@ export class UsersService implements OnModuleInit {
   }
 
   async hasAccess(user: User) {
-    //const ip = '10.0.1.5';
-    const ip = IP;
-
-    const door = await this.doorRepository.findOne({
-      ip: ip,
-    });
-    if (!door) {
-      throw new NotFoundException(
-        `Door with IP '${ip}' not found, is actual Raspberry even added to the System?`,
-      );
-    }
+    const door = await this.findActualRaspberryInDoortable();
 
     const accesses = user.accesses ?? [];
 
@@ -234,7 +246,7 @@ export class UsersService implements OnModuleInit {
     return ret;
   }
 
-  async removeAccess(createAccessDto: CreateAccessDto) {
+  async removeAccess(createAccessDto: CreateAccessDto, modifier: User) {
     const { userId, doorId } = createAccessDto;
 
     const door = await this.doorRepository.findOne({
@@ -274,11 +286,40 @@ export class UsersService implements OnModuleInit {
       );
     }
 
+    this.createUserLog(modifier, 'DELETE', null, 'User: ' + user.toString() + ' -> Door: ' + door.toString()).catch(() => {
+      console.log('No log created');
+    });
+
     // remove reference
     user = await this.userRepository.preload({
       uuid: userId,
       accesses: accesses,
     });
     await this.userRepository.save(user);
+  }
+
+  async findActualRaspberryInDoortable() {
+    const ip = '10.0.0.2';
+    //const ip = IP;
+
+    const door = await this.doorRepository.findOne({
+      ip: ip,
+    });
+    if (!door) {
+      throw new NotFoundException(`Door with IP '${ip}' not in the System`);
+    }
+    return door;
+  }
+
+  async createUserLog(modifier: User, action: string, newVal: string, oldVal: string) {
+    await this.logsService.createConfigLog(
+      {
+        action: action,
+        modifiedTable: 'USER',
+        newValue: newVal || 'NONE',
+        oldValue: oldVal || 'NONE',
+      },
+      modifier,
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Query, Req } from "@nestjs/common";
 import { CreateAccessDto } from '../users/dto/create-access.dto';
 import { UsersService } from '../users/users.service';
 
@@ -7,12 +7,12 @@ export class AccessesController {
   constructor(private readonly userService: UsersService) {}
 
   @Post()
-  createAccess(@Body() createAccessDto: CreateAccessDto) {
-    return this.userService.addAccess(createAccessDto);
+  createAccess(@Body() createAccessDto: CreateAccessDto, @Req() req) {
+    return this.userService.addAccess(createAccessDto, req.user);
   }
 
   @Delete()
-  deleteAccess(@Query() ids: CreateAccessDto) {
-    return this.userService.removeAccess(ids);
+  deleteAccess(@Query() ids: CreateAccessDto, @Req() req) {
+    return this.userService.removeAccess(ids, req.user);
   }
 }
