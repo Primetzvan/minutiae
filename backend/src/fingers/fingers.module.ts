@@ -6,10 +6,11 @@ import { FingersController } from './fingers.controller';
 import { User } from '../users/entities/user.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { LogsModule } from "../logs/logs.module";
+import { Fingerprint } from "../externalFinger/entities/fingerprint.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Finger, User]),
+    TypeOrmModule.forFeature([Finger, Fingerprint, User]),
     ClientsModule.register([
       {
         name: 'MQ_CLIENT',
