@@ -109,7 +109,7 @@ import Loading from '../components/Loading';
              return (
         
                 <div>
-                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button id="cp_backfromdoors" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button data-cy="backFromDoors" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
                     <h1 style={{textAlign:'center', marginBottom:'5%'}}>Doors</h1>
                     <AddNewDoor />
 

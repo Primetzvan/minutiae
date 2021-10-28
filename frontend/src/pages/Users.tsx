@@ -91,7 +91,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
              return (
 
                 <div>
-                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button id="cp_backfromusers" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button data-cy="backFromUsers" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
                 <h1 style={{textAlign:'center'}}>Users</h1>
                 <TableContainer style={{display: 'grid', placeItems: 'center'}}>
                 <SearchBar className={classes.searchBar} onChange={onSearchbarChange} />

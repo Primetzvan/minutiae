@@ -74,7 +74,7 @@ export default function MenuAppBar() {
          {/* {auth &&  */}
      
             <div hidden={data == null}>
-              <IconButton id="cp_nav"
+              <IconButton data-cy="nav"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
@@ -99,7 +99,7 @@ export default function MenuAppBar() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose} ><Link to={`/profile/${data?.uuid}`} onClick={()=> window.location.href='/profile'} style={{color:'black', textDecoration:'none'}}>Profile</Link></MenuItem>
-                <MenuItem id="cp_logout" onClick={handleClose}><Link to='/' onClick={()=> {logout(); window.location.href='/'}} style={{color:'black', textDecoration:'none'}}>Log out</Link></MenuItem>
+                <MenuItem data-cy="logout" onClick={handleClose}><Link to='/' onClick={()=> {logout(); window.location.href='/'}} style={{color:'black', textDecoration:'none'}}>Log out</Link></MenuItem>
               </Menu>
             </div>
        

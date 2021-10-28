@@ -2,19 +2,19 @@ describe('Test: Switch to other page', function() {
     beforeEach(() => {
         cy.visit('http://localhost:3001/')
 
-        cy.get('#username').type('admin')
-        cy.get('#password').type('admin')
-        cy.get('#cp_login').click()
+        cy.get('[data-cy=username]').type('admin')
+        cy.get('[data-cy=password]').type('admin')
+        cy.get('[data-cy=login]').click()
       })
 
       afterEach(() => {
-        cy.get('#cp_nav').click()
-        cy.get('#cp_logout').click()
+        cy.get('[data-cy=nav]').click()
+        cy.get('[data-cy=logout]').click()
       })
 
     it('Switch to doors true', function() {
 
-        cy.get('#cp_linktodoors').click()
+        cy.get('[data-cy=linkToDoors]').click()
 
         cy.url().should('include','/doors')
 
@@ -22,9 +22,9 @@ describe('Test: Switch to other page', function() {
 
     it('Switch back from doors true', function() {
 
-        cy.get('#cp_linktodoors').click()
+        cy.get('[data-cy=linkToDoors]').click()
 
-        cy.get('#cp_backfromdoors').click()
+        cy.get('[data-cy=backFromDoors]').click()
 
         cy.url().should('include','/management')
 
@@ -32,7 +32,7 @@ describe('Test: Switch to other page', function() {
 
     it('Switch to users true', function() {
 
-        cy.get('#cp_linktousers').click()
+        cy.get('[data-cy=linkToUsers]').click()
 
         cy.url().should('include','/users')
 
@@ -40,13 +40,26 @@ describe('Test: Switch to other page', function() {
 
     it('Switch back from users true', function() {
 
-        cy.get('#cp_linktousers').click()
+        cy.get('[data-cy=linkToUsers]').click()
 
-        cy.get('#cp_backfromusers').click()
+        cy.get('[data-cy=backFromUsers]').click()
 
         cy.url().should('include','/management')
 
     })
+
+
+    it('Switch back from users true', function() {
+
+        cy.get('[data-cy=linkToUsers]').click()
+
+        cy.get('[data-cy=userDetail]').click()
+
+        cy.url().should('include','/userdetail')
+
+    })
+
+    
 
 
 
