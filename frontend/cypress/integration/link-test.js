@@ -49,7 +49,7 @@ describe('Test: Switch to other page', function() {
     })
 
 
-    it('Switch back from users true', function() {
+    it('Switch to user detail true', function() {
 
         cy.get('[data-cy=linkToUsers]').click()
 
@@ -59,8 +59,28 @@ describe('Test: Switch to other page', function() {
 
     })
 
-    
+    it('Switch to logs true', function() {
 
+        cy.wait(3000)
 
+        cy.get('[data-cy=nav]').click()
+
+        cy.get('[data-cy=logs]').click()
+
+        cy.url().should('include','/logs')
+
+    })
+
+    it('Switch to profile true', function() {
+
+        cy.wait(3000)
+
+        cy.get('[data-cy=nav]').click()
+
+        cy.get('[data-cy=profile]').click()
+
+        cy.url().should('include','/profile')
+
+    })
 
 })
