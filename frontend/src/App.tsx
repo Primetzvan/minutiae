@@ -20,8 +20,6 @@ import UserDetailProfile from './components/UserDetailProfile';
 import Login from './pages/Login';
 import CreateNewUser from './components/CreateNewUser';
 import Logs from './components/Logs';
-import TestNewUser from './components/testNewUser';
-
 
 
 
@@ -48,8 +46,6 @@ function App() {
                 <Route path="/profile"><AdminProfile /></Route>
                 <Route path="/new-user/:username"><CreateNewUser /></Route>
                 <Route path="/logs"><Logs /></Route>
-                <Route path="/test/"><TestNewUser /></Route>
-
 
         </Router>
       </div>
