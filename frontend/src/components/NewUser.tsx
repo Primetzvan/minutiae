@@ -71,6 +71,7 @@ export default function FormDialog() {
                 variant="filled"
                 fullWidth
                 required={true}
+                data-cy="username"
                 {...register("username")}
               />
             </DialogContent>

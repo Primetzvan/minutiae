@@ -68,14 +68,14 @@ export default function Login(){
                             <form onSubmit={handleSubmit(onSubmit)}>
 
                                 {/* pattern: /^\S+@\S+$/i */}
-                                <TextField   {...register("usernameoremail", { required: true})} margin="dense" id="username" label='username' variant='filled'/><br></br>
+                                <TextField   {...register("usernameoremail", { required: true})} margin="dense" id="username" data-cy="username" label='username' variant='filled'/><br></br>
                                 {errors.usernameoremail  && <span style={{color:'red'}}>Please enter a unique username <br></br></span>}
 
-                                <TextField   {...register("password", { required: true })} type='password' margin="dense" id="password" label='password' variant='filled'/> <br></br>
+                                <TextField   {...register("password", { required: true })} type='password' margin="dense" id="password" data-cy="password" label='password' variant='filled'/> <br></br>
                                 {errors.password  && <span style={{color:'red'}}>Please enter a password <br></br></span>}
 
                                 <br></br>
-                                <Button type="submit" variant='contained' style={{marginTop:'2%'}}>Login</Button>
+                                <Button data-cy="login" type="submit" variant='contained' style={{marginTop:'2%'}}>Login</Button>
 
                             </form>
                         </CardContent>

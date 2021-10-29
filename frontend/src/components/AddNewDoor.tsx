@@ -71,7 +71,7 @@ export default function FormDialog() {
            label="Doorname"
            variant="filled"
            fullWidth
-        
+            data-cy="doornameInput"
           />
         {errors.doorname  && <span style={{color:'red'}}>Please enter a unique doorname! <br></br></span>}
         </DialogContentText>
@@ -84,7 +84,7 @@ export default function FormDialog() {
             label="IP-Address"
             variant="filled"
             fullWidth
-        
+            data-cy="ipInput"
           />
           <br></br>{errors.ip  && <span style={{color:'red'}}>Please enter a valid IP-Address! <br></br></span>}
 
@@ -94,7 +94,7 @@ export default function FormDialog() {
             Cancel
           </Button>
                  
-          <Button type="submit" variant='contained' onClick={handleClose}>Download</Button> 
+          <Button data-cy="download" type="submit" variant='contained' onClick={handleClose}>Download</Button>
        {/* <a href="" download>Download</a> */}
         </DialogActions>
         </form>
