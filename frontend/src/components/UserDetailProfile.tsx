@@ -157,7 +157,7 @@ function stringAvatar(name: string) {
   return (
 
     <div style={{ padding:'0.5%', margin:'0.5%'}}>    
-        <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+        <Link to='/users' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />} data-cy="backFromDetail">back</Button></Link>
 
     <Button onClick={changeEditableState}>edit</Button>
     <form onSubmit={handleSubmit(onSubmit)}>
