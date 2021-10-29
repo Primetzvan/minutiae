@@ -48,14 +48,27 @@ describe('Test: Switch to other page', function() {
 
     })
 
-
     it('Switch to user detail true', function() {
 
         cy.get('[data-cy=linkToUsers]').click()
 
         cy.get('[data-cy=userDetail]').click()
 
-        cy.url().should('include','/userdetail')
+        cy.get('[data-cy=backFromDetail]').click()
+
+        cy.url().should('include','/users')
+
+    })
+
+    it('Switch back from profile true', function() {
+
+        cy.wait(3000)
+
+        cy.get('[data-cy=nav]').click()
+
+        cy.get('[data-cy=profile]').click()
+
+        cy.url().should('include','/profile')
 
     })
 
