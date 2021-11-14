@@ -10,6 +10,6 @@ type: 'download'
 Add your ip and a password, and you'll get a folder with all needed installation files
 for your first raspberry. Put it on an usb stick and move it on to the raspberry.
 Type `hostname -I` to get your Raspberries IP.  
-Read more about the installing process in the [documentation](../install-system)
+Read more about the installing process in the [documentation]()
 
 ## Download

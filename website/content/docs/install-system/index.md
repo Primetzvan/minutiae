@@ -7,7 +7,7 @@ type: install
 summary: Instruction for installing the first door.
 ---
 
-The installation just includes the first raspberry, for adding more doors please follow the [update system](./../update-system) instructions  
+The installation just includes the first raspberry, for adding more doors please follow the [update system](../../../delete/specimen/index.md) instructions  
 
 ## Set up raspberry pi
 
@@ -16,7 +16,7 @@ The installation just includes the first raspberry, for adding more doors please
 - Download and install [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to a computer with an SD card reader. 
 - Put the SD card you'll use with your Raspberry Pi into the reader and run Raspberry Pi Imager. 
 You will have to choose of some different OS Images.
-We recommend using raspbian lite (which has no GUI)
+We recommend using raspbian lite (which has no GUI), you can also use another one, like raspbian (has a UI) for example 
 - Repeat this step for each door raspberries
 
 ### Configuration
@@ -33,13 +33,13 @@ if you are using a german keyboard
 ## Hardware
 
 For the hardware set up we relegate to [another project](https://github.com/ElektronikNode/fp-server).  
-We suggest doing the hardware setup on a table first and install the system on your door when you installed everything.
-Consider that you have to know the Raspberries future IP address for this, you can solve this with using static ips instead of dynamic ones. We recommend using static ips anyways. 
+We suggest doing the hardware set up on a table first and install the system on your door when you installed everything.
+Consider that you have to know the Raspberries future IP address for this, you can solve this with using static ips instead of dynamic ones for example. 
 
 ## Download files
 
-* For the first door you can download the files from our [download page](./../file-download/)
-  * You'll get 2 Zip folders, extract them and put all the contained files on an usb stick into a folder called `newcluster`
+* For the first door you can download the files from our [download page](../../../delete/specimen/index.md)
+  * You'll get 2 Zip folders, extract them and put them all on an usb stick into a folder called `newcluster`
 * When using this page, you'll have to insert an IP address, you can type `hostname -I` in the raspberries terminal to look it up.
 
 ## Mount usb stick
@@ -56,7 +56,7 @@ This path/name and fs_type you have to insert into the next command:
 `sudo mount -t <fs_type> -o utf8,uid=pi,gid=pi /dev/<usb stick name> /media/usb`
 
 ```
-sudo cp /media/usb/<yourPathOnYourStick>/newcluster/ .
+sudo cp -r /media/usb/<yourPathOnYourStick>/newcluster/* .
 
 sudo umount /media/usb
 ```
@@ -79,7 +79,7 @@ sudo raspi-config
 
 We use the Kiosk Mode as a super full screen mode of the frontend, which otherwise would be a normal tab in the browser. 
 The operating mode is more difficult to exit than regular full screen mode and protects against setting changes.
-Notice, that it works on raspbian lite as a normal (but only) user interface.
+Notice, that it also works on raspbian lite as a normal (but only) user interface.
 
 Since you still need a password if you change to the terminal, changing the password is still an important thing to do.
 
@@ -90,7 +90,6 @@ The installations scripts come with the system and automatically install and set
 and the Kiosk Mode.
 
 ```
-cd newcluster
 sudo chmod +x ./preinstallation.sh
 sudo ./preinstallation.sh
 ```
@@ -105,7 +104,7 @@ because you need to know which one was the very first when adding more doors.
 
 
 ```
-cd newcluster
+sudo chmod +x ./setup.sh
 sudo ./setup.sh your_username your_password
 ```
 
@@ -115,7 +114,7 @@ You can sign in to the frontend with the automatically generated default admin. 
 Username: `admin`  
 Password: `admin`
 
-If you want to add more doors you can switch to the [update system](./../update-system/) instructions.
+If you want to add more doors you can switch to the [update system](../update-system/index.md) instructions.
 
 
 ## SSH

@@ -1,4 +1,4 @@
-homepage_image{{- if .Site.IsServer -}}
+{{- if .Site.IsServer -}}
   <!-- Dont add Google analytics to localhost -->
 {{ else }}
   {{ $gid := (getenv "HUGO_GOOGLE_ANALYTICS_ID") }}

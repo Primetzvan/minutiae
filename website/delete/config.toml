@@ -1,4 +1,4 @@
-baseURL = "https://sarahfeichtinger.github.io/minutiae-website-test/"
+baseURL = "www.example.at"
 languageCode = "en-us"
 title = "Minutiae"
 themesDir = "./themes"
@@ -32,7 +32,6 @@ summaryLength = 30
   homepage_image = '/images/terminal.gif'
   homepage_button_link = '/docs'
   homepage_button_text = 'Read The Docs'
-  frontend_screencast = '/images/terminal.gif'
 
   ## You can enable to add anchor links to header elements
   # enable_anchor_link = true

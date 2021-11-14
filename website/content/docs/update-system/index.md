@@ -16,7 +16,7 @@ we have to add the new raspberries IP address to each the configuration files of
 the first raspberry you update ist the cluster head, means the very first door you did set up. The order of the other ones doesn't matter.
 
 Do the following process for each raspberry now, starting with your head raspberry: 
-- Leave the Kioskmode and swap to a terminal by pressing F3 or Strg + Alt + F3
+- Leave the Kioskmode and swap to a terminal by pressing F3
 
 - Mount the usb stick carrying the files like in the installation script described
 
@@ -38,7 +38,10 @@ This time, you can't get the **configuration files** for the new raspberry from 
 
 - Add the door in the frontend on one of the already running raspberries
 - You'll get a download option witch returns a zip folder after adding the door.
-- Extract the folder and put the files on a stick in a folder called `newnode`
+- Extract the folder and put the files on a stick
   - Notice, that in this folder there also files for updating the old doors are included, you can recognize the folder for the new door by the folder naming which is "ipAddress_doorname"
 
 When you run the installation scripts, be careful to use the same username and password for the setup.sh script as you did the first time, there is no verification but it wont work if you do it wrong
+
+When you are finished with the installation process, type `sudo reboot` to make your changes effective
+
