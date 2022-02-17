@@ -1,9 +1,9 @@
-import { IsString } from 'class-validator';
+import { IsArray, IsString } from "class-validator";
 
 export class CreateAccessDto {
   @IsString()
   readonly userId: string;
 
-  @IsString()
-  readonly doorId: string;
+  @IsArray()
+  readonly doorIds: string[];
 }

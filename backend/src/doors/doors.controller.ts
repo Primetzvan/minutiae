@@ -9,7 +9,7 @@ import {
   Post, Req,
   Res,
   StreamableFile,
-  UseInterceptors
+  UseInterceptors,
 } from "@nestjs/common";
 import { DoorsService } from './doors.service';
 import { CreateDoorDto } from './dto/create-door.dto';

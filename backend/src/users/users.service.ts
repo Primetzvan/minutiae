@@ -191,11 +191,7 @@ export class UsersService implements OnModuleInit {
     }
   }
 
-  async addAccess(createAccessDto: CreateAccessDto, modifier: User) {
-    const door = await this.doorRepository.findOne({
-      uuid: createAccessDto.doorId,
-    });
-
+  async overrideAccesses(createAccessDto: CreateAccessDto, modifier: User) {
     let user = await this.userRepository.findOne(
       {
         uuid: createAccessDto.userId,
@@ -208,25 +204,28 @@ export class UsersService implements OnModuleInit {
       throw new NotFoundException(`User '${createAccessDto.userId}' not found`);
     }
 
-    const accesses = user.accesses ?? [];
-    if (user.accesses != []) {
-      accesses.forEach(function (door) {
-        if (door.uuid === createAccessDto.doorId) {
-          throw new BadRequestException(
-            `User '${createAccessDto.userId}' already has access to door '${createAccessDto.doorId}'`,
-          );
-        }
+    //Delete all accesses
+    user.accesses = [];
+
+    //Add all accesses
+    for (const doorId of createAccessDto.doorIds) {
+      const door = await this.doorRepository.findOne({
+        uuid: doorId,
+      });
+      if (!door) {
+        throw new NotFoundException(`Door '${doorId}' not found`);
+      }
+
+      user.accesses.push(door);
+
+      this.createUserLog(modifier, 'CREATE', 'User: ' + user.toString() + ' -> Door: ' + door.toString(), null).catch(() => {
+        console.log('No log created');
       });
     }
-    accesses.push(door);
-
-    this.createUserLog(modifier, 'CREATE', 'User: ' + user.toString() + ' -> Door: ' + door.toString(), null).catch(() => {
-      console.log('No log created');
-    });
 
     user = await this.userRepository.preload({
       uuid: createAccessDto.userId,
-      accesses: accesses,
+      accesses: user.accesses,
     });
 
     return this.userRepository.save(user);
@@ -246,8 +245,8 @@ export class UsersService implements OnModuleInit {
     return ret;
   }
 
-  async removeAccess(createAccessDto: CreateAccessDto, modifier: User) {
-    const { userId, doorId } = createAccessDto;
+  /*async removeAccess(createAccessDto: CreateAccessDto, modifier: User) {
+    const { userId, doorIds } = createAccessDto;
 
     const door = await this.doorRepository.findOne({
       uuid: doorId,
@@ -296,7 +295,7 @@ export class UsersService implements OnModuleInit {
       accesses: accesses,
     });
     await this.userRepository.save(user);
-  }
+  }*/
 
   async findActualRaspberryInDoortable() {
     //const ip = '10.0.0.1';

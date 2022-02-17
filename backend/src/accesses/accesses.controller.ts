@@ -7,12 +7,13 @@ export class AccessesController {
   constructor(private readonly userService: UsersService) {}
 
   @Post()
-  createAccess(@Body() createAccessDto: CreateAccessDto, @Req() req) {
-    return this.userService.addAccess(createAccessDto, req.user);
+  // delete all and array empfangen
+  renewAccesses(@Body() createAccessDto: CreateAccessDto, @Req() req) {
+    return this.userService.overrideAccesses(createAccessDto, req.user);
   }
 
-  @Delete()
+  /*@Delete()
   deleteAccess(@Query() ids: CreateAccessDto, @Req() req) {
     return this.userService.removeAccess(ids, req.user);
-  }
+  }*/
 }
