@@ -13,8 +13,8 @@ import * as JSZip from 'jszip';
 import * as fs from 'fs';
 import { clusterName } from './constants';
 import * as path from 'path';
-import { User } from "../users/entities/user.entity";
-import { LogsService } from "../logs/logs.service";
+import { User } from '../users/entities/user.entity';
+import { LogsService } from '../logs/logs.service';
 
 @Injectable()
 export class DoorsService {
@@ -66,7 +66,12 @@ export class DoorsService {
     }
     door = await this.saveDoor(door);
 
-    await this.createDoorLog(modifier, 'UPDATE', door.toString(), oldDoor.toString()).catch(() => {
+    await this.createDoorLog(
+      modifier,
+      'UPDATE',
+      door.toString(),
+      oldDoor.toString(),
+    ).catch(() => {
       console.log('No log created');
     });
 
@@ -188,7 +193,12 @@ export class DoorsService {
     folder.file('galera.cnf', overwrite);
   }
 
-  async createDoorLog(modifier: User, action: string, newVal: string, oldVal: string) {
+  async createDoorLog(
+    modifier: User,
+    action: string,
+    newVal: string,
+    oldVal: string,
+  ) {
     await this.logsService.createConfigLog(
       {
         action: action,

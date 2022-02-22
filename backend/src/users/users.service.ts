@@ -183,8 +183,9 @@ export class UsersService implements OnModuleInit {
     // check if logged in user is not deleting himself and (included) if he isnt the last admin
     if (user.uuid != loggedInAdmin.uuid) {
       this.createUserLog(loggedInAdmin, 'DELETE', null, user.toString()).catch(() => {
-        console.log('No log created');
-      });
+          console.log('No log created');
+        },
+      );
       return this.userRepository.remove(user);
     } else {
       throw new BadRequestException(`Cant delete logged in admin`);
