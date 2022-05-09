@@ -3,11 +3,12 @@ import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
-  app.enableCors({ credentials: true, origin: 'http://localhost:3001' });
+  app.enableCors({ credentials: true, origin: true });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // removes not expected attributes in post/update request body, help prevent malicious data from being sent into our Requests
@@ -27,6 +28,14 @@ async function bootstrap() {
     },
     { inheritAppConfig: true },
   );
+
+  const config = new DocumentBuilder()
+    .setTitle('Minutiae')
+    .setDescription('API for a fingerprint system')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   await app.startAllMicroservices();
   await app.listen(3000);

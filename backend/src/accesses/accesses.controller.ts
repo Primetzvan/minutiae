@@ -9,7 +9,7 @@ export class AccessesController {
   @Post()
   // delete all and array empfangen
   renewAccesses(@Body() createAccessDto: CreateAccessDto, @Req() req) {
-    return this.userService.overrideAccesses(createAccessDto, req.user);
+    return this.userService.addOrRemoveAccess(createAccessDto, req.user);
   }
 
   /*@Delete()

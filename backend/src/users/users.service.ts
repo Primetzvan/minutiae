@@ -1,11 +1,13 @@
 import {
-  BadRequestException, forwardRef,
+  BadRequestException,
+  forwardRef,
   HttpException,
-  HttpStatus, Inject,
+  HttpStatus,
+  Inject,
   Injectable,
   NotFoundException,
-  OnModuleInit
-} from "@nestjs/common";
+  OnModuleInit,
+} from '@nestjs/common';
 import { User, UserRole } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +18,7 @@ import { UserRepository } from './repositories/user.repository';
 import { Door } from '../doors/entities/door.entity';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { IP } from '../mqtt/constants';
-import { LogsService } from "../logs/logs.service";
+import { LogsService } from '../logs/logs.service';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -137,14 +139,25 @@ export class UsersService implements OnModuleInit {
 
     user = await this.saveUser(user);
 
-    const { password, currentHashedRefreshToken, accesses, finger, ...newUser } = user;
+    const {
+      password,
+      currentHashedRefreshToken,
+      accesses,
+      finger,
+      ...newUser
+    } = user;
     delete userBeforeUpdate.password;
     delete userBeforeUpdate.currentHashedRefreshToken;
     delete userBeforeUpdate.accesses;
     delete userBeforeUpdate.finger;
 
-    if (modifier != null){
-      this.createUserLog(modifier, 'UPDATE', JSON.stringify(newUser), JSON.stringify(userBeforeUpdate)).catch((err) => {
+    if (modifier != null) {
+      this.createUserLog(
+        modifier,
+        'UPDATE',
+        JSON.stringify(newUser),
+        JSON.stringify(userBeforeUpdate),
+      ).catch((err) => {
         console.log('no log created');
       });
     }
@@ -182,7 +195,8 @@ export class UsersService implements OnModuleInit {
 
     // check if logged in user is not deleting himself and (included) if he isnt the last admin
     if (user.uuid != loggedInAdmin.uuid) {
-      this.createUserLog(loggedInAdmin, 'DELETE', null, user.toString()).catch(() => {
+      this.createUserLog(loggedInAdmin, 'DELETE', null, user.toString()).catch(
+        () => {
           console.log('No log created');
         },
       );
@@ -192,7 +206,7 @@ export class UsersService implements OnModuleInit {
     }
   }
 
-  async overrideAccesses(createAccessDto: CreateAccessDto, modifier: User) {
+  async addOrRemoveAccess(createAccessDto: CreateAccessDto, modifier: User) {
     let user = await this.userRepository.findOne(
       {
         uuid: createAccessDto.userId,
@@ -217,9 +231,20 @@ export class UsersService implements OnModuleInit {
         throw new NotFoundException(`Door '${doorId}' not found`);
       }
 
-      user.accesses.push(door);
+      // if door is already in accesses then remove, otherwise add
+      const index = user.accesses.indexOf(door);
+      if (index > -1) {
+        user.accesses.splice(index, 1); // 2nd parameter means remove one item only
+      } else {
+        user.accesses.push(door);
+      }
 
-      this.createUserLog(modifier, 'CREATE', 'User: ' + user.toString() + ' -> Door: ' + door.toString(), null).catch(() => {
+      this.createUserLog(
+        modifier,
+        'CREATE',
+        'User: ' + user.toString() + ' -> Door: ' + door.toString(),
+        null,
+      ).catch(() => {
         console.log('No log created');
       });
     }
@@ -311,7 +336,12 @@ export class UsersService implements OnModuleInit {
     return door;
   }
 
-  async createUserLog(modifier: User, action: string, newVal: string, oldVal: string) {
+  async createUserLog(
+    modifier: User,
+    action: string,
+    newVal: string,
+    oldVal: string,
+  ) {
     await this.logsService.createConfigLog(
       {
         action: action,

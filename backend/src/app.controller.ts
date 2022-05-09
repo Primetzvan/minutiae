@@ -1,17 +1,19 @@
-import { Controller, Get, Request, Post, UseGuards, Res } from '@nestjs/common';
+import { Controller, Get, Request, Post, UseGuards, Res, Param, Delete } from "@nestjs/common";
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { Public } from './auth/constants';
 import { Response } from 'express';
 import { LogsService } from "./logs/logs.service";
+import { AuthGuard } from "@nestjs/passport";
+import { JwtAuthGuard } from "./auth/jwt-auth.guard";
 
-@Controller()
+@Controller('auth')
 export class AppController {
   constructor(private authService: AuthService, private readonly logsService: LogsService) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
+  @Post('login')
   async login(@Res({ passthrough: true }) response: Response, @Request() req) {
     const access = await this.authService.login(req.user);
     const refresh_token = await this.authService.getRefreshToken(req.user);
@@ -41,9 +43,14 @@ export class AppController {
     return { userId: access.userId };
   }
 
-  @Get('auth/logout')
-  logout() {
-    return 'logout';
+  @Get('logout')
+  @UseGuards(JwtAuthGuard)
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.cookie('ACCESS_TOKEN_COOKIE', {
+      expires: Date.now(),
+    });
+
+    return { logout: true };
   }
 
   /*@Get('refresh')

@@ -54,3 +54,4 @@ export class MqttController {
     await this.fingersService.changeStatus(data);
   }
 }
+

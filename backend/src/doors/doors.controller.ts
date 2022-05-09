@@ -38,19 +38,20 @@ export class DoorsController {
 
     console.log(createDoorDto.ip + " " + createDoorDto.doorname)
     // add door to db
-    await this.doorsService.create(createDoorDto, req.user).catch((err) => {
-      console.log(err);
-      return err;
-    });
-
-    // Set header, so that download dialog is automatically opened in frontend
-    response.set({
-      'Content-Type': 'application/octet-stream',
-      'Content-Disposition': 'attachment; filename="setup.zip',
-    });
-
-    // return config files for door
-    response.send(await zip.generateAsync({ type: 'nodebuffer' }));
+    await this.doorsService.create(createDoorDto, req.user)
+      .then(async () => {
+        // Set header, so that download dialog is automatically opened in frontend
+        response.set({
+          'Content-Type': 'application/octet-stream',
+          'Content-Disposition': 'attachment; filename="setup.zip',
+        });
+        // return config files for door
+        response.send(await zip.generateAsync({ type: 'nodebuffer' }));
+      })
+      .catch((err) => {
+        console.log(err);
+        return err;
+      });
   }
 
   /*@Post()

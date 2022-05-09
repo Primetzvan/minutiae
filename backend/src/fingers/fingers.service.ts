@@ -76,8 +76,9 @@ export class FingersService {
     const removed = this.fingerRepository.remove(finger);
 
     this.createFingerLog(modifier, 'DELETE', null, finger.toString()).catch(() => {
-      console.log('No log created');
-    });
+        console.log('No log created');
+      },
+    );
 
     // remove finger
     return {
