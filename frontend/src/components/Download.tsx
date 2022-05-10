@@ -6,7 +6,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import NewUserProfile from './NewUserProfile';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link } from 'react-router-dom';

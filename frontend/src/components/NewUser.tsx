@@ -6,9 +6,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Link } from 'react-router-dom';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import AddIcon from '@material-ui/icons/Add';
+
 
 type Inputs = {
   username: string,
@@ -16,6 +17,8 @@ type Inputs = {
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
+
+  let uuid;
   //let username ;
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     
@@ -31,15 +34,11 @@ export default function FormDialog() {
       credentials: "include",
       body: JSON.stringify(data)
     });
-    const jsonData = await response.json();
-
-    if(response.ok){
-     // alert("ok");
-      //window.location.href=`/new-user/${data.username}`;
-    } else {
-     // alert("nicht ok");
-    }
-
+    await response.json().then(data => {
+        uuid = data.uuid;
+        window.location.href = `/userdetail/${uuid}`
+        console.log(uuid)
+    });
   }
   const handleClickOpen = () => {
     setOpen(true);
@@ -53,7 +52,7 @@ export default function FormDialog() {
   return (
     <div>
       <Button variant="contained" color="inherit" onClick={handleClickOpen} data-cy="addNewUserbtn">
-        +
+        <AddIcon style={{color:'black'}} />
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,16 +70,15 @@ export default function FormDialog() {
                 variant="filled"
                 fullWidth
                 required={true}
-                data-cy="username"
                 {...register("username")}
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="inherit" data-cy="addNewUserCancel">
+                <Button onClick={handleClose} color="inherit" data-cy="addNewUserCancel">
                 Cancel
-              </Button>
-                 
-              <Button data-cy="addNewUserBtn" type="submit"><ArrowForwardIosIcon /></Button>
+                </Button>
+
+            <Button data-cy="addNewUserBtn" type="submit"><ArrowForwardIosIcon /></Button>
             </DialogActions>
         </form>
       </Dialog>

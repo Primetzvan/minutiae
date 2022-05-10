@@ -28,7 +28,7 @@ function filterUsersByUsername(users: User[] | undefined, usernameSearchQuery: s
     }
 
     const filteredUsers = users.filter(user => user.username.match(usernameSearchQuery.trim()));
-    return filteredUsers;
+    return filteredUsers.sort((a, b) => a.username> b.username ? 1:-1);
 }
 
     //const [doors, setDoors] = useState<Door[]>([]);
@@ -70,28 +70,30 @@ const StyledTableCell = withStyles((theme: Theme) =>
     
     
     export const Users: React.FC = () => {
-        const { data, isLoading } = useQuery(getUsers.name, getUsers); 
+        const { data, refetch } = useQuery(getUsers.name, getUsers,);
         const [usernameSearchQuery, setUsernameSeachQuery] = useState("");
+        const [list, setList] = useState<User[]>();
         const classes = useStyles();
-        
- 
-        if(isLoading){
-            console.log("is Loading ...");
-            <Loading />
-        }
+
 
         const onSearchbarChange = (query: string) => {
             setUsernameSeachQuery(query);
         }
 
-         const filteredUsersByUsername = filterUsersByUsername(data, usernameSearchQuery)
 
+        async function removeUser(index: number) {
+            filteredUsersByUsername.splice(index);
+            await refetch();
+        }
+
+
+        let filteredUsersByUsername = filterUsersByUsername(data, usernameSearchQuery);
         //debugger;
         
              return (
 
                 <div>
-                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button data-cy="backFromUsers" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
                 <h1 style={{textAlign:'center'}}>Users</h1>
                 <TableContainer style={{display: 'grid', placeItems: 'center'}}>
                 <SearchBar className={classes.searchBar} onChange={onSearchbarChange} />
@@ -109,10 +111,10 @@ const StyledTableCell = withStyles((theme: Theme) =>
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        {filteredUsersByUsername.sort((a, b) => a.username> b.username ? 1:-1).map((row) => (
+                        {filteredUsersByUsername.map((row) => (
                             <StyledTableRow key={row.uuid}>
                                 {/*hidden={row.uuid == }*/}
-                                <StyledTableCell><Button data-cy="deleteUser" ><DeleteUser uuid={row.uuid}/></Button></StyledTableCell>
+                                <StyledTableCell><DeleteUser uuid={row.uuid} arr={filteredUsersByUsername} removeIndex={(index:number) => removeUser(index)}/></StyledTableCell>
                                 <StyledTableCell align="center">{row.username}</StyledTableCell>
                                 <StyledTableCell align="center">{row.role}</StyledTableCell>
                                 <StyledTableCell align="center">{row.finger === null ? <FingerprintIcon style={{color: 'red'}}/> : <FingerprintIcon style={{color: 'green'}}/>}</StyledTableCell>
