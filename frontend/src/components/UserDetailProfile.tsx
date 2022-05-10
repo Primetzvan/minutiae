@@ -176,9 +176,9 @@ async function removeFinger() {
     return (
 
 
-    <div style={{ padding:'0.5%', margin:'0.5%'}}>    
+    <div style={{ padding:'0.5%', margin:'0.5%'}}>
         <Link to='/users' style={{color:'black', textDecoration:'none'}}>
-            <Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button>
+            <Button data-cy="backFromDetail" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button>
         </Link>
 
         <Button onClick={()=>{

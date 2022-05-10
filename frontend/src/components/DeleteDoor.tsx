@@ -29,11 +29,11 @@ export default function FormDialog(props: { uuid: string,  refetch: Function}) {
 
   const response = await fetch(`${process.env.REACT_APP_API_URL}/doors/${props.uuid}`, {
     method: 'DELETE',
-    headers: { 
+    headers: {
         'Content-Type': 'application/json',
         "Access-Control-Allow-Credentials": "true",
         "Access-Control-Allow-Origin": "http://localhost:3000",
-         
+
     },
     credentials: "include",
 });
@@ -49,7 +49,7 @@ if(response.ok){
 
   return (
     <div>
-      <Button onClick={handleClickOpen}><RemoveIcon style={{color: 'red'}}/></Button>
+      <Button data-cy="deleteDoor"  onClick={handleClickOpen}><RemoveIcon style={{color: 'red'}}/></Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Delete Door</DialogTitle>
         <DialogContent>
@@ -63,7 +63,7 @@ if(response.ok){
           <Button onClick={handleClose} color="inherit" data-cy="deleteUserCancel">
             No
           </Button>
-          <Button data-cy="deleteUserbtn" onClick={() => {deleteDoor(); handleClose(); }}>
+          <Button data-cy="deleteDoorbtn" onClick={() => {deleteDoor(); handleClose(); }}>
               <Link to='/doors'>Yes</Link>
         </Button>
         </DialogActions>

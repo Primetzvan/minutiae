@@ -57,8 +57,8 @@ const StyledTableCell = withStyles((theme: Theme) =>
         const useStyles = makeStyles({
             table: {
               width: '80%',
-             
-            
+
+
             },
             searchBar: {
                 width: '80%',
@@ -67,8 +67,8 @@ const StyledTableCell = withStyles((theme: Theme) =>
             }
           });
 
-    
-    
+
+
     export const Users: React.FC = () => {
         const { data, refetch } = useQuery(getUsers.name, getUsers,);
         const [usernameSearchQuery, setUsernameSeachQuery] = useState("");
@@ -89,11 +89,11 @@ const StyledTableCell = withStyles((theme: Theme) =>
 
         let filteredUsersByUsername = filterUsersByUsername(data, usernameSearchQuery);
         //debugger;
-        
+
              return (
 
                 <div>
-                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+                <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button data-cy="backFromUsers" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
                 <h1 style={{textAlign:'center'}}>Users</h1>
                 <TableContainer style={{display: 'grid', placeItems: 'center'}}>
                 <SearchBar className={classes.searchBar} onChange={onSearchbarChange} />
@@ -110,11 +110,11 @@ const StyledTableCell = withStyles((theme: Theme) =>
                             <StyledTableCell align="right" ><NewUser /></StyledTableCell>
                         </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody data-cy="userTable">
                         {filteredUsersByUsername.map((row) => (
                             <StyledTableRow key={row.uuid}>
                                 {/*hidden={row.uuid == }*/}
-                                <StyledTableCell><DeleteUser uuid={row.uuid} arr={filteredUsersByUsername} removeIndex={(index:number) => removeUser(index)}/></StyledTableCell>
+                                <StyledTableCell data-cy="deleteUser" ><DeleteUser uuid={row.uuid} arr={filteredUsersByUsername} removeIndex={(index:number) => removeUser(index)}/></StyledTableCell>
                                 <StyledTableCell align="center">{row.username}</StyledTableCell>
                                 <StyledTableCell align="center">{row.role}</StyledTableCell>
                                 <StyledTableCell align="center">{row.finger === null ? <FingerprintIcon style={{color: 'red'}}/> : <FingerprintIcon style={{color: 'green'}}/>}</StyledTableCell>
@@ -122,7 +122,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
                                     {row.accesses?.map((door: Door) =>(
                                         <Chip label={door.doorname} style={{margin:'0.5%', backgroundColor: door.color}}/>
                                     ))}
-                                </StyledTableCell> 
+                                </StyledTableCell>
                                 <StyledTableCell align="right"><Link to={`/userdetail/${row.uuid}`} ><Button data-cy="userDetail"><ArrowForwardIosIcon /></Button></Link> </StyledTableCell>
                             </StyledTableRow>
                         ))}

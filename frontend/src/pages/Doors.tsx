@@ -21,7 +21,7 @@ import DeleteDoor from '../components/DeleteDoor';
 
 
 
-    //#region 
+    //#region
 
     //const [doors, setDoors] = useState<Door[]>([]);
     // useEffect(()=>{
@@ -45,7 +45,7 @@ const Doors: React.FC = () => {
        const { data, refetch } = useQuery(getDoors.name, getDoors); //isLoading
 
         let inputChanged = false;
- 
+
 
        //return <span>{getDoors.name}</span>
        /* if(isLoading){
@@ -58,7 +58,7 @@ const Doors: React.FC = () => {
             //key: string,
             //doors: {name: string, color: ColorPicker}
         });
-        
+
 
         const StyledTableCell = withStyles((theme: Theme) =>
         createStyles({
@@ -86,7 +86,7 @@ const Doors: React.FC = () => {
         const useStyles = makeStyles({
             table: {
               width: '60%',
-              
+
             },
         });
         const [editable, setEditable] = useState(false);
@@ -127,7 +127,7 @@ const Doors: React.FC = () => {
 
             <div>
                 <Link to='/management' style={{color: 'black', textDecoration: 'none'}}>
-                    <Button variant='contained'
+                    <Button data-cy="backFromDoors" variant='contained'
                      style={{ margin: '1%', backgroundColor: '#9bbda3',textAlign: 'center' }}
                       startIcon={
                          <ArrowBackIcon/>
@@ -157,11 +157,11 @@ const Doors: React.FC = () => {
 
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody data-cy="doorTable">
                             {data?.map((row) => (
 
                                 <StyledTableRow key={row.uuid}>
-                                <StyledTableCell><DeleteDoor uuid={row.uuid} refetch={refetch}/></StyledTableCell>
+                                <StyledTableCell data-cy="deleteDoor"><DeleteDoor uuid={row.uuid} refetch={refetch}/></StyledTableCell>
 
                                     <StyledTableCell align="left">{editable ?<Controller
                                             name="doorname"

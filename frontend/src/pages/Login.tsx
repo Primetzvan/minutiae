@@ -52,8 +52,8 @@ export default function Login(){
     }
     // const { data, isLoading, refetch} = useQuery(loginUser.name, loginUser(),  {
     //     refetchOnWindowFocus: false,
-    //     enabled: false 
-    //   }); 
+    //     enabled: false
+    //   });
 
 
 
@@ -68,14 +68,14 @@ export default function Login(){
                     <form onSubmit={handleSubmit(onSubmit)}>
 
                         {/* pattern: /^\S+@\S+$/i */}
-                        <TextField   {...register("usernameoremail", { required: true})} margin="dense" id="username" label='username or email' variant='filled'/><br></br>
+                        <TextField   {...register("usernameoremail", { required: true})} margin="dense" data-cy="username" id="username" label='username or email' variant='filled'/><br></br>
                         {errors.usernameoremail  && <span style={{color:'red'}}>Please enter a unique username or email <br></br></span>}
 
-                        <TextField   {...register("password", { required: true })} type='password' margin="dense" id="password" label='password' variant='filled'/> <br></br>
+                        <TextField   {...register("password", { required: true })} type='password' margin="dense" data-cy="password" id="password" label='password' variant='filled'/> <br></br>
                         {errors.password  && <span style={{color:'red'}}>Please enter a password <br></br></span>}
 
                         <br></br>
-                        <Button type="submit" variant='contained' style={{marginTop:'2%'}}>Login</Button>
+                        <Button data-cy="login" type="submit" variant='contained' style={{marginTop:'2%'}}>Login</Button>
 
                     </form>
                 </CardContent>

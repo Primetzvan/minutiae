@@ -55,7 +55,7 @@ export default function FormDialog(props: {refetch: Function}) {
                     <DialogContent>
                         <DialogContentText>
                             Enter a unique doorname please:
-                            <TextField
+                            <TextField data-cy="doornameInput"
                                 {...register("doorname", { required: true })}
                                 margin="dense"
                                 label="Doorname"
@@ -69,7 +69,7 @@ export default function FormDialog(props: {refetch: Function}) {
                         <DialogContentText>
                             Enter a valid IP-address please:
                         </DialogContentText>
-                        <TextField {...register("ip", { required: true })}
+                        <TextField data-cy="ipInput" {...register("ip", { required: true })}
                                    margin="dense"
                                    label="IP-Address"
                                    variant="filled"
@@ -84,7 +84,7 @@ export default function FormDialog(props: {refetch: Function}) {
                             Cancel
                         </Button>
 
-                        <Button type="submit" variant='contained'>Download</Button>
+                        <Button data-cy="download" type="submit" variant='contained'>Download</Button>
                         {/* <a href="" download>Download</a> */}
                     </DialogActions>
                 </form>

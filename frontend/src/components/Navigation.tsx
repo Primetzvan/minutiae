@@ -34,7 +34,7 @@ export default function MenuAppBar() {
  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const { data, isLoading } = useQuery(getAdminProfile.name, getAdminProfile); 
+  const { data, isLoading } = useQuery(getAdminProfile.name, getAdminProfile);
 
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setAuth(event.target.checked);
@@ -74,9 +74,9 @@ export default function MenuAppBar() {
             Minutiae
           </Typography>
          {/* {auth &&  */}
-     
+
             <div hidden={data == null}>
-              <IconButton
+              <IconButton data-cy="nav"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
@@ -100,12 +100,12 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose} ><Link to={`/profile/${data?.uuid}`} onClick={()=> window.location.href='/profile'} style={{color:'black', textDecoration:'none'}}>Profile</Link></MenuItem>
-                <MenuItem onClick={handleClose}><Link to='/logs' onClick={()=> {window.location.href='/logs'}} style={{color:'black', textDecoration:'none'}}>Logs</Link></MenuItem>
-                <MenuItem onClick={handleClose}><div onClick={()=> {logout()}} style={{color:'black', textDecoration:'none'}}>Log out</div></MenuItem>
+                <MenuItem data-cy="profile" onClick={handleClose} ><Link to={`/profile/${data?.uuid}`} onClick={()=> window.location.href='/profile'} style={{color:'black', textDecoration:'none'}}>Profile</Link></MenuItem>
+                <MenuItem data-cy="logs" onClick={handleClose}><Link to='/logs' onClick={()=> {window.location.href='/logs'}} style={{color:'black', textDecoration:'none'}}>Logs</Link></MenuItem>
+                <MenuItem onClick={handleClose}><div data-cy="logout" onClick={()=> {logout()}} style={{color:'black', textDecoration:'none'}}>Log out</div></MenuItem>
               </Menu>
             </div>
-       
+
           {/* } */}
         </Toolbar>
       </AppBar>

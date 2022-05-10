@@ -21,15 +21,15 @@ export default function FormDialog() {
   let uuid;
   //let username ;
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    
+
    // debugger;
     const response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
       method: 'POST',
-      headers: { 
+      headers: {
           'Content-Type': 'application/json',
           "Access-Control-Allow-Credentials": "true",
           "Access-Control-Allow-Origin": "http://localhost:3000",
-      
+
       },
       credentials: "include",
       body: JSON.stringify(data)
@@ -61,7 +61,8 @@ export default function FormDialog() {
               <DialogContentText>
                  Enter a unique username please:
              </DialogContentText>
-              <TextField 
+              <TextField
+                data-cy="username"
                 autoFocus
                 margin="dense"
                 id="username"

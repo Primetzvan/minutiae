@@ -75,10 +75,10 @@ const roles = [
     },
   ];
 
-  
+
 
 export default function NewUserForm() {
-  const { data, refetch } = useQuery(getAdminProfile.name, getAdminProfile); 
+  const { data, refetch } = useQuery(getAdminProfile.name, getAdminProfile);
 
   const uuid = data?.uuid;
   const { register, handleSubmit, control, formState: { errors } } = useForm<Inputs>(
@@ -95,21 +95,21 @@ export default function NewUserForm() {
   );
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    
+
     // debugger;
      const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${uuid}`, {
        method: 'PATCH',
-       headers: { 
+       headers: {
            'Content-Type': 'application/json',
            "Access-Control-Allow-Credentials": "true",
            "Access-Control-Allow-Origin": "http://localhost:3000",
-       
+
        },
        credentials: "include",
        body: JSON.stringify(data)
      });
      const jsonData = await response.json();
- 
+
      if(response.ok){
        alert("updated");
       // window.location.href=`/new-user/${data.username}`;
@@ -135,7 +135,7 @@ export default function NewUserForm() {
 
 
   let name1: string = data?.username ?? "default name";
-  
+
   let changedFields = {username: false,
     firstname: false,
     lastname: false,
@@ -162,8 +162,8 @@ function handlePasswordChange(){
 
 
   return (
-    <div style={{ padding:'0.5%', margin:'0.5%'}}>    
-        <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
+    <div style={{ padding:'0.5%', margin:'0.5%'}}>
+        <Link to='/management' style={{color:'black', textDecoration:'none'}}><Button data-cy="backFromProfile" variant='contained' style={{margin:'1%',backgroundColor:'#9bbda3', textAlign:'center'}} startIcon={<ArrowBackIcon />}>back</Button></Link>
 
     <Button onClick={changeEditableState}>edit</Button>
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -218,7 +218,7 @@ function handlePasswordChange(){
                 />
 
               )}
-            />: <h3>{data?.firstname}</h3> }          
+            />: <h3>{data?.firstname}</h3> }
             </TableCell>
         </TableRow>
         <TableRow>
@@ -241,7 +241,7 @@ function handlePasswordChange(){
                   onChange={onChange}
                   />
                 )}
-              />: <h3>{data?.lastname}</h3> }          
+              />: <h3>{data?.lastname}</h3> }
               </TableCell>
         </TableRow>
         <TableRow>
@@ -297,7 +297,7 @@ function handlePasswordChange(){
                   onChange={onChange}
                 />
                 )}
-              />: <h3>{data?.email}</h3> }             
+              />: <h3>{data?.email}</h3> }
             {errors.email  && <span style={{color:'red'}}>Please enter a valid email </span>}
           </TableCell>
         </TableRow>
@@ -321,20 +321,20 @@ function handlePasswordChange(){
                   onChange={onChange}
                 />
             )}
-              />: <h3>{data?.phonenumber}</h3> } 
+              />: <h3>{data?.phonenumber}</h3> }
           </TableCell>
         </TableRow>
       </TableBody>
-      
+
     </Table>
     <div hidden={!editable}>
         <Button  type="submit" variant='contained' style={{float:'right', display:'inline-block'}} >Save</Button>
         </div>
 
-       
+
 
 <div style={{float:'left', width:'40%', marginLeft:'10%'}}>
-              
+
               {data?.finger === null ? <Link to={`/fingerprintscan/${data?.uuid}`} ><Button variant='outlined' fullWidth style={{fontSize:'1.5vw',textDecoration:'none'}} startIcon={<FingerprintIcon style={{color: 'red',fontSize:'2vw', padding:'2%'}} />}>add</Button></Link>: <DeleteFinger uuid={uuid} refetch={refetch}/> }
               <br></br>
             <div className={classes.root} style={{width:'95%', display: 'inline-block',backgroundColor:'#A9C6B0', position:'relative', padding:'3%', marginTop:'10%'}}>
