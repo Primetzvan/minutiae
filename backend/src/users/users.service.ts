@@ -16,15 +16,21 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from './repositories/user.repository';
 import { Door } from '../doors/entities/door.entity';
-import { CreateAccessDto } from './dto/create-access.dto';
+import { CreateAccessDto, UpdateAccessDto } from './dto/create-access.dto';
 import { IP } from '../mqtt/constants';
 import { LogsService } from '../logs/logs.service';
+import { Access } from '../accesses/entities/access.entity';
+import { AccessRepository } from 'src/accesses/repositories/access.repository';
+import { accessSync } from 'fs';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: UserRepository,
+
+    @InjectRepository(Access)
+    private readonly accessRepository: AccessRepository,
 
     @InjectRepository(Door)
     private readonly doorRepository: Repository<Door>,
@@ -120,12 +126,12 @@ export class UsersService implements OnModuleInit {
 
     if (user.role !== UserRole.ADMIN && updateUserDto.password != null) {
       throw new BadRequestException(
-        "User with Role 'User' cant have a password",
+        "User with Role 'User/Leader' cant have a password",
       );
     } else if (
       updateUserDto.role == UserRole.ADMIN &&
       updateUserDto.password == null &&
-      userBeforeUpdate.role == UserRole.USER
+      userBeforeUpdate.role != UserRole.ADMIN
     ) {
       throw new BadRequestException(
         "User with Role 'Admin' must have a password",
@@ -193,17 +199,30 @@ export class UsersService implements OnModuleInit {
   async remove(id: string, loggedInAdmin: User) {
     const user = await this.findOneById(id);
 
-    // check if logged in user is not deleting himself and (included) if he isnt the last admin
+    // check if logged-in user is not deleting himself and (included) if he isnt the last admin
     if (user.uuid != loggedInAdmin.uuid) {
-      this.createUserLog(loggedInAdmin, 'DELETE', null, user.toString()).catch(
-        () => {
-          console.log('No log created');
-        },
-      );
-      return this.userRepository.remove(user);
-    } else {
-      throw new BadRequestException(`Cant delete logged in admin`);
+      return this.removeUser(loggedInAdmin, user);
+    } else if (user.uuid == loggedInAdmin.uuid) {
+      const adminsCount =
+        (await this.userRepository.count({ role: UserRole.ADMIN })) || false;
+
+      if (adminsCount > 1) {
+        return this.removeUser(loggedInAdmin, loggedInAdmin);
+      } else {
+        throw new BadRequestException(`Cant delete last admin`);
+      }
     }
+  }
+
+  //TODO: wenn angemeldeter admin gelöscht wird, wird nicht erkannt das man keinen zugriff mehr hat!! => sobald gefixt auch im frontend admin profil eigene löschun ermöglichen
+
+  async removeUser(loggedInAdmin: User, user: User) {
+    this.createUserLog(loggedInAdmin, 'DELETE', null, user.toString()).catch(
+      () => {
+        console.log('No log created');
+      },
+    );
+    return this.userRepository.remove(user);
   }
 
   async addOrRemoveAccess(createAccessDto: CreateAccessDto, modifier: User) {
@@ -220,10 +239,30 @@ export class UsersService implements OnModuleInit {
     }
 
     //Delete all accesses
-    user.accesses = [];
+    //user.accesses = [];
+
+    user = await this.userRepository.preload({
+      uuid: createAccessDto.userId,
+      accesses: user.accesses,
+    });
 
     //Add all accesses
-    for (const doorId of createAccessDto.doorIds) {
+    for (const acc of user.accesses) {
+      if (!createAccessDto.accesses.includes(acc.door.uuid)) {
+        await this.accessRepository.remove(acc);
+
+        this.createUserLog(
+          modifier,
+          'REMOVE',
+          'User: ' + user.toString() + ' -> Door: ' + acc.door.toString(),
+          null,
+        ).catch(() => {
+          console.log('No log created');
+        });
+      }
+    }
+
+    for (const doorId of createAccessDto.accesses) {
       const door = await this.doorRepository.findOne({
         uuid: doorId,
       });
@@ -231,30 +270,156 @@ export class UsersService implements OnModuleInit {
         throw new NotFoundException(`Door '${doorId}' not found`);
       }
 
-      // if door is already in accesses then remove, otherwise add
-      const index = user.accesses.indexOf(door);
-      if (index > -1) {
-        user.accesses.splice(index, 1); // 2nd parameter means remove one item only
-      } else {
-        user.accesses.push(door);
-      }
+      if (user.accesses.filter(access => access.door.uuid == doorId).length == 0) {
+        const date = new Date();
+        date.setFullYear(date.getFullYear() + 1);
 
-      this.createUserLog(
-        modifier,
-        'CREATE',
-        'User: ' + user.toString() + ' -> Door: ' + door.toString(),
-        null,
-      ).catch(() => {
-        console.log('No log created');
-      });
+        await this.accessRepository.save({
+          door: door,
+          expireDate: date.toString(),
+          user: user,
+        });
+
+        this.createUserLog(
+          modifier,
+          'CREATE',
+          'User: ' + user.toString() + ' -> Door: ' + door.toString(),
+          null,
+        ).catch(() => {
+          console.log('No log created');
+        });
+      }
     }
 
-    user = await this.userRepository.preload({
-      uuid: createAccessDto.userId,
-      accesses: user.accesses,
+    return this.userRepository.findOne(
+      {
+        uuid: user.uuid,
+      },
+      {
+        relations: ['accesses'],
+      },
+    );
+  }
+
+  async removeAccess(accessId: string, modifier: User) {
+    const access = await this.accessRepository.findOne(accessId);
+
+    this.createUserLog(
+      modifier,
+      'REMOVE',
+      'User: ' + modifier.toString() + ' -> Door: ' + access.door.toString(),
+      null,
+    ).catch(() => {
+      console.log('No log created');
     });
 
-    return this.userRepository.save(user);
+    await this.accessRepository.remove(access);
+  }
+
+  /* async addOrRemoveAccess(createAccessDto: CreateAccessDto, modifier: User) {
+      let user = await this.userRepository.findOne(
+        {
+          uuid: createAccessDto.userId,
+        },
+        {
+          relations: ['accesses'],
+        },
+      );
+      if (!user) {
+        throw new NotFoundException(`User '${createAccessDto.userId}' not found`);
+      }
+
+      //Delete all accesses
+      //user.accesses = [];
+
+      user = await this.userRepository.preload({
+        uuid: createAccessDto.userId,
+        accesses: user.accesses,
+      });
+
+      //Add all accesses
+      for (const acc of createAccessDto.accesses) {
+        const door = await this.doorRepository.findOne({
+          uuid: acc,
+        });
+        if (!door) {
+          throw new NotFoundException(`Door '${acc}' not found`);
+        }
+
+        // if door is already in accesses then remove, otherwise add
+        const access: Access | null = await this.accessRepository.findOne(
+          {
+            door: door,
+          },
+          {
+            relations: ['door'],
+          },
+        );
+
+        if (access) {
+          await this.accessRepository.remove(access);
+        } else {
+          let date = new Date();
+          date.setFullYear(date.getFullYear() + 1);
+
+          await this.accessRepository.save({
+            door: door,
+            expireDate: date.toString(),
+            user: user,
+          });
+        }
+
+        this.createUserLog(
+          modifier,
+          'CREATE',
+          'User: ' + user.toString() + ' -> Door: ' + door.toString(),
+          null,
+        ).catch(() => {
+          console.log('No log created');
+        });
+      }
+
+      return this.userRepository.findOne(
+        {
+          uuid: user.uuid,
+        },
+        {
+          relations: ['accesses'],
+        },
+      );
+    }*/
+
+  async updateAccessExpireDate(
+    updateAccessDto: UpdateAccessDto,
+    modifier: User,
+  ) {
+    let access = await this.accessRepository.findOne({
+      uuid: updateAccessDto.accessId,
+    });
+    if (!access) {
+      throw new NotFoundException(
+        `Access '${updateAccessDto.accessId}' not found`,
+      );
+    }
+
+    access = await this.accessRepository.preload({
+      ...access,
+      expireDate: updateAccessDto.expireDate.toString(),
+    });
+    if (!access) {
+      throw new NotFoundException(
+        `Access '${updateAccessDto.accessId}' not found`,
+      );
+    }
+
+    await this.accessRepository.save(access).catch((err) => {
+      throw new HttpException(
+        {
+          message: err.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
   }
 
   async hasAccess(user: User) {
@@ -263,9 +428,10 @@ export class UsersService implements OnModuleInit {
     const accesses = user.accesses ?? [];
 
     let ret = false;
-    accesses.forEach((accessableDoor) => {
-      if (door.uuid === accessableDoor.uuid) {
-        ret = true;
+    accesses.forEach((accessable) => {
+      if (door.uuid === accessable.door.uuid) {
+        console.log(accessable.expireDate);
+        if (new Date(accessable.expireDate) > new Date()) ret = true;
       }
     });
     return ret;

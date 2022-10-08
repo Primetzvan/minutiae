@@ -8,10 +8,12 @@ import { ConfigService } from '@nestjs/config';
 import { UserRepository } from './repositories/user.repository';
 import { Door } from '../doors/entities/door.entity';
 import { LogsModule } from "../logs/logs.module";
+import { AccessRepository } from "../accesses/repositories/access.repository";
+import { Access } from "../accesses/entities/access.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, UserRepository, Door]),
+    TypeOrmModule.forFeature([User, UserRepository, Door, Access, AccessRepository]),
     forwardRef(() => LogsModule),
   ],
   providers: [UsersService, JwtStrategy, ConfigService],

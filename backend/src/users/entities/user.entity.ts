@@ -1,14 +1,13 @@
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Finger } from '../../fingers/entities/finger.entity';
-import { Door } from '../../doors/entities/door.entity';
 import { Exclude } from 'class-transformer';
+import { Access } from '../../accesses/entities/access.entity';
 
 @Entity()
 export class User {
@@ -40,9 +39,8 @@ export class User {
   @OneToOne(() => Finger, (finger) => finger.user)
   finger: Finger;
 
-  @ManyToMany(() => Door, (door) => door.accessors)
-  @JoinTable({ name: 'access' })
-  accesses: Door[];
+  @OneToMany(() => Access, (accesses) => accesses.user)
+  accesses: Access[];
 
   @Column({
     nullable: true,
@@ -57,5 +55,6 @@ User.prototype.toString = function fingerToString() {
 
 export enum UserRole {
   USER = 'User',
+  LEADER = 'Leader',
   ADMIN = 'Admin',
 }

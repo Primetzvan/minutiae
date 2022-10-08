@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Access } from '../../accesses/entities/access.entity';
 
 @Entity()
 export class Door {
@@ -15,8 +15,8 @@ export class Door {
   @Column({ default: '#70a07c' })
   color: string;
 
-  @ManyToMany(() => User, (user) => user.accesses, { onDelete: 'CASCADE' })
-  accessors: User[];
+  @OneToMany(() => Access, (accesses) => accesses.door)
+  accesses: Access[];
 }
 
 Door.prototype.toString = function fingerToString() {

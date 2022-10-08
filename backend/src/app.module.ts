@@ -10,7 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AccessesController } from './accesses/accesses.controller';
 import { DATABASE_NAME } from './constants';
 import { MqttModule } from './mqtt/mqtt.module';
-import { LogsModule } from "./logs/logs.module";
+import { LogsModule } from './logs/logs.module';
 
 @Module({
   imports: [
